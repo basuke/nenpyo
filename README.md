@@ -51,12 +51,18 @@ Prerequisite: the `nenpyo.net` zone must be added to your Cloudflare account
 2. **Deploy** — on push to `main` only, after tests pass, build and deploy to
    Cloudflare Workers.
 
-Required GitHub repository secrets:
+Required GitHub repository secret (the SiestaWare account ID is pinned in
+`wrangler.jsonc`, so only the token is needed):
 
-| Secret                 | Description                                                        |
-| ---------------------- | ----------------------------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN` | API token (SiestaWare account) with **Edit Workers** permission   |
-| `CLOUDFLARE_ACCOUNT_ID`| SiestaWare account ID (also pinned in `wrangler.jsonc`)            |
+| Secret                 | Description                                                      |
+| ---------------------- | --------------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN` | API token (SiestaWare account) with **Edit Workers** permission |
+
+Register it from the CLI:
+
+```bash
+gh secret set CLOUDFLARE_API_TOKEN   # prompts for the value (not echoed)
+```
 
 ## Current status
 
