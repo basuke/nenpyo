@@ -2,12 +2,17 @@
   "name": "nenpyo-net",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "license": "MIT",
   "packageManager": "pnpm@10.33.2",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
-    "start": "wrangler dev",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "pnpm build && vite preview",
+    "deploy": "pnpm build && wrangler deploy",
+    "start": "vite dev",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "cf-typegen": "wrangler types",
     "typecheck": "tsc --noEmit"
   },
@@ -15,10 +20,17 @@
     "hono": "^4.9.10"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.51.2",
+    "@cloudflare/vitest-pool-workers": "^0.21.0",
     "typescript": "^5.9.3",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10",
     "wrangler": "^4.42.2"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "workerd"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
   }
 }
