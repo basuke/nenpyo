@@ -2,6 +2,8 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nenpyo-net",
   "main": "src/index.ts",
+  // SiestaWare account (owns the nenpyo.net zone).
+  "account_id": "055b10d55440049a7e1b5964646f7d2c",
   "compatibility_date": "2026-08-10",
   "routes": [
     { "pattern": "nenpyo.net", "custom_domain": true }

@@ -53,10 +53,10 @@ Prerequisite: the `nenpyo.net` zone must be added to your Cloudflare account
 
 Required GitHub repository secrets:
 
-| Secret                 | Description                                             |
-| ---------------------- | ------------------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN` | API token with **Edit Workers** permission              |
-| `CLOUDFLARE_ACCOUNT_ID`| Cloudflare account ID (AssistOn)                        |
+| Secret                 | Description                                                        |
+| ---------------------- | ----------------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN` | API token (SiestaWare account) with **Edit Workers** permission   |
+| `CLOUDFLARE_ACCOUNT_ID`| SiestaWare account ID (also pinned in `wrangler.jsonc`)            |
 
 ## Current status
 
