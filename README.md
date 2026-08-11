@@ -5,13 +5,13 @@ Cloudflare Workers project using [Hono](https://hono.dev/).
 ## Setup
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## Development
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Local server runs at `http://localhost:8787`.
@@ -19,7 +19,7 @@ Local server runs at `http://localhost:8787`.
 ## Deploy
 
 ```bash
-npm run deploy
+pnpm deploy
 ```
 
 Deployed at custom domain: https://nenpyo.net/
@@ -27,15 +27,15 @@ Deployed at custom domain: https://nenpyo.net/
 ### Custom domain
 
 The `nenpyo.net` custom domain is configured via `routes` in `wrangler.jsonc`.
-On the first `npm run deploy`, Wrangler creates the DNS record and provisions the
+On the first `pnpm deploy`, Wrangler creates the DNS record and provisions the
 TLS certificate automatically.
 
 Prerequisite: the `nenpyo.net` zone must be added to your Cloudflare account
 (active nameservers). Verify with:
 
 ```bash
-npx wrangler login          # authenticate
-npx wrangler whoami         # check account
+pnpm exec wrangler login          # authenticate
+pnpm exec wrangler whoami         # check account
 ```
 
 ## Current status
@@ -46,10 +46,10 @@ routes when ready to launch.
 
 ## Scripts
 
-- `npm run dev` — start local dev server
-- `npm run deploy` — deploy to Cloudflare
-- `npm run cf-typegen` — regenerate `worker-configuration.d.ts` from bindings
-- `npm run typecheck` — run TypeScript type checking
+- `pnpm dev` — start local dev server
+- `pnpm deploy` — deploy to Cloudflare
+- `pnpm cf-typegen` — regenerate `worker-configuration.d.ts` from bindings
+- `pnpm typecheck` — run TypeScript type checking
 
 ## License
 
