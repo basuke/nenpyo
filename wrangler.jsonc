@@ -1,12 +1,25 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nenpyo-net",
-  "main": "src/index.ts",
+  "main": ".svelte-kit/cloudflare/_worker.js",
   // SiestaWare account (owns the nenpyo.net zone).
   "account_id": "055b10d55440049a7e1b5964646f7d2c",
   "compatibility_date": "2026-08-10",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".svelte-kit/cloudflare"
+  },
   "routes": [
     { "pattern": "nenpyo.net", "custom_domain": true }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nenpyo",
+      "database_id": "144d95c4-1005-4464-ad92-18dcab45649c",
+      "migrations_dir": "migrations"
+    }
   ],
   "observability": {
     "enabled": true

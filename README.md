@@ -1,85 +1,120 @@
-# nenpyo-net
+# nenpyo.net
 
-Cloudflare Workers project built with [Hono](https://hono.dev/), [Vite](https://vite.dev/)
-(via `@cloudflare/vite-plugin`), and [Vitest](https://vitest.dev/).
+関心年表。要件は [`docs/001-mvp.md`](docs/001-mvp.md)。
 
-## Setup
+[SvelteKit](https://svelte.dev/docs/kit) を [Cloudflare Workers](https://developers.cloudflare.com/workers/)
+の上で動かし、データは [D1](https://developers.cloudflare.com/d1/)（SQLite）に置いている。
+ORM は入れず生 SQL で書く。
+
+## セットアップ
 
 ```bash
 pnpm install
+pnpm cf-typegen            # worker-configuration.d.ts を生成
+pnpm db:migrate:local      # ローカル D1 にスキーマを流す
+pnpm data:convert          # 元データを取得して data/ に変換結果を出す
+pnpm data:import:local     # ローカル D1 に 720 件を投入
 ```
 
-## Development
+GitHub OAuth を使うので、ローカルでは `.dev.vars` を用意する（`.dev.vars.example` を参照）。
+
+```
+GITHUB_CLIENT_ID=...
+GITHUB_CLIENT_SECRET=...
+```
+
+GitHub の OAuth App はコールバック URL を 1 つしか持てないので、
+開発用と本番用で別々のアプリを登録する。
+
+- 本番: `https://nenpyo.net/auth/github/callback`
+- 開発: `http://localhost:5173/auth/github/callback`
+
+## 開発
 
 ```bash
-pnpm dev
+pnpm dev       # http://localhost:5173
 ```
 
-Vite dev server runs at `http://localhost:5173` with the Workers runtime.
-
-## Test
+`vite dev` でも adapter-cloudflare が D1 をエミュレートするので、
+本番と同じ経路（`platform.env.DB`）でローカル D1 に触れる。
 
 ```bash
-pnpm test        # run once
-pnpm test:watch  # watch mode
+pnpm test        # ユニットテスト
+pnpm typecheck   # svelte-check
+pnpm preview     # 本番ビルドを wrangler dev で動かす
 ```
 
-Tests run inside the real Workers runtime via `@cloudflare/vitest-pool-workers`.
+CSRF の検証は本番ビルドでのみ働く（SvelteKit が dev では意図的に飛ばす）。
+その手の確認は `pnpm preview` 側で行うこと。
 
-## Deploy
+## データベース
 
 ```bash
-pnpm deploy      # vite build && wrangler deploy
+pnpm db:migrate:local   # ローカルに適用
+pnpm db:migrate         # 本番に適用
 ```
 
-Deployed at custom domain: https://nenpyo.net/
+マイグレーションは `migrations/` に生 SQL で置く。
+本番への適用は CI（main への push）でも自動で走る。
 
-### Custom domain
+## 初期データ
 
-The `nenpyo.net` custom domain is configured via `routes` in `wrangler.jsonc`.
-On the first deploy, Wrangler creates the DNS record and provisions the TLS
-certificate automatically.
-
-Prerequisite: the `nenpyo.net` zone must be added to your Cloudflare account
-(active nameservers). Verify with `pnpm exec wrangler whoami`.
-
-## CI/CD
-
-`.github/workflows/deploy.yml` runs on every push and pull request:
-
-1. **Test** — install, typecheck, and run Vitest.
-2. **Deploy** — on push to `main` only, after tests pass, build and deploy to
-   Cloudflare Workers.
-
-Required GitHub repository secret (the SiestaWare account ID is pinned in
-`wrangler.jsonc`, so only the token is needed):
-
-| Secret                 | Description                                                      |
-| ---------------------- | --------------------------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN` | API token (SiestaWare account) with **Edit Workers** permission |
-
-Register it from the CLI:
+松尾公也さんの [SF・コンピューター技術ライフライン](https://github.com/matsuo-koya/sf-tech-lifeline)（MIT）
+720 件を `/@matsuo-koya/sf-tech-lifeline` に投入している。
 
 ```bash
-gh secret set CLOUDFLARE_API_TOKEN   # prompts for the value (not echoed)
+pnpm data:convert       # 取得 → 変換（data/ に JSON と SQL を出す）
+pnpm data:import        # 本番 D1 に投入（流し直すと入れ替わる）
 ```
 
-## Current status
+`data/` は成果物なので commit しない。元データはコミット SHA で固定している
+（`scripts/convert-lifeline.mjs` の `SOURCE_COMMIT`）。
 
-The Worker is in **maintenance / coming-soon** mode: every request returns
-HTTP `503` with a styled "近日公開" page. Swap `src/index.ts` to real routes
-when ready to launch.
+## デプロイ
 
-## Scripts
+```bash
+pnpm deploy     # ビルドして wrangler deploy
+```
 
-- `pnpm dev` — start Vite dev server (Workers runtime)
-- `pnpm build` — build with Vite
-- `pnpm preview` — build then preview locally
-- `pnpm deploy` — build and deploy to Cloudflare
-- `pnpm test` / `pnpm test:watch` — run Vitest
-- `pnpm cf-typegen` — regenerate `worker-configuration.d.ts` from bindings
-- `pnpm typecheck` — run TypeScript type checking
+`.github/workflows/deploy.yml` が main への push で
 
-## License
+1. 型チェックとテスト
+2. D1 マイグレーションの適用
+3. ビルドとデプロイ
 
-[MIT](./LICENSE.md) © 2026 basuke
+を行う。必要な GitHub secret は `CLOUDFLARE_API_TOKEN` のみ
+（account_id は `wrangler.jsonc` に固定）。
+
+Worker 側の secret は wrangler で設定する。
+
+```bash
+pnpm exec wrangler secret put GITHUB_CLIENT_ID
+pnpm exec wrangler secret put GITHUB_CLIENT_SECRET
+```
+
+## URL
+
+```
+/                                       全タイムライン一覧
+/login  /logout  /auth/github/callback  認証
+/@{username}                            ユーザーの年表一覧
+/@{username}/-/new                      年表をつくる
+/@{username}/{slug}                     年表本体
+/@{username}/{slug}/-/edit              年表を編集
+/@{username}/{slug}/-/events/new        イベントを追加
+/@{username}/{slug}/-/events/{id}/edit  イベントを編集
+```
+
+ユーザー名に `@` を前置してアプリ側のパスと名前空間を分けているので、
+予約語リストを持たなくても `/login` などと衝突しない。
+ユーザー配下のアプリ機能は GitLab 方式で `/-/` を挟む。
+
+## 公開範囲
+
+いまは全体 `noindex`。閲覧は誰でもできるが、サインアップは
+`allowed_github_ids` テーブルの allowlist で絞っている。
+
+```bash
+pnpm exec wrangler d1 execute nenpyo --remote \
+  --command "INSERT INTO allowed_github_ids (github_id, note) VALUES (123, 'name');"
+```
