@@ -29,6 +29,8 @@ GitHub の OAuth App はコールバック URL を 1 つしか持てないので
 - 本番: `https://nenpyo.net/auth/github/callback`
 - 開発: `http://localhost:5173/auth/github/callback`
 
+作り方と、どのアプリが何なのかの台帳は [`docs/002-github-oauth.md`](docs/002-github-oauth.md)。
+
 ## 開発
 
 ```bash
@@ -92,6 +94,8 @@ pnpm exec wrangler secret put GITHUB_CLIENT_ID
 pnpm exec wrangler secret put GITHUB_CLIENT_SECRET
 ```
 
+secret を作り直す手順は [`docs/002-github-oauth.md`](docs/002-github-oauth.md) の 7 章。
+
 ## URL
 
 ```
@@ -118,3 +122,8 @@ pnpm exec wrangler secret put GITHUB_CLIENT_SECRET
 pnpm exec wrangler d1 execute nenpyo --remote \
   --command "INSERT INTO allowed_github_ids (github_id, note) VALUES (123, 'name');"
 ```
+
+## ドキュメント
+
+- [`docs/001-mvp.md`](docs/001-mvp.md) — 要件定義。何をなぜこう作ったか
+- [`docs/002-github-oauth.md`](docs/002-github-oauth.md) — OAuth App の作り方と台帳
