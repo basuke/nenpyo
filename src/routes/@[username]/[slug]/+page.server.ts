@@ -2,6 +2,11 @@ import type { PageServerLoad } from "./$types";
 import { listEvents } from "$lib/server/db";
 import { loadTimelineContext } from "$lib/server/guards";
 
+// 読むだけのページなので、クライアント側では何もしない。
+// 有効にしておくと 720 件分のデータがハイドレーション用の JSON として
+// 本文と二重に載り、転送量がそのまま倍になる。
+export const csr = false;
+
 export const load: PageServerLoad = async ({ platform, params, locals }) => {
   const { db, owner, timeline, canEdit } = await loadTimelineContext(platform, params, locals.user);
 
