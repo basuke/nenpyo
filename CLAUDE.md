@@ -140,6 +140,7 @@ pnpm preview              build して wrangler dev
 pnpm db:migrate:local     マイグレーション適用（ローカル D1）
 pnpm db:migrate           同（本番 D1）
 pnpm data:convert         元データを SQL に変換
+pnpm data:check           仕分け表（curation/）が元データと整合しているか
 pnpm data:import:local    投入（ローカル）
 ```
 
@@ -147,6 +148,9 @@ pnpm data:import:local    投入（ローカル）
 
 ## 5. 気をつけること
 
+- **`data/` は gitignore されている。** 生成物の置き場なので、コミットされるものを
+  ここに置かない。人が手で書いたデータ（仕分け表など）は `curation/` に置く。
+  `data/` は `pnpm data:convert` でいつでも作り直せる、が判断の基準
 - **`touchTimeline()` を忘れない。** 一覧は `timelines.updated_at` の降順なので、
   配下のイベントを変更したらタイムライン側も動かす
 - **イベントの並び順**は year → month → day → hour → minute → id の昇順。
