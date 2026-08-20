@@ -34,56 +34,82 @@ export function toSessionUser(user: UserRow): SessionUser {
   };
 }
 
-function randomToken(): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(32));
+function toHex(bytes: Uint8Array): string {
   return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function randomToken(): string {
+  return toHex(crypto.getRandomValues(new Uint8Array(32)));
+}
+
+/**
+ * セッショントークンを保存用のハッシュに変える。
+ *
+ * Cookie に入るのは乱数そのもので、DB にはこのハッシュだけを置く。
+ * こうしておくと、DB の中身が漏れても、そこから成りすませるトークンは作れない。
+ *
+ * ソルトも反復もしないのは、トークンが 256 ビットの乱数だから。
+ * bcrypt や PBKDF2 が要るのは、総当たりが現実的な低エントロピーの秘密
+ * （＝パスワード）を守るときで、ここではリクエストごとの負荷が増えるだけになる。
+ */
+export async function hashToken(token: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
+  return toHex(new Uint8Array(digest));
 }
 
 /* ── セッション ───────────────────────────────────────────────────────── */
 
-export async function createSession(db: D1Database, userId: number): Promise<{ id: string; expiresAt: Date }> {
-  const id = randomToken();
+export async function createSession(
+  db: D1Database,
+  userId: number,
+): Promise<{ token: string; expiresAt: Date }> {
+  const token = randomToken();
   const expiresAt = new Date(Date.now() + SESSION_TTL_SECONDS * 1000);
 
   await db
-    .prepare("INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)")
-    .bind(id, userId, expiresAt.toISOString())
+    .prepare("INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, ?)")
+    .bind(await hashToken(token), userId, expiresAt.toISOString())
     .run();
 
-  return { id, expiresAt };
+  // 呼び出し側に渡すのは Cookie に入れる生のトークン。
+  // この値はここでしか存在せず、DB には残らない。
+  return { token, expiresAt };
 }
 
 /**
- * Cookie の session id からユーザーを引く。
+ * Cookie のトークンからユーザーを引く。
  * 期限切れの行はその場で消す（掃除専用のジョブを持たずに済ませる）。
  */
-export async function resolveSession(db: D1Database, sessionId: string): Promise<SessionUser | null> {
+export async function resolveSession(db: D1Database, token: string): Promise<SessionUser | null> {
   const row = await db
     .prepare(
       `SELECT s.expires_at, u.*
          FROM sessions s
          JOIN users u ON u.id = s.user_id
-        WHERE s.id = ?`,
+        WHERE s.token_hash = ?`,
     )
-    .bind(sessionId)
+    .bind(await hashToken(token))
     .first<UserRow & { expires_at: string }>();
 
   if (!row) return null;
 
   if (new Date(row.expires_at).getTime() <= Date.now()) {
-    await destroySession(db, sessionId);
+    await destroySession(db, token);
     return null;
   }
 
   return toSessionUser(row);
 }
 
-export async function destroySession(db: D1Database, sessionId: string) {
-  await db.prepare("DELETE FROM sessions WHERE id = ?").bind(sessionId).run();
+export async function destroySession(db: D1Database, token: string) {
+  await db
+    .prepare("DELETE FROM sessions WHERE token_hash = ?")
+    .bind(await hashToken(token))
+    .run();
 }
 
-export function setSessionCookie(cookies: Cookies, sessionId: string, expiresAt: Date) {
-  cookies.set(SESSION_COOKIE, sessionId, {
+export function setSessionCookie(cookies: Cookies, token: string, expiresAt: Date) {
+  cookies.set(SESSION_COOKIE, token, {
     path: "/",
     httpOnly: true,
     sameSite: "lax",

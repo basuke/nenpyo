@@ -37,7 +37,7 @@ export const GET: RequestHandler = async ({ url, cookies, platform }) => {
   }
 
   const session = await createSession(db, user.id);
-  setSessionCookie(cookies, session.id, session.expiresAt);
+  setSessionCookie(cookies, session.token, session.expiresAt);
 
   throw redirect(303, returnTo === "/" ? `/@${user.username}` : returnTo);
 };
