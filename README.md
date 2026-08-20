@@ -63,7 +63,13 @@ pnpm db:migrate         # 本番に適用
 ## 初期データ
 
 松尾公也さんの [SF・コンピューター技術ライフライン](https://github.com/matsuo-koya/sf-tech-lifeline)（MIT）
-720 件を `/@matsuo-koya/sf-tech-lifeline` に投入している。
+720 件を、`category` ごとに 3 本へ割って投入している。
+
+| URL | 件数 |
+|---|---|
+| `/@matsuo-koya/sf` | 96 |
+| `/@matsuo-koya/tech` | 557 |
+| `/@matsuo-koya/music` | 67 |
 
 ```bash
 pnpm data:convert       # 取得 → 変換（data/ に JSON と SQL を出す）
