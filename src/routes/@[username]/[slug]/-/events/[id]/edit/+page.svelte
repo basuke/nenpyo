@@ -1,5 +1,5 @@
 <script lang="ts">
-  import EventFields from "$lib/EventFields.svelte";
+  import EntryFields from "$lib/EntryFields.svelte";
 
   let { data, form } = $props();
 
@@ -19,7 +19,7 @@
 {/if}
 
 <form class="form" method="POST" action="?/save">
-  <EventFields values={form?.values ?? data.event} used={data.used} />
+  <EntryFields values={form?.values ?? data.entry} used={data.used} />
 
   <div class="actions">
     <button type="submit">保存する</button>
@@ -31,7 +31,7 @@
 
 <form method="POST" action="?/delete"
       onsubmit={(event) => {
-        if (!confirm(`「${data.event.title}」を削除します。元に戻せません。`)) event.preventDefault();
+        if (!confirm(`「${data.entry.title}」を削除します。元に戻せません。`)) event.preventDefault();
       }}>
   <button class="danger" type="submit">このイベントを削除する</button>
 </form>

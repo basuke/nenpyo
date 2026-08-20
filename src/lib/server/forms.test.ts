@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatLinksInput, parseEventForm, parseLinksInput, parseTimelineForm } from "./forms";
+import { formatLinksInput, parseEntryForm, parseLinksInput, parseTimelineForm } from "./forms";
 
 function formData(values: Record<string, string>): FormData {
   const form = new FormData();
@@ -27,17 +27,18 @@ describe("parseTimelineForm", () => {
   });
 });
 
-describe("parseEventForm", () => {
+describe("parseEntryForm", () => {
   const base = { year: "1974", title: "日本沈没 映画公開" };
 
   it("takes year and title, leaving optional fields null", () => {
-    const result = parseEventForm(formData(base));
+    const result = parseEntryForm(formData(base));
     expect(result).toEqual({
       ok: true,
       value: {
         year: 1974,
         title: "日本沈没 映画公開",
-        description: null,
+        tagline: null,
+        body: null,
         category: null,
         subcategory: null,
         links: null,
@@ -45,16 +46,30 @@ describe("parseEventForm", () => {
     });
   });
 
+  it("keeps the tagline separate from the title so a reading never becomes a fact", () => {
+    const result = parseEntryForm(formData({ ...base, tagline: " 沈む国を先に見た ", body: "説明" }));
+    expect(result).toMatchObject({
+      ok: true,
+      value: { title: "日本沈没 映画公開", tagline: "沈む国を先に見た", body: "説明" },
+    });
+  });
+
+  it("rejects an over-long tagline", () => {
+    const result = parseEntryForm(formData({ ...base, tagline: "あ".repeat(101) }));
+    expect(result).toMatchObject({ ok: false });
+    expect(parseEntryForm(formData({ ...base, tagline: "あ".repeat(100) }))).toMatchObject({ ok: true });
+  });
+
   it("accepts years before the common era", () => {
-    const result = parseEventForm(formData({ ...base, year: "-300" }));
+    const result = parseEntryForm(formData({ ...base, year: "-300" }));
     expect(result).toMatchObject({ ok: true, value: { year: -300 } });
   });
 
   it("rejects a missing, fractional, or out-of-range year", () => {
-    expect(parseEventForm(formData({ ...base, year: "" }))).toMatchObject({ ok: false });
-    expect(parseEventForm(formData({ ...base, year: "1974.5" }))).toMatchObject({ ok: false });
-    expect(parseEventForm(formData({ ...base, year: "99999" }))).toMatchObject({ ok: false });
-    expect(parseEventForm(formData({ ...base, year: "むかし" }))).toMatchObject({ ok: false });
+    expect(parseEntryForm(formData({ ...base, year: "" }))).toMatchObject({ ok: false });
+    expect(parseEntryForm(formData({ ...base, year: "1974.5" }))).toMatchObject({ ok: false });
+    expect(parseEntryForm(formData({ ...base, year: "99999" }))).toMatchObject({ ok: false });
+    expect(parseEntryForm(formData({ ...base, year: "むかし" }))).toMatchObject({ ok: false });
   });
 });
 

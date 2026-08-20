@@ -45,12 +45,12 @@
 
 <form method="POST" action="?/delete"
       onsubmit={(event) => {
-        if (!confirm(`「${data.timeline.title}」とイベント ${data.timeline.eventCount} 件を削除します。元に戻せません。`)) {
+        if (!confirm(`「${data.timeline.title}」とイベント ${data.timeline.entryCount} 件を削除します。元に戻せません。`)) {
           event.preventDefault();
         }
       }}>
   <button class="danger" type="submit">この年表を削除する</button>
   <p class="field__hint" style="margin-top: 0.5rem">
-    イベント {data.timeline.eventCount} 件も一緒に消えます。物理削除なので元に戻せません。
+    イベント {data.timeline.entryCount} 件も一緒に消えます。年表から外れるだけで、他の年表から参照されている出来事そのものは残ります。
   </p>
 </form>

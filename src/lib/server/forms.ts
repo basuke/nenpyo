@@ -34,16 +34,24 @@ export function parseTimelineForm(form: FormData): FormResult<TimelineForm> {
   };
 }
 
-export type EventForm = {
+/**
+ * 年表の 1 行ぶんの入力。事実（year / title / category / links）と
+ * 読み（tagline / body）が 1 枚のフォームに同居している。
+ *
+ * DB では events と notes に分かれて入るが、自分の年表に自分で書くあいだは
+ * 分けて入力させる意味がないので、フォームは 1 枚のままにしている。
+ */
+export type EntryForm = {
   year: number;
   title: string;
-  description: string | null;
+  tagline: string | null;
+  body: string | null;
   category: string | null;
   subcategory: string | null;
   links: string | null;
 };
 
-export function parseEventForm(form: FormData): FormResult<EventForm> {
+export function parseEntryForm(form: FormData): FormResult<EntryForm> {
   const rawYear = text(form, "year");
   if (!rawYear) return { ok: false, message: "年を入力してください" };
 
@@ -55,12 +63,18 @@ export function parseEventForm(form: FormData): FormResult<EventForm> {
   if (!title) return { ok: false, message: "タイトルを入力してください" };
   if (title.length > 300) return { ok: false, message: "タイトルは 300 文字までです" };
 
+  const tagline = optionalText(form, "tagline");
+  if (tagline && tagline.length > 100) {
+    return { ok: false, message: "キャッチコピーは 100 文字までです" };
+  }
+
   return {
     ok: true,
     value: {
       year,
       title,
-      description: optionalText(form, "description"),
+      tagline,
+      body: optionalText(form, "body"),
       category: optionalText(form, "category"),
       subcategory: optionalText(form, "subcategory"),
       links: parseLinksInput(text(form, "links")),

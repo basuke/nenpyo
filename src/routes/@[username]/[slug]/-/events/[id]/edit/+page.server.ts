@@ -1,12 +1,12 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { deleteEvent, findEvent, listUsedCategories, updateEvent } from "$lib/server/db";
+import { deleteEntry, findEntry, listUsedCategories, updateEntry } from "$lib/server/db";
 import { loadTimelineContext, requireOwner } from "$lib/server/guards";
-import { formatLinksInput, parseEventForm } from "$lib/server/forms";
+import { formatLinksInput, parseEntryForm } from "$lib/server/forms";
 import type { MaybePlatform } from "$lib/server/platform";
 
-/** URL の :id から、そのタイムラインに属するイベントを引く。 */
-async function loadEvent(
+/** URL の :id から、そのタイムラインに属する行を引く。 */
+async function loadEntry(
   platform: MaybePlatform,
   params: { username: string; slug: string; id: string },
   user: App.Locals["user"],
@@ -18,26 +18,31 @@ async function loadEvent(
   const id = Number(params.id);
   if (!Number.isInteger(id)) throw error(404, "そのイベントは見つかりません");
 
-  const event = await findEvent(context.db, context.timeline.id, id);
-  if (!event) throw error(404, "そのイベントは見つかりません");
+  const entry = await findEntry(context.db, context.timeline.id, id);
+  if (!entry) throw error(404, "そのイベントは見つかりません");
 
-  return { ...context, event };
+  return { ...context, entry };
 }
 
 export const load: PageServerLoad = async ({ platform, params, locals, url }) => {
-  const { db, owner, timeline, event } = await loadEvent(platform, params, locals.user, url.pathname);
+  const { db, owner, timeline, entry } = await loadEntry(platform, params, locals.user, url.pathname);
+
+  // 束ねられた行は代表イベントだけを編集できる。束ねの編集は Issue #9 で扱う。
+  const head = entry.events[0];
 
   return {
     username: owner.username,
     timeline: { slug: timeline.slug, title: timeline.title },
-    event: {
-      id: event.id,
-      year: event.year,
-      title: event.title,
-      description: event.description,
-      category: event.category,
-      subcategory: event.subcategory,
-      links: formatLinksInput(event.links),
+    entry: {
+      id: entry.id,
+      year: head?.year,
+      title: head?.title,
+      tagline: entry.note?.tagline ?? null,
+      body: entry.note?.body ?? null,
+      category: head?.category ?? null,
+      subcategory: head?.subcategory ?? null,
+      links: formatLinksInput(head?.links ?? null),
+      eventCount: entry.events.length,
     },
     used: await listUsedCategories(db, timeline.id),
   };
@@ -45,21 +50,21 @@ export const load: PageServerLoad = async ({ platform, params, locals, url }) =>
 
 export const actions: Actions = {
   save: async ({ platform, params, locals, url, request }) => {
-    const { db, owner, timeline, event } = await loadEvent(platform, params, locals.user, url.pathname);
+    const { db, owner, timeline, entry } = await loadEntry(platform, params, locals.user, url.pathname);
 
     const form = await request.formData();
-    const parsed = parseEventForm(form);
+    const parsed = parseEntryForm(form);
     if (!parsed.ok) return fail(400, { message: parsed.message, values: Object.fromEntries(form) });
 
-    await updateEvent(db, timeline.id, event.id, parsed.value);
+    await updateEntry(db, timeline.id, entry, parsed.value);
 
     throw redirect(303, `/@${owner.username}/${timeline.slug}`);
   },
 
   delete: async ({ platform, params, locals, url }) => {
-    const { db, owner, timeline, event } = await loadEvent(platform, params, locals.user, url.pathname);
+    const { db, owner, timeline, entry } = await loadEntry(platform, params, locals.user, url.pathname);
 
-    await deleteEvent(db, timeline.id, event.id);
+    await deleteEntry(db, timeline.id, entry);
 
     throw redirect(303, `/@${owner.username}/${timeline.slug}`);
   },
