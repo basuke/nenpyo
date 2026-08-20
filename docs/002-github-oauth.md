@@ -138,9 +138,9 @@ http://localhost:5173/login を開いて GitHub の同意画面に飛び、
 | 項目 | 値 |
 |---|---|
 | Application name | `nenpyo.net` |
-| Client ID | _（作成後に記入）_ |
-| 所有者 | _（個人 basuke / Organization のどちらか記入）_ |
-| 作成日 | _（記入）_ |
+| Client ID | Ov23liwFCqqOXQH5ce2D |
+| 所有者 | basuke |
+| 作成日 | 2026-08-19 |
 | callback URL | `https://nenpyo.net/auth/github/callback` |
 | secret の置き場 | Cloudflare Workers の secret（`nenpyo-net`） |
 
@@ -149,9 +149,9 @@ http://localhost:5173/login を開いて GitHub の同意画面に飛び、
 | 項目 | 値 |
 |---|---|
 | Application name | `nenpyo.net (local)` |
-| Client ID | _（作成後に記入）_ |
-| 所有者 | _（記入）_ |
-| 作成日 | _（記入）_ |
+| Client ID | Ov23liuSUMnCD969AS0T |
+| 所有者 | basuke |
+| 作成日 | 2026-08-19 |
 | callback URL | `http://localhost:5173/auth/github/callback` |
 | secret の置き場 | 各自の `.dev.vars`（共有しない） |
 
@@ -189,6 +189,11 @@ pnpm exec wrangler d1 execute nenpyo --remote --command "DELETE FROM sessions;"
 | `OAuth の state が一致しません` | state Cookie の期限切れ（10 分）。もう一度 `/login` から |
 | ローカルでログインが保持されない | `.dev.vars` を変えたら dev サーバーを再起動する |
 
+**callback URL が正しいかは、ブラウザで実際にログインするまで分かりません。**
+未ログインの状態で認可 URL を叩いても、GitHub は `redirect_uri` を検証する前に
+ログインページへ飛ばします。誤った callback を送っても同じ 302 が返るので、
+curl での確認は当てになりません。
+
 ## 9. allowlist に人を足す
 
 OAuth を通っても、`allowed_github_ids` に載っていない人は `/pending` に着きます。
@@ -213,3 +218,4 @@ pnpm exec wrangler d1 execute nenpyo --remote \
 |---|---|
 | 2026-08-19 | このドキュメントを作成。アプリ本体は未作成 |
 | 2026-08-19 | 3 章を訂正。callback URL は 10 個まで登録でき、2 つ作るのは制約ではなく資格情報を分けるため。5.3 にチェックボックスの説明を追加 |
+| 2026-08-19 | 本番用・ローカル用の OAuth App を作成し、台帳に記入。本番の secret を Workers に登録し、`/login` が GitHub へリダイレクトすることを確認 |
