@@ -27,16 +27,33 @@ const SOURCE_URL = `https://raw.githubusercontent.com/${SOURCE_REPO}/${SOURCE_CO
 
 // 投入先。オーナーは松尾さん本人（本人のログイン前でも User 行は存在する）。
 const OWNER_USERNAME = "matsuo-koya";
-const TIMELINE_SLUG = "sf-tech-lifeline";
-const TIMELINE_TITLE = "SF・コンピューター技術ライフライン";
-// TODO: 書き下ろす。元 README の「生年を入力すると…」はアプリの説明であって
-// 年表そのものの説明ではないので流用できない（docs/001-mvp.md 8.4）。
-const TIMELINE_DESCRIPTION = [
-  "1822 年から 2026 年まで、SF 作品・コンピューター技術・音楽の 720 項目。",
-  "松尾公也「SF・コンピューター技術ライフライン」より。",
-  "",
-  "※この説明文は仮です（TODO: 書き下ろす）",
-].join("\n");
+
+// category ごとに 1 本ずつ。slug は category のキーと揃えてある。
+//
+// 当初は 720 件を 1 本の混在版として投入していたが、問い 2（カテゴリは独立した
+// タイムラインに分けるべきか）を実地で見るために 3 本へ割った。混在版はもう作らない。
+//
+// TODO: 説明文を書き下ろす。元 README の「生年を入力すると…」はアプリの説明で
+// あって年表そのものの説明ではないので流用できない（docs/001-mvp.md 8.4）。
+const TIMELINES = {
+  sf: {
+    slug: "sf",
+    title: "SF作品 ライフライン",
+    description: "松尾公也「SF・コンピューター技術ライフライン」から SF 作品だけを抜き出した年表。",
+  },
+  tech: {
+    slug: "tech",
+    title: "実テクノロジー ライフライン",
+    description: "松尾公也「SF・コンピューター技術ライフライン」から実テクノロジーだけを抜き出した年表。",
+  },
+  music: {
+    slug: "music",
+    title: "音楽・カルチャー ライフライン",
+    description: "松尾公也「SF・コンピューター技術ライフライン」から音楽・カルチャーだけを抜き出した年表。",
+  },
+};
+
+const DESCRIPTION_SUFFIX = "\n\n※この説明文は仮です（TODO: 書き下ろす）";
 
 // D1 には 1 文あたりの長さの上限がある（超えると SQLITE_TOOBIG）。
 // 蘊蓄が最長 1013 字あるので行数ではなくバイト数で刻む。
@@ -121,76 +138,82 @@ function rowValues(row) {
   ].join(", ");
 }
 
-function buildSql(rows) {
+function buildSql(byCategory) {
   const owner = sqlString(OWNER_USERNAME);
-  const slug = sqlString(TIMELINE_SLUG);
+  const total = Object.values(byCategory).reduce((n, rows) => n + rows.length, 0);
 
   const out = [];
   out.push("-- 自動生成: pnpm data:convert");
   out.push(`-- 出典 ${SOURCE_REPO} @ ${SOURCE_COMMIT} (MIT)`);
-  out.push(`-- ${rows.length} 件`);
+  out.push(`-- ${total} 件を category ごとに ${Object.keys(byCategory).length} 本へ`);
   out.push("--");
   out.push("-- 冪等。流し直すとイベントを入れ替える。");
   out.push("");
 
-  out.push("INSERT OR IGNORE INTO timelines (owner_id, slug, title, description)");
-  out.push(
-    `SELECT id, ${slug}, ${sqlString(TIMELINE_TITLE)}, ${sqlString(TIMELINE_DESCRIPTION)}`,
-  );
-  out.push(`  FROM users WHERE username = ${owner};`);
-  out.push("");
+  for (const [category, rows] of Object.entries(byCategory)) {
+    const timeline = TIMELINES[category];
+    const slug = sqlString(timeline.slug);
 
-  out.push("DELETE FROM events WHERE timeline_id IN (");
-  out.push("  SELECT t.id FROM timelines t JOIN users u ON u.id = t.owner_id");
-  out.push(`   WHERE u.username = ${owner} AND t.slug = ${slug}`);
-  out.push(");");
-  out.push("");
+    out.push(`-- ── ${timeline.title}（${rows.length} 件）`);
+    out.push("INSERT OR IGNORE INTO timelines (owner_id, slug, title, description)");
+    out.push(
+      `SELECT id, ${slug}, ${sqlString(timeline.title)}, ${sqlString(timeline.description + DESCRIPTION_SUFFIX)}`,
+    );
+    out.push(`  FROM users WHERE username = ${owner};`);
+    out.push("");
 
-  for (const chunk of chunkRows(rows)) {
+    out.push("DELETE FROM events WHERE timeline_id IN (");
+    out.push("  SELECT t.id FROM timelines t JOIN users u ON u.id = t.owner_id");
+    out.push(`   WHERE u.username = ${owner} AND t.slug = ${slug}`);
+    out.push(");");
+    out.push("");
+
+    for (const chunk of chunkRows(rows)) {
+      out.push(
+        "INSERT INTO events (timeline_id, year, precision, title, description, category, subcategory, links, created_by)",
+      );
+      // SQLite の VALUES は列名を付けられないので column1..column7 で受ける。
+      out.push(
+        "SELECT t.id, v.column1, v.column2, v.column3, v.column4, v.column5, v.column6, v.column7, u.id",
+      );
+      out.push("  FROM (VALUES");
+      chunk.forEach((row, index) => {
+        out.push(`    (${rowValues(row)})${index === chunk.length - 1 ? "" : ","}`);
+      });
+      out.push("  ) AS v");
+      out.push(`  JOIN users u ON u.username = ${owner}`);
+      out.push(`  JOIN timelines t ON t.owner_id = u.id AND t.slug = ${slug};`);
+      out.push("");
+    }
+
+    out.push("UPDATE timelines SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')");
     out.push(
-      "INSERT INTO events (timeline_id, year, precision, title, description, category, subcategory, links, created_by)",
+      ` WHERE slug = ${slug} AND owner_id = (SELECT id FROM users WHERE username = ${owner});`,
     );
-    // SQLite の VALUES は列名を付けられないので column1..column7 で受ける。
-    out.push(
-      "SELECT t.id, v.column1, v.column2, v.column3, v.column4, v.column5, v.column6, v.column7, u.id",
-    );
-    out.push("  FROM (VALUES");
-    chunk.forEach((row, index) => {
-      out.push(`    (${rowValues(row)})${index === chunk.length - 1 ? "" : ","}`);
-    });
-    out.push("  ) AS v");
-    out.push(`  JOIN users u ON u.username = ${owner}`);
-    out.push(`  JOIN timelines t ON t.owner_id = u.id AND t.slug = ${slug};`);
     out.push("");
   }
-
-  out.push("UPDATE timelines SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')");
-  out.push(` WHERE slug = ${slug} AND owner_id = (SELECT id FROM users WHERE username = ${owner});`);
-  out.push("");
 
   return out.join("\n");
 }
 
-function report(rows) {
-  const tally = (key) =>
-    rows.reduce((acc, row) => {
-      const value = row[key] ?? "(none)";
-      acc[value] = (acc[value] ?? 0) + 1;
-      return acc;
-    }, {});
+function report(byCategory) {
+  const lines = [];
 
-  const years = rows.map((r) => r.year);
-  const lengths = rows.map((r) => (r.description ?? "").length).sort((a, b) => a - b);
-  const linkCount = rows.reduce((sum, r) => sum + (r.links ? JSON.parse(r.links).length : 0), 0);
+  for (const [category, rows] of Object.entries(byCategory)) {
+    const years = rows.map((r) => r.year);
+    const lengths = rows.map((r) => (r.description ?? "").length).sort((a, b) => a - b);
+    const links = rows.reduce((sum, r) => sum + (r.links ? JSON.parse(r.links).length : 0), 0);
+    const subs = new Set(rows.map((r) => r.subcategory).filter(Boolean));
 
-  const lines = [
-    `件数        ${rows.length}`,
-    `年の範囲    ${Math.min(...years)} 〜 ${Math.max(...years)}（${new Set(years).size} 年分）`,
-    `category    ${JSON.stringify(tally("category"))}`,
-    `subcategory ${Object.keys(tally("subcategory")).length} 種`,
-    `description 中央値 ${lengths[lengths.length >> 1]} 字 / 最長 ${lengths.at(-1)} 字`,
-    `links       計 ${linkCount} 本`,
-  ];
+    lines.push(
+      `${TIMELINES[category].slug.padEnd(6)} ${String(rows.length).padStart(4)} 件  ` +
+        `${Math.min(...years)}〜${Math.max(...years)}（${new Set(years).size} 年分）  ` +
+        `分野 ${subs.size} 種  蘊蓄 中央値 ${lengths[lengths.length >> 1]} 字  リンク ${links} 本`,
+    );
+  }
+
+  const total = Object.values(byCategory).reduce((n, rows) => n + rows.length, 0);
+  lines.push(`合計   ${String(total).padStart(4)} 件`);
   return lines.join("\n");
 }
 
@@ -203,13 +226,23 @@ if (broken.length) {
   throw new Error(`year か title が欠けている行が ${broken.length} 件ある`);
 }
 
+// 知らない category が来たら黙って落とさず気づけるようにする。
+const unknown = [...new Set(rows.map((r) => r.category).filter((c) => !c || !TIMELINES[c]))];
+if (unknown.length) {
+  throw new Error(`投入先の決まっていない category がある: ${unknown.join(", ")}`);
+}
+
+const byCategory = {};
+for (const category of Object.keys(TIMELINES)) byCategory[category] = [];
+for (const row of rows) byCategory[row.category].push(row);
+
 await mkdir(DATA_DIR, { recursive: true });
 await writeFile(
   path.join(DATA_DIR, "sf-tech-lifeline.json"),
-  JSON.stringify({ source: { repo: SOURCE_REPO, commit: SOURCE_COMMIT }, rows }, null, 2),
+  JSON.stringify({ source: { repo: SOURCE_REPO, commit: SOURCE_COMMIT }, byCategory }, null, 2),
   "utf8",
 );
-await writeFile(path.join(DATA_DIR, "sf-tech-lifeline.sql"), buildSql(rows), "utf8");
+await writeFile(path.join(DATA_DIR, "sf-tech-lifeline.sql"), buildSql(byCategory), "utf8");
 
-process.stdout.write(report(rows) + "\n");
+process.stdout.write(report(byCategory) + "\n");
 process.stdout.write("\n→ data/sf-tech-lifeline.json\n→ data/sf-tech-lifeline.sql\n");
