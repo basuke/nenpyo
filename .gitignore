@@ -6,3 +6,5 @@ worker-configuration.d.ts
 *.log
 dist/
 .vite/
+.svelte-kit/
+data/

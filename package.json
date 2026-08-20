@@ -8,20 +8,27 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "preview": "pnpm build && vite preview",
+    "preview": "pnpm build && wrangler dev",
     "deploy": "pnpm build && wrangler deploy",
     "start": "vite dev",
+    "prepare": "svelte-kit sync",
     "test": "vitest run",
     "test:watch": "vitest",
     "cf-typegen": "wrangler types",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "hono": "^4.9.10"
+    "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "db:migrate:local": "wrangler d1 migrations apply nenpyo --local",
+    "db:migrate": "wrangler d1 migrations apply nenpyo --remote",
+    "data:convert": "node scripts/convert-lifeline.mjs",
+    "data:import:local": "wrangler d1 execute nenpyo --local --file=data/sf-tech-lifeline.sql",
+    "data:import": "wrangler d1 execute nenpyo --remote --file=data/sf-tech-lifeline.sql"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.51.2",
-    "@cloudflare/vitest-pool-workers": "^0.21.0",
+    "@sveltejs/adapter-cloudflare": "^7.2.9",
+    "@sveltejs/kit": "^2.70.3",
+    "@sveltejs/vite-plugin-svelte": "^7.3.0",
+    "@types/node": "^26.2.0",
+    "svelte": "^5.56.9",
+    "svelte-check": "^4.7.6",
     "typescript": "^5.9.3",
     "vite": "^8.2.1",
     "vitest": "^4.1.10",
