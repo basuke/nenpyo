@@ -1,7 +1,7 @@
 # GitHub OAuth App の資格情報。.dev.vars にコピーして使う（.dev.vars は commit しない）。
 #
-# 開発用のアプリを別途登録すること。GitHub の OAuth App は
-# コールバック URL を 1 つしか持てないため。
+# 開発用のアプリを別途登録すること。本番と同じアプリを使うと、
+# ここに置く secret が本番のものと同じになってしまうため。
 #   Homepage URL:               http://localhost:5173
 #   Authorization callback URL: http://localhost:5173/auth/github/callback
 #

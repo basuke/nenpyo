@@ -23,8 +23,9 @@ GITHUB_CLIENT_ID=...
 GITHUB_CLIENT_SECRET=...
 ```
 
-GitHub の OAuth App はコールバック URL を 1 つしか持てないので、
-開発用と本番用で別々のアプリを登録する。
+開発用と本番用で別々のアプリを登録する。1 つのアプリに callback URL を
+10 個まで並べられるので技術的には 1 つで足りるが、共用すると開発機に置く
+client secret が本番と同じものになるため、分けている。
 
 - 本番: `https://nenpyo.net/auth/github/callback`
 - 開発: `http://localhost:5173/auth/github/callback`
