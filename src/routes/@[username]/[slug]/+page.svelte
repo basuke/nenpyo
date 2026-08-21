@@ -10,7 +10,7 @@
 
   /**
    * リンクは出どころが 2 つある。出来事そのものの出典（events.links）と、
-   * その読みの根拠（notes.links）は別物なので、まとめずに分けて出す
+   * そのノートの根拠（notes.links）は別物なので、まとめずに分けて出す
    * （docs/003-events-and-notes.md 2 章）。
    */
   function linksOf(entry: Entry) {
@@ -89,7 +89,7 @@
               {/if}
               {#if links.references.length}
                 <ul class="linklist linklist--reference">
-                  <li class="linklist__label">読みの根拠</li>
+                  <li class="linklist__label">ノートの根拠</li>
                   {#each links.references as link}
                     <li><a href={link.href} rel="noreferrer noopener" target="_blank">{link.label}</a></li>
                   {/each}

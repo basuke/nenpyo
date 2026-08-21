@@ -24,7 +24,7 @@ export const actions: Actions = {
     const parsed = parseEntryForm(form);
     if (!parsed.ok) return fail(400, { message: parsed.message, values: Object.fromEntries(form) });
 
-    // 事実と読みを 1 枚のフォームで受け、event / note / entry に分けて置く。
+    // 事実とノートを 1 枚のフォームで受け、event / note / entry に分けて置く。
     await createEntry(db, timeline.id, user.id, parsed.value);
 
     throw redirect(303, `/@${owner.username}/${timeline.slug}`);
