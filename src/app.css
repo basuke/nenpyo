@@ -212,34 +212,11 @@ h1, h2, h3 {
   font-size: 1.0625rem;
 }
 
-.entry__event {
-  display: block;
-}
-
-/* 束ねられた行。指しているイベントを罫線でまとめて、これで 1 行だと示す。
-   読みは罫線の外に出す。束ね全体に掛かっているもので、
-   個々の出来事の説明ではないため。
-   
-   罫線を --border にすると背景に沈んで、単に折り返した長いタイトルと
-   見分けが付かなくなる。行頭の点と合わせて、複数あることを二重に示す。 */
-.entry--bundled .entry__title {
-  border-left: 2px solid color-mix(in srgb, var(--muted) 50%, transparent);
-  padding-left: 0.75rem;
-}
-
-.entry--bundled .entry__event {
-  text-indent: -0.9em;
-  padding-left: 0.9em;
-}
-
-.entry--bundled .entry__event::before {
-  content: "・";
+/* 束ねられた行のイベント同士の区切り。元データの "/" をそのまま踏襲する。 */
+.entry__join {
   color: var(--muted);
   font-weight: normal;
-}
-
-.entry--bundled .entry__event + .entry__event {
-  margin-top: 0.125rem;
+  margin: 0 0.25rem;
 }
 
 /* 読みのキャッチコピー。事実であるタイトルと見た目で分ける。

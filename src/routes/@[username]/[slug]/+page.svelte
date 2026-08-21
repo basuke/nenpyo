@@ -44,8 +44,7 @@
       {#each group.entries as entry (entry.id)}
         {@const links = linksOf(entry)}
         {@const head = entry.events[0]}
-        {@const bundled = entry.events.length > 1}
-        <li class="entry" class:entry--bundled={bundled}>
+        <li class="entry">
           {#if head?.category || head?.subcategory}
             <p class="entry__tags">
               {#if head.category}
@@ -60,14 +59,14 @@
           {/if}
 
           <!--
-            束ねられた行は、指しているイベントを 1 件ずつ縦に並べて、
-            まとめて括られていることを左の罫線で示す。読み（tagline / body）は
-            罫線の外に置く。束ね全体に掛かっているものだからで、
-            「1937年は再起動の年」のような読みは個々の出来事の説明ではない。
+            束ねられた行は元データと同じく "/" で繋いで 1 行として見せる。
+            束ねかどうかは編集のときに効く構造の話で、読むときには要らない。
+            そこを見た目で分けようとすると、"IBM System/360" のように名前へ
+            "/" を含むタイトルと張り合うことになって、かえって読みにくい。
           -->
           <h3 class="entry__title">
-            {#each entry.events as event (event.id)}
-              <span class="entry__event">{event.title}</span>
+            {#each entry.events as event, i (event.id)}
+              {#if i > 0}<span class="entry__join">/</span>{/if}{event.title}
             {/each}
           </h3>
 
