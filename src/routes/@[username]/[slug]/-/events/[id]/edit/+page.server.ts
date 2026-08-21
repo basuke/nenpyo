@@ -10,6 +10,7 @@ import {
   updateEntry,
 } from "$lib/server/db";
 import { loadTimelineContext, requireOwner } from "$lib/server/guards";
+import { bundleable } from "$lib/period";
 import { formatLinksInput, parseEntryForm } from "$lib/server/forms";
 import type { MaybePlatform } from "$lib/server/platform";
 
@@ -39,10 +40,14 @@ export const load: PageServerLoad = async ({ platform, params, locals, url }) =>
   // 並べ替えと切り離しだけできるようにする。
   const [head] = entry.events;
 
-  // 束ねる相手の候補。entry は年表のものなので、跨ぐと意味が壊れる。
-  // 同じ年に限るのは、実データの束ねが 27 件すべて同年だから。
+  // 束ねる相手の候補。entry は年表のものなので、まず同じ年表であること。
+  //
+  // そのうえで、束ねた結果の出来事がすべて収まる期間が 1 つあること。束ねた行は
+  // 年表の 1 か所に出るので、そこに収まらない期間の出来事が混ざると行の位置が
+  // 嘘になる。「同じ年」ではないのは、1998 年と 1998 年 3 月は束ねられるが
+  // 1998 年 3 月と 5 月は束ねられない、という差があるため（$lib/period）。
   const siblings = (await listEntries(db, timeline.id))
-    .filter((other) => other.id !== entry.id && other.events[0]?.year === head?.year)
+    .filter((other) => other.id !== entry.id && bundleable([...entry.events, ...other.events]))
     .map((other) => ({
       id: other.id,
       label: other.events.map((event) => event.title).join(" / "),

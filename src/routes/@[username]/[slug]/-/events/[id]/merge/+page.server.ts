@@ -2,6 +2,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { findEntry, mergeEntries, type MergeNote } from "$lib/server/db";
 import { loadTimelineContext, requireOwner } from "$lib/server/guards";
+import { bundleable } from "$lib/period";
 import type { MaybePlatform } from "$lib/server/platform";
 
 /**
@@ -30,6 +31,11 @@ async function loadPair(
   const target = await findEntry(context.db, context.timeline.id, targetId);
   const source = await findEntry(context.db, context.timeline.id, sourceId);
   if (!target || !source) throw error(404, "その行は見つかりません");
+
+  // 画面では候補を絞っているが、URL を直に叩かれることもあるのでここでも見る。
+  if (!bundleable([...target.events, ...source.events])) {
+    throw error(400, "この 2 行は期間が離れていて束ねられません");
+  }
 
   return { ...context, target, source };
 }
