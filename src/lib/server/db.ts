@@ -213,10 +213,22 @@ export async function touchTimeline(db: D1Database, id: number) {
  * events が 1..N なのは束ね（compound）を同じ仕組みで表すため。単独の
  * イベントは要素数 1 の束ねとして扱うので、この型に分岐は要らない。
  */
+/** ノートの持ち主や、その先祖を書いた人。アイコンと名前を出すのに要る分だけ。 */
+export type Person = {
+  id: number;
+  username: string;
+  display_name: string | null;
+  avatar_url: string | null;
+};
+
 export type TimelineEntry = {
   id: number;
   position: number;
   note: NoteRow | null;
+  /** ノートの持ち主。本文を開いたときだけ出す（#25）。 */
+  author: Person | null;
+  /** 先祖のノートを書いた人。新しい順、重複を除いて最大 3 人。 */
+  ancestors: Person[];
   events: EventRow[];
 };
 
@@ -226,6 +238,11 @@ const ENTRY_ORDER =
 
 type EntryHeadRow = { id: number; position: number } & {
   [K in keyof NoteRow as `note_${string & K}`]: NoteRow[K] | null;
+} & {
+  author_id: number | null;
+  author_username: string | null;
+  author_display_name: string | null;
+  author_avatar_url: string | null;
 };
 
 /**
@@ -245,11 +262,16 @@ export async function listEntries(db: D1Database, timelineId: number): Promise<T
               n.body        AS note_body,
               n.links       AS note_links,
               n.created_at  AS note_created_at,
-              n.updated_at  AS note_updated_at
+              n.updated_at  AS note_updated_at,
+              au.id           AS author_id,
+              au.username     AS author_username,
+              au.display_name AS author_display_name,
+              au.avatar_url   AS author_avatar_url
          FROM timeline_entries te
          JOIN timeline_entry_events tee ON tee.entry_id = te.id AND tee.position = 0
          JOIN events ev ON ev.id = tee.event_id
     LEFT JOIN notes n ON n.id = te.note_id
+    LEFT JOIN users au ON au.id = n.author_id
         WHERE te.timeline_id = ?
         ${ENTRY_ORDER}`,
     )
@@ -275,12 +297,70 @@ export async function listEntries(db: D1Database, timelineId: number): Promise<T
     else byEntry.set(entry_id, [event]);
   }
 
+  const ancestors = await listNoteAncestors(db, timelineId);
+
   return heads.results.map((head) => ({
     id: head.id,
     position: head.position,
     note: toNote(head),
+    author: toPerson(head),
+    ancestors: (head.note_id !== null && ancestors.get(head.note_id)) || [],
     events: byEntry.get(head.id) ?? [],
   }));
+}
+
+/** LEFT JOIN で引いた author_* 列を Person に戻す。 */
+function toPerson(head: EntryHeadRow): Person | null {
+  if (head.author_id === null || head.author_username === null) return null;
+  return {
+    id: head.author_id,
+    username: head.author_username,
+    display_name: head.author_display_name,
+    avatar_url: head.author_avatar_url,
+  };
+}
+
+/**
+ * その年表で使われているノートの、先祖を書いた人を集める。
+ *
+ * derivations を遡る。誰のノートから来たのかを、名前ではなくアイコンの並びで
+ * 見せるため（#11）。同じ人が続くことはあるので重ねて数えず、近いほうから
+ * 最大 3 人に切る。
+ *
+ * 深さを 5 で止めているのは、際限なく遡っても出す場所が無いから。
+ */
+const ANCESTOR_LIMIT = 3;
+
+async function listNoteAncestors(db: D1Database, timelineId: number): Promise<Map<number, Person[]>> {
+  const { results } = await db
+    .prepare(
+      `WITH RECURSIVE ancestry(note_id, ancestor_id, depth) AS (
+              SELECT te.note_id, d.ancestor_id, 1
+                FROM timeline_entries te
+                JOIN derivations d ON d.kind = 'note' AND d.descendant_id = te.note_id
+               WHERE te.timeline_id = ?
+           UNION ALL
+              SELECT a.note_id, d.ancestor_id, a.depth + 1
+                FROM ancestry a
+                JOIN derivations d ON d.kind = 'note' AND d.descendant_id = a.ancestor_id
+               WHERE a.depth < 5
+            )
+          SELECT a.note_id, u.id, u.username, u.display_name, u.avatar_url
+            FROM ancestry a
+            JOIN notes n ON n.id = a.ancestor_id
+            JOIN users u ON u.id = n.author_id
+        ORDER BY a.note_id, a.depth`,
+    )
+    .bind(timelineId)
+    .all<{ note_id: number } & Person>();
+
+  const byNote = new Map<number, Person[]>();
+  for (const { note_id, ...person } of results) {
+    const list = byNote.get(note_id) ?? [];
+    if (list.length < ANCESTOR_LIMIT && !list.some((p) => p.id === person.id)) list.push(person);
+    byNote.set(note_id, list);
+  }
+  return byNote;
 }
 
 /** LEFT JOIN で引いた note_* 列を NoteRow に戻す。note が無ければ null。 */
@@ -360,8 +440,10 @@ export async function createEntry(
   if (!entry) throw new Error("failed to insert timeline entry");
 
   await db
-    .prepare("INSERT INTO timeline_entry_events (entry_id, event_id, position) VALUES (?, ?, 0)")
-    .bind(entry.id, event.id)
+    .prepare(
+      "INSERT INTO timeline_entry_events (entry_id, event_id, timeline_id, position) VALUES (?, ?, ?, 0)",
+    )
+    .bind(entry.id, event.id, timelineId)
     .run();
 
   await touchTimeline(db, timelineId);
@@ -388,17 +470,25 @@ async function noteIsFrozen(db: D1Database, noteId: number): Promise<boolean> {
   return Boolean(row && (row.refs > 1 || row.children > 0));
 }
 
-/** 凍結されたノートを、この行のためのノートとして複製する。来歴を 1 行残す。 */
+/**
+ * 凍結されたノートを、この行のためのノートとして複製する。来歴を 1 行残す。
+ *
+ * **複製したものの持ち主は、書き換えた人になる。** 他人のノートを自分の年表に
+ * 載せて、そこへ手を入れたなら、出来上がった文はその人のものである。元の人の
+ * 名前が残り続けると、書いていないものを書いたことにしてしまう。
+ * どこから来たかは derivations が語る（#11）。
+ */
 async function forkNote(
   db: D1Database,
   entry: TimelineEntry,
+  authorId: number,
   tagline: string | null,
   body: string | null,
 ) {
   const ancestor = entry.note!;
   const forked = await db
     .prepare("INSERT INTO notes (author_id, tagline, body, links) VALUES (?, ?, ?, ?) RETURNING id")
-    .bind(ancestor.author_id, tagline, body, ancestor.links)
+    .bind(authorId, tagline, body, ancestor.links)
     .first<{ id: number }>();
   if (!forked) throw new Error("failed to fork note");
 
@@ -407,7 +497,7 @@ async function forkNote(
       `INSERT OR IGNORE INTO derivations (kind, ancestor_id, descendant_id, reason, created_by)
             VALUES ('note', ?, ?, '編集による複製', ?)`,
     )
-    .bind(ancestor.id, forked.id, ancestor.author_id)
+    .bind(ancestor.id, forked.id, authorId)
     .run();
 
   await db
@@ -431,6 +521,7 @@ export async function updateEntry(
   timelineId: number,
   entry: TimelineEntry,
   input: EntryInput,
+  authorId: number,
 ) {
   const event = entry.events[0];
   if (!event) throw new Error(`entry ${entry.id} has no event`);
@@ -446,7 +537,7 @@ export async function updateEntry(
 
   if (entry.note) {
     if (await noteIsFrozen(db, entry.note.id)) {
-      await forkNote(db, entry, input.tagline, input.body);
+      await forkNote(db, entry, authorId, input.tagline, input.body);
     } else {
       await db
         .prepare("UPDATE notes SET tagline = ?, body = ?, updated_at = ? WHERE id = ?")
@@ -457,7 +548,7 @@ export async function updateEntry(
     // ノートが無かった行に、初めてノートが付いた。
     const note = await db
       .prepare("INSERT INTO notes (author_id, tagline, body) VALUES (?, ?, ?) RETURNING id")
-      .bind(event.created_by, input.tagline, input.body)
+      .bind(authorId, input.tagline, input.body)
       .first<{ id: number }>();
     if (note) {
       await db
@@ -515,6 +606,131 @@ async function collectNoteIfUnreferenced(db: D1Database, noteId: number) {
     .run();
 }
 
+/**
+ * ノートの歴代。いまのものから、derivations を遡って古いほうへ並べる。
+ *
+ * 複製が起きるのは、凍結されたノートに手を入れたとき（5 章）と、束ねを統合した
+ * とき（#18）。後者は親が 2 つになるので、同じ深さに複数並ぶことがある。
+ */
+export type NoteRevision = NoteRow & {
+  depth: number;
+  reason: string | null;
+  author: Person | null;
+};
+
+export async function listNoteHistory(db: D1Database, noteId: number): Promise<NoteRevision[]> {
+  const { results } = await db
+    .prepare(
+      `WITH RECURSIVE chain(id, depth, reason) AS (
+              SELECT ?, 0, NULL
+           UNION ALL
+              SELECT d.ancestor_id, c.depth + 1, d.reason
+                FROM chain c
+                JOIN derivations d ON d.kind = 'note' AND d.descendant_id = c.id
+               WHERE c.depth < 20
+            )
+          SELECT n.*, c.depth, c.reason,
+                 u.id AS person_id, u.username, u.display_name, u.avatar_url
+            FROM chain c
+            JOIN notes n ON n.id = c.id
+       LEFT JOIN users u ON u.id = n.author_id
+        ORDER BY c.depth, n.id`,
+    )
+    .bind(noteId)
+    .all<NoteRow & { depth: number; reason: string | null; person_id: number | null } & Omit<Person, "id">>();
+
+  return results.map(({ depth, reason, person_id, username, display_name, avatar_url, ...note }) => ({
+    ...note,
+    depth,
+    reason,
+    author: person_id === null ? null : { id: person_id, username, display_name, avatar_url },
+  }));
+}
+
+/* ── 他人の年表から載せる ─────────────────────────────────────────────── */
+
+/**
+ * その年表に既にある event を返す。
+ *
+ * 1 つの年表に同じ出来事は一度だけ（migrations/0005）。制約は DB が守るので、
+ * ここで見るのは「既にこの年表にあります」と手前で返すため。
+ */
+export async function eventsAlreadyIn(
+  db: D1Database,
+  timelineId: number,
+  eventIds: number[],
+): Promise<number[]> {
+  if (!eventIds.length) return [];
+  const placeholders = eventIds.map(() => "?").join(", ");
+  const { results } = await db
+    .prepare(
+      `SELECT event_id FROM timeline_entry_events
+        WHERE timeline_id = ? AND event_id IN (${placeholders})`,
+    )
+    .bind(timelineId, ...eventIds)
+    .all<{ event_id: number }>();
+  return results.map((row) => row.event_id);
+}
+
+/**
+ * 載せるときのノートの決め方。
+ *
+ *   share … 元のノートをそのまま参照する。参照が 2 本になるので、手を入れた
+ *           時点で複製される（docs/003-events-and-notes.md 5 章）
+ *   own   … 自分で書く。元のノートから派生したわけではないので来歴は残さない
+ *   none  … 付けない
+ */
+export type PlacedNote =
+  | { kind: "share" }
+  | { kind: "own"; tagline: string | null; body: string | null }
+  | { kind: "none" };
+
+/**
+ * 他人の年表にある行を、自分の年表にも載せる。
+ *
+ * **events は複製しない。** 同じ出来事は同じ行に寄っていてほしい素材なので、
+ * 両方の年表が同じ行を参照する（docs/003 の 5 章）。できるのは自分の年表の
+ * 新しい entry だけで、それが既にある event を指す。
+ *
+ * 行ごとに載せる。束ねはそのまま来て、要らないものは切り離せる（#18）。
+ * イベントとノートが必ずセットで来るので、掛かり方がずれない。
+ */
+export async function placeEntry(
+  db: D1Database,
+  timelineId: number,
+  source: TimelineEntry,
+  note: PlacedNote,
+  userId: number,
+): Promise<number> {
+  const eventIds = source.events.map((event) => event.id);
+
+  const already = await eventsAlreadyIn(db, timelineId, eventIds);
+  if (already.length) throw new Error(`既にこの年表にある出来事がある: ${already.join(", ")}`);
+
+  let noteId: number | null = null;
+  if (note.kind === "share") {
+    noteId = source.note?.id ?? null;
+  } else if (note.kind === "own") {
+    const created = await db
+      .prepare("INSERT INTO notes (author_id, tagline, body) VALUES (?, ?, ?) RETURNING id")
+      .bind(userId, note.tagline, note.body)
+      .first<{ id: number }>();
+    if (!created) throw new Error("failed to insert note");
+    noteId = created.id;
+  }
+
+  const entry = await db
+    .prepare("INSERT INTO timeline_entries (timeline_id, note_id) VALUES (?, ?) RETURNING id")
+    .bind(timelineId, noteId)
+    .first<{ id: number }>();
+  if (!entry) throw new Error("failed to insert timeline entry");
+
+  // 元の行の並びをそのまま持ってくる。束ねの順は書き手の判断なので崩さない。
+  await resequence(db, timelineId, entry.id, eventIds);
+  await touchTimeline(db, timelineId);
+  return entry.id;
+}
+
 /* ── 束ねの組み替え ───────────────────────────────────────────────────── */
 
 /**
@@ -524,12 +740,19 @@ async function collectNoteIfUnreferenced(db: D1Database, noteId: number) {
  * したあとは必ず通す。(entry_id, position) が主キーなので、
  * その場で番号をずらすと衝突する。いったん全部消してから入れ直す。
  */
-async function resequence(db: D1Database, entryId: number, eventIds: number[]) {
+async function resequence(
+  db: D1Database,
+  timelineId: number,
+  entryId: number,
+  eventIds: number[],
+) {
   await db.prepare("DELETE FROM timeline_entry_events WHERE entry_id = ?").bind(entryId).run();
   for (const [position, eventId] of eventIds.entries()) {
     await db
-      .prepare("INSERT INTO timeline_entry_events (entry_id, event_id, position) VALUES (?, ?, ?)")
-      .bind(entryId, eventId, position)
+      .prepare(
+        "INSERT INTO timeline_entry_events (entry_id, event_id, timeline_id, position) VALUES (?, ?, ?, ?)",
+      )
+      .bind(entryId, eventId, timelineId, position)
       .run();
   }
 }
@@ -562,7 +785,7 @@ export async function addEventToEntry(
     .first<EventRow>();
   if (!event) throw new Error("failed to insert event");
 
-  await resequence(db, entry.id, byDate([...entry.events, event]).map((e) => e.id));
+  await resequence(db, timelineId, entry.id, byDate([...entry.events, event]).map((e) => e.id));
   await touchTimeline(db, timelineId);
 }
 
@@ -582,7 +805,7 @@ export async function reorderEntryEvents(
   if (eventIds.length !== known.size || !eventIds.every((id) => known.has(id))) {
     throw new Error(`entry ${entry.id} の並べ替えに、元と違うイベントが混ざっている`);
   }
-  await resequence(db, entry.id, eventIds);
+  await resequence(db, timelineId, entry.id, eventIds);
   await touchTimeline(db, timelineId);
 }
 
@@ -616,8 +839,8 @@ export async function detachEvent(
     .first<{ id: number }>();
   if (!created) throw new Error("failed to insert timeline entry");
 
-  await resequence(db, created.id, [eventId]);
-  await resequence(db, entry.id, byDate(remaining).map((event) => event.id));
+  await resequence(db, timelineId, created.id, [eventId]);
+  await resequence(db, timelineId, entry.id, byDate(remaining).map((event) => event.id));
   await touchTimeline(db, timelineId);
   return created.id;
 }
@@ -676,7 +899,7 @@ export async function mergeEntries(
     .prepare("UPDATE timeline_entries SET note_id = ?, updated_at = ? WHERE id = ?")
     .bind(noteId, now(), target.id)
     .run();
-  await resequence(db, target.id, events);
+  await resequence(db, timelineId, target.id, events);
 
   // 採らなかったノートは、他から参照されていなければ回収する。
   for (const id of [target.note?.id, source.note?.id]) {

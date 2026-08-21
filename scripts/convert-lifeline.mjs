@@ -335,9 +335,14 @@ function buildSql(entries) {
   out.push(`  JOIN users u ON u.username = ${owner}`);
   out.push("  JOIN timelines t ON t.owner_id = u.id AND t.slug = se.slug;");
   out.push("");
-  out.push("INSERT INTO timeline_entry_events (entry_id, event_id, position)");
-  out.push("SELECT b.entry_base + sv.entry_key, b.event_base + sv.key, sv.position");
-  out.push("  FROM _seed_events sv, _seed_base b;");
+  // timeline_id は entry から辿れる値の写しだが、UNIQUE (timeline_id, event_id) を
+  // 張るために列として持っている（migrations/0005）。ここでも入れる。
+  out.push("INSERT INTO timeline_entry_events (entry_id, event_id, timeline_id, position)");
+  out.push("SELECT b.entry_base + sv.entry_key, b.event_base + sv.key, t.id, sv.position");
+  out.push("  FROM _seed_events sv, _seed_base b");
+  out.push("  JOIN _seed_entries se ON se.key = sv.entry_key");
+  out.push(`  JOIN users u ON u.username = ${owner}`);
+  out.push("  JOIN timelines t ON t.owner_id = u.id AND t.slug = se.slug;");
   out.push("");
   out.push("UPDATE timelines SET updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')");
   out.push(` WHERE slug IN (${slugs}) AND owner_id = (SELECT id FROM users WHERE username = ${owner});`);

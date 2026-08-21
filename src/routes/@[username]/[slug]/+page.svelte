@@ -45,7 +45,7 @@
         {@const links = linksOf(entry)}
         {@const head = entry.events[0]}
         {@const more = Boolean(entry.note?.body) || links.sources.length > 0
-          || links.references.length > 0 || data.canEdit}
+          || links.references.length > 0 || Boolean(entry.author) || data.canEdit || data.canPlace}
         <li class="entry">
           <!--
             折りたたんだ行に出すのは、イベント名とキャッチコピーだけ。
@@ -106,9 +106,42 @@
                   </div>
                 {/if}
 
-                {#if data.canEdit}
+                <!--
+                  ノートの持ち主は開いたときだけ出す（#25）。折りたたみ側に出すと
+                  自分の年表で自分の名前が何百回も並ぶ。
+                  先祖は名前ではなくアイコンだけで、誰のノートから来たのかを示す。
+                -->
+                {#if entry.author}
+                  <p class="entry__by">
+                    {#if entry.ancestors.length}
+                      <a class="entry__ancestors" href="{base}/-/notes/{entry.note?.id}"
+                         title="このノートの歴代を見る">
+                        {#each entry.ancestors as person (person.id)}
+                          {#if person.avatar_url}
+                            <img class="avatar avatar--stacked" src={person.avatar_url}
+                                 alt={person.username} width="18" height="18" loading="lazy" />
+                          {:else}
+                            <span class="avatar avatar--stacked avatar--blank">{person.username.slice(0, 1)}</span>
+                          {/if}
+                        {/each}
+                      </a>
+                    {/if}
+                    {#if entry.author.avatar_url}
+                      <img class="avatar" src={entry.author.avatar_url} alt=""
+                           width="18" height="18" loading="lazy" />
+                    {/if}
+                    <a href="/@{entry.author.username}">{entry.author.display_name ?? entry.author.username}</a>
+                  </p>
+                {/if}
+
+                {#if data.canEdit || data.canPlace}
                   <p class="entry__actions">
-                    <a href="{base}/-/events/{entry.id}/edit">編集</a>
+                    {#if data.canEdit}
+                      <a href="{base}/-/events/{entry.id}/edit">編集</a>
+                    {/if}
+                    {#if data.canPlace}
+                      <a href="{base}/-/events/{entry.id}/place">自分の年表に載せる</a>
+                    {/if}
                   </p>
                 {/if}
               </div>
