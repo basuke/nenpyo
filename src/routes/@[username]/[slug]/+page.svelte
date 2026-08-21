@@ -44,64 +44,87 @@
       {#each group.entries as entry (entry.id)}
         {@const links = linksOf(entry)}
         {@const head = entry.events[0]}
+        {@const more = Boolean(entry.note?.body) || links.sources.length > 0
+          || links.references.length > 0 || data.canEdit}
         <li class="entry">
-          {#if head?.category || head?.subcategory}
-            <p class="entry__tags">
-              {#if head.category}
-                <span class="tag" style="color: {categoryColor(head.category)}">
-                  {categoryLabel(head.category)}
-                </span>
-              {/if}
-              {#if head.subcategory}
-                <span class="tag tag--sub">{subcategoryLabel(head.subcategory)}</span>
-              {/if}
-            </p>
-          {/if}
-
           <!--
-            束ねられた行は元データと同じく "/" で繋いで 1 行として見せる。
-            束ねかどうかは編集のときに効く構造の話で、読むときには要らない。
-            そこを見た目で分けようとすると、"IBM System/360" のように名前へ
-            "/" を含むタイトルと張り合うことになって、かえって読みにくい。
+            折りたたんだ行に出すのは、イベント名とキャッチコピーだけ。
+            本文まで並べると 720 行が壁になって、年表として読めない。
+
+            開閉は details / summary に任せる。このページは csr = false なので
+            （720 件がハイドレーション用の JSON として二重に載るのを避けるため）、
+            JavaScript を要らない仕組みで開く必要がある。
           -->
-          <h3 class="entry__title">
-            {#each entry.events as event, i (event.id)}
-              {#if i > 0}<span class="entry__join">/</span>{/if}{event.title}
-            {/each}
-          </h3>
-
-          {#if entry.note?.tagline}
-            <p class="entry__tagline">{entry.note.tagline}</p>
-          {/if}
-
-          {#if entry.note?.body}
-            <p class="entry__body">{entry.note.body}</p>
-          {/if}
-
-          {#if links.sources.length || links.references.length}
-            <div class="entry__links">
-              {#if links.sources.length}
-                <ul class="linklist">
-                  {#each links.sources as link}
-                    <li><a href={link.href} rel="noreferrer noopener" target="_blank">{link.label}</a></li>
+          {#if more}
+            <details class="entry__details">
+              <summary class="entry__summary">
+                <h3 class="entry__title">
+                  {#each entry.events as event, i (event.id)}
+                    {#if i > 0}<span class="entry__join">/</span>{/if}{event.title}
                   {/each}
-                </ul>
-              {/if}
-              {#if links.references.length}
-                <ul class="linklist linklist--reference">
-                  <li class="linklist__label">ノートの根拠</li>
-                  {#each links.references as link}
-                    <li><a href={link.href} rel="noreferrer noopener" target="_blank">{link.label}</a></li>
-                  {/each}
-                </ul>
+                </h3>
+                {#if entry.note?.tagline}
+                  <p class="entry__tagline">{entry.note.tagline}</p>
+                {/if}
+              </summary>
+
+              <div class="entry__more">
+                {#if head?.category || head?.subcategory}
+                  <p class="entry__tags">
+                    {#if head.category}
+                      <span class="tag" style="color: {categoryColor(head.category)}">
+                        {categoryLabel(head.category)}
+                      </span>
+                    {/if}
+                    {#if head.subcategory}
+                      <span class="tag tag--sub">{subcategoryLabel(head.subcategory)}</span>
+                    {/if}
+                  </p>
+                {/if}
+
+                {#if entry.note?.body}
+                  <p class="entry__body">{entry.note.body}</p>
+                {/if}
+
+                {#if links.sources.length || links.references.length}
+                  <div class="entry__links">
+                    {#if links.sources.length}
+                      <ul class="linklist">
+                        {#each links.sources as link}
+                          <li><a href={link.href} rel="noreferrer noopener" target="_blank">{link.label}</a></li>
+                        {/each}
+                      </ul>
+                    {/if}
+                    {#if links.references.length}
+                      <ul class="linklist linklist--reference">
+                        <li class="linklist__label">ノートの根拠</li>
+                        {#each links.references as link}
+                          <li><a href={link.href} rel="noreferrer noopener" target="_blank">{link.label}</a></li>
+                        {/each}
+                      </ul>
+                    {/if}
+                  </div>
+                {/if}
+
+                {#if data.canEdit}
+                  <p class="entry__actions">
+                    <a href="{base}/-/events/{entry.id}/edit">編集</a>
+                  </p>
+                {/if}
+              </div>
+            </details>
+          {:else}
+            <!-- 開いても何も無い行。開閉の印を出すと空振りになる。 -->
+            <div class="entry__summary entry__summary--flat">
+              <h3 class="entry__title">
+                {#each entry.events as event, i (event.id)}
+                  {#if i > 0}<span class="entry__join">/</span>{/if}{event.title}
+                {/each}
+              </h3>
+              {#if entry.note?.tagline}
+                <p class="entry__tagline">{entry.note.tagline}</p>
               {/if}
             </div>
-          {/if}
-
-          {#if data.canEdit}
-            <p class="entry__actions">
-              <a href="{base}/-/events/{entry.id}/edit">編集</a>
-            </p>
           {/if}
         </li>
       {/each}
