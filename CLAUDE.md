@@ -22,6 +22,7 @@
 - `docs/001-mvp.md` — MVP の全体設計。スキーマ、URL 設計、認証、データ投入
 - `docs/002-github-oauth.md` — GitHub OAuth の実装
 - `docs/003-events-and-notes.md` — イベントとノートの分離、entry、CoW
+- `docs/004-layers.md` — 層の分け方。ロジックは lib に、ルートは入り口だけ
 
 ## 2. Issue の運用
 
@@ -106,6 +107,8 @@ export const csr = false;
 - **ORM は入れない。生 SQL を書く**（`docs/001-mvp.md` 3 章）。
   後から構造を変える前提なので、SQLite の挙動が見えているほうが判断しやすい
 - **SQL は `src/lib/server/db.ts` に集約する。** ルートから直接 `db.prepare()` を書かない
+- `actions/` `views/` から引くときは `import * as sql from "../db"`。
+  その行がどの層を触っているかを名前で見せる
 - 関数の第一引数は `db: D1Database`。名前付き export のみ、default export はしない
 - 行の型は `UserRow` `EventRow` のように手書きし、**列名は snake_case のまま**持つ
 - SQL は template literal でキーワードの桁を揃えて書く
@@ -132,10 +135,35 @@ return {
 - スキーマ変更は `migrations/NNNN_*.sql` を足す。既存ファイルは編集しない。
   マイグレーションにも**なぜその変更が要るのか**を日本語コメントで書く
 
+### 層（`docs/004-layers.md`）
+
+**ロジックはルートに置かない。`src/lib/server/` に置く。**
+`+page.server.ts` に残ってよいのは「どの操作を呼ぶか」と
+「成功したらどこへ行くか」の 2 つだけ。
+
+```
+routes  →  route.ts  →  actions / views  →  context / input  →  db
+```
+
+- `actions/`（書き込み）と `views/`（読み取り）は **`@sveltejs/kit` を import しない**。
+  `error()` も `redirect()` も `fail()` も呼ばない。失敗は `AppError` を投げる。
+  SvelteKit を経由しない呼び出し（API、テスト）が同じ道を通れるようにするため
+- 認可は `src/lib/server/context.ts` の `require*` に寄せる。
+  ルートで直接 `locals.user` を判定しない
+- 検証は `src/lib/server/input.ts`。**`FormData` ではなく plain object を受ける。**
+  検証は操作の中で走らせる。ルートで走らせると API から呼んだときに素通りする
+- `AppError` を HTTP に翻訳するのは `src/lib/server/route.ts` だけ
+- **`views/` と `actions/` の戻り値には名前を付ける**（`Promise<TimelineView>`）。
+  その形はページが受け取る `data` であり、API のレスポンスの契約でもある
+- **DB の行をそのまま外へ出さない。** `owner_username` のような SQL の都合の
+  列名が画面と API に漏れる。`views/common.ts` の `to*View` で詰め替える
+- 同じ形を 2 か所で宣言しない。検証を通った入力の形は `db.ts` が持ち、
+  `input.ts` はそれを import して戻り値に使う
+- 新しい操作を足すときは、まず `actions/` に置いてからルートを繋ぐ。逆をやらない
+
 ### SvelteKit / Svelte
 
 - Svelte 5 の runes（`$props()` / `$derived()` / `$state()`）を使う
-- 認可は `src/lib/server/guards.ts` に寄せる。ルートで直接 `locals.user` を判定しない
 - `error()` / `redirect()` は `throw` する
 - 読むだけのページは `export const csr = false;` を**理由のコメント付きで**置く
 - CSS クラスは BEM 風（`field__hint`）

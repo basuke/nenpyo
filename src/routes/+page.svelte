@@ -14,11 +14,11 @@
     {#each data.timelines as timeline (timeline.id)}
       <li class="timeline-card">
         <h2 class="timeline-card__title">
-          <a href="/@{timeline.owner_username}/{timeline.slug}">{timeline.title}</a>
+          <a href="/@{timeline.owner.username}/{timeline.slug}">{timeline.title}</a>
         </h2>
         <p class="timeline-card__meta">
-          <a href="/@{timeline.owner_username}">@{timeline.owner_username}</a>
-          ・{timeline.entry_count} 件
+          <a href="/@{timeline.owner.username}">@{timeline.owner.username}</a>
+          ・{timeline.entryCount} 件
         </p>
         {#if timeline.description}
           <p class="timeline-card__desc">{timeline.description}</p>

@@ -22,7 +22,7 @@
         <h2 class="timeline-card__title">
           <a href="/@{data.owner.username}/{timeline.slug}">{timeline.title}</a>
         </h2>
-        <p class="timeline-card__meta">{timeline.entry_count} 件</p>
+        <p class="timeline-card__meta">{timeline.entryCount} 件</p>
         {#if timeline.description}
           <p class="timeline-card__desc">{timeline.description}</p>
         {/if}

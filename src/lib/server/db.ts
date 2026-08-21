@@ -160,10 +160,15 @@ export async function findTimeline(db: D1Database, ownerId: number, slug: string
     .first<TimelineWithOwner>();
 }
 
-export async function createTimeline(
-  db: D1Database,
-  input: { ownerId: number; slug: string; title: string; description: string | null },
-) {
+/**
+ * 年表 1 本ぶんの書き込み内容。作成と更新で同じものを使う。
+ *
+ * 検証を通ったあとの形なので、`slug` は正規化済みで、`description` は
+ * 「未入力」が空文字ではなく NULL になっている（input.ts）。
+ */
+export type TimelineInput = { slug: string; title: string; description: string | null };
+
+export async function createTimeline(db: D1Database, input: TimelineInput & { ownerId: number }) {
   return db
     .prepare(
       `INSERT INTO timelines (owner_id, slug, title, description)
@@ -174,11 +179,7 @@ export async function createTimeline(
     .first<TimelineRow>();
 }
 
-export async function updateTimeline(
-  db: D1Database,
-  id: number,
-  input: { slug: string; title: string; description: string | null },
-) {
+export async function updateTimeline(db: D1Database, id: number, input: TimelineInput) {
   return db
     .prepare(
       `UPDATE timelines
@@ -908,8 +909,14 @@ export async function mergeEntries(
   await touchTimeline(db, timelineId);
 }
 
-/** そのタイムラインで実際に使われているカテゴリ。入力フォームの候補に使う。 */
-export async function listUsedCategories(db: D1Database, timelineId: number) {
+/** そのタイムラインで実際に使われているカテゴリと、その件数。 */
+export type CategoryUsage = { category: string | null; subcategory: string | null; count: number };
+
+/** 入力フォームの候補に使う。多い順に出すので、よく使う値が上に来る。 */
+export async function listUsedCategories(
+  db: D1Database,
+  timelineId: number,
+): Promise<CategoryUsage[]> {
   const { results } = await db
     .prepare(
       `SELECT ev.category, ev.subcategory, COUNT(*) AS count
@@ -921,6 +928,6 @@ export async function listUsedCategories(db: D1Database, timelineId: number) {
      ORDER BY count DESC`,
     )
     .bind(timelineId)
-    .all<{ category: string | null; subcategory: string | null; count: number }>();
+    .all<CategoryUsage>();
   return results;
 }

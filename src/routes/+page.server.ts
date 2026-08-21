@@ -1,8 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { listAllTimelines } from "$lib/server/db";
-import { requireDb } from "$lib/server/platform";
+import { page } from "$lib/server/route";
+import { homeView } from "$lib/server/views/timelines";
 
-export const load: PageServerLoad = async ({ platform }) => {
-  const db = requireDb(platform);
-  return { timelines: await listAllTimelines(db) };
-};
+export const load: PageServerLoad = (event) => page(event, homeView);
