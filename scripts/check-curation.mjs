@@ -95,6 +95,60 @@ for (const item of slash.items) {
   }
 }
 
+/* ── inline-parens.json（Issue #7） ──────────────────────────────────── */
+
+// #7 が見るのは slash.json の分割を織り込んだあとのタイトル。分割で新しく
+// 生まれた「Bフレッツ(光回線)開始」なども対象に入るので、ここで組み立て直す。
+const splitBySlash = new Map(
+  slash.items.filter((item) => item.disposition !== "keep").map((item) => [item.title, item]),
+);
+
+const curatedTitles = events.flatMap((event) => {
+  const item = splitBySlash.get(event.title);
+  const titles = item ? item.events.map((child) => child.title) : [event.title];
+  return titles.map((title) => ({ title, year: event.year, category: event.category }));
+});
+
+// 末尾ではない位置にある括弧だけを拾う。末尾のものは #6 の対象。
+function inlineParens(title) {
+  const trimmed = title.trimEnd();
+  return [...trimmed.matchAll(/\(([^()]*)\)/g)]
+    .filter((match) => match.index + match[0].length < trimmed.length)
+    .map((match) => match[1]);
+}
+
+const withInline = curatedTitles.filter((row) => inlineParens(row.title).length > 0);
+const inline = JSON.parse(await readFile(path.join(ROOT, "curation", "inline-parens.json"), "utf8"));
+
+const inlineListed = new Map();
+for (const item of inline.items) {
+  if (inlineListed.has(item.title)) fail(`inline-parens.json: 二重に載っている — ${item.title}`);
+  inlineListed.set(item.title, item);
+}
+
+for (const row of withInline) {
+  const item = inlineListed.get(row.title);
+  if (!item) {
+    fail(`inline-parens.json: 対象なのに載っていない — ${row.title}`);
+    continue;
+  }
+  if (item.year !== row.year) fail(`inline-parens.json: year が違う — ${row.title}`);
+}
+
+for (const item of inline.items) {
+  if (!withInline.some((row) => row.title === item.title)) {
+    fail(`inline-parens.json: 対象ではないタイトル — ${item.title}`);
+  }
+  if (!["keep", "tagline"].includes(item.disposition)) {
+    fail(`inline-parens.json: 未知の disposition「${item.disposition}」— ${item.title}`);
+  }
+  if (!item.reason || item.reason === "TODO") fail(`inline-parens.json: reason が無い — ${item.title}`);
+  // 転記した括弧の中身が、実際にそのタイトルに含まれているか。
+  if (!item.title.includes(`(${item.inline})`)) {
+    fail(`inline-parens.json: inline「${item.inline}」がタイトルにない — ${item.title}`);
+  }
+}
+
 /* ── まとめ ──────────────────────────────────────────────────────────── */
 
 const counts = { keep: 0, compound: 0, split: 0, tagline: 0 };
@@ -118,6 +172,11 @@ if (unresolved.length) {
   console.log(`  未決: ${unresolved.length} 件`);
   for (const item of unresolved) console.log(`    - ${item.title}\n      ${item.unresolved}`);
 }
+
+const inlineCounts = { keep: 0, tagline: 0 };
+for (const item of inline.items) inlineCounts[item.disposition] += 1;
+console.log(`\ninline-parens.json: ${inline.items.length} 件（対象 ${withInline.length} 件）`);
+console.log(`  keep ${inlineCounts.keep} / tagline ${inlineCounts.tagline}`);
 
 if (problems.length) {
   console.error(`\n${problems.length} 件の問題:`);
