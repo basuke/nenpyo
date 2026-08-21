@@ -1,0 +1,157 @@
+{
+  "$comment": [
+    "Issue #7 — 末尾ではない位置に括弧があるタイトルの仕分け表。",
+    "元データ: data/sf-tech-lifeline.json (matsuo-koya/sf-tech-lifeline @ ad94155)",
+    "",
+    "対象は slash.json の分割を織り込んだあとのタイトル。分割で新しく生まれた",
+    "「Bフレッツ(光回線)開始」「LTE(Xi)サービス開始」もここに入る。",
+    "",
+    "disposition:",
+    "  keep    … 名前の言い換え・略称・原題・規格名。タイトルの一部として残す",
+    "  tagline … 読みなので notes.tagline へ切り出す",
+    "",
+    "結果は 15 件すべて keep。「括弧が末尾にあるかどうか」がそのまま",
+    "「読みか事実補足か」の判定基準になる、という見立ての裏が取れた。",
+    "唯一の例外だった Xerox Alto(GUIの原点) は slash.json 側で tagline に振ってある。",
+    "",
+    "EMI(Emmy)開発開始(…) だけは末尾にも括弧があり、そちらは #6 の対象になる。",
+    "この表が決めるのは inline のほうだけ。"
+  ],
+  "items": [
+    {
+      "title": "レンズマン(銀河パトロール隊)連載開始",
+      "year": 1937,
+      "category": "sf",
+      "from": null,
+      "inline": "銀河パトロール隊",
+      "disposition": "keep",
+      "reason": "別題（連載時のタイトル）"
+    },
+    {
+      "title": "新スタートレック(TNG) 米国放映開始",
+      "year": 1987,
+      "category": "sf",
+      "from": null,
+      "inline": "TNG",
+      "disposition": "keep",
+      "reason": "略称"
+    },
+    {
+      "title": "バベッジ 階差機関(ディファレンス・エンジン)設計",
+      "year": 1822,
+      "category": "tech",
+      "from": null,
+      "inline": "ディファレンス・エンジン",
+      "disposition": "keep",
+      "reason": "原語での呼び名"
+    },
+    {
+      "title": "エジソン 蓄音機(フォノグラフ)発明",
+      "year": 1877,
+      "category": "tech",
+      "from": null,
+      "inline": "フォノグラフ",
+      "disposition": "keep",
+      "reason": "原語での呼び名"
+    },
+    {
+      "title": "バーコード(UPC)実用化",
+      "year": 1974,
+      "category": "tech",
+      "from": null,
+      "inline": "UPC",
+      "disposition": "keep",
+      "reason": "規格名"
+    },
+    {
+      "title": "EMI(Emmy)開発開始(コープの自動作曲AI。90年代にバッハ様式作品で論争)",
+      "year": 1981,
+      "category": "tech",
+      "from": null,
+      "inline": "Emmy",
+      "disposition": "keep",
+      "reason": "別名（開発者コープによる愛称）"
+    },
+    {
+      "title": "シリコングラフィックス(SGI)創業とジオメトリエンジン",
+      "year": 1982,
+      "category": "tech",
+      "from": null,
+      "inline": "SGI",
+      "disposition": "keep",
+      "reason": "略称"
+    },
+    {
+      "title": "ISDN(INSネット64)サービス開始",
+      "year": 1988,
+      "category": "tech",
+      "from": null,
+      "inline": "INSネット64",
+      "disposition": "keep",
+      "reason": "NTT でのサービス名"
+    },
+    {
+      "title": "MD(ミニディスク)発売",
+      "year": 1992,
+      "category": "tech",
+      "from": null,
+      "inline": "ミニディスク",
+      "disposition": "keep",
+      "reason": "正式名称"
+    },
+    {
+      "title": "ガジェット(Gadget: Past as Future)発売",
+      "year": 1993,
+      "category": "tech",
+      "from": null,
+      "inline": "Gadget: Past as Future",
+      "disposition": "keep",
+      "reason": "原題"
+    },
+    {
+      "title": "プリント倶楽部(プリクラ)登場",
+      "year": 1995,
+      "category": "tech",
+      "from": null,
+      "inline": "プリクラ",
+      "disposition": "keep",
+      "reason": "通称"
+    },
+    {
+      "title": "FireWire(IEEE 1394)標準化",
+      "year": 1995,
+      "category": "tech",
+      "from": null,
+      "inline": "IEEE 1394",
+      "disposition": "keep",
+      "reason": "規格番号"
+    },
+    {
+      "title": "Bフレッツ(光回線)開始",
+      "year": 2001,
+      "category": "tech",
+      "from": "Yahoo! BBでADSL価格破壊/Bフレッツ(光回線)開始",
+      "inline": "光回線",
+      "disposition": "keep",
+      "reason": "何の回線かの補足"
+    },
+    {
+      "title": "LTE(Xi)サービス開始",
+      "year": 2010,
+      "category": "tech",
+      "from": "LTE(Xi)サービス開始/スマホの本格普及",
+      "inline": "Xi",
+      "disposition": "keep",
+      "reason": "ドコモでのサービス名"
+    },
+    {
+      "title": "GAN(敵対的生成ネットワーク)発表",
+      "year": 2014,
+      "category": "tech",
+      "from": null,
+      "inline": "敵対的生成ネットワーク",
+      "disposition": "keep",
+      "reason": "正式名称"
+    }
+  ]
+}
