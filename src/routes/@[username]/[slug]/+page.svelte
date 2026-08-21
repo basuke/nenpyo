@@ -6,10 +6,18 @@
 
   const base = $derived(`/@${data.owner.username}/${data.timeline.slug}`);
 
-  // リンクは出来事の出典と読みの根拠の両方がありうるので、まとめて出す。
-  // 区別して見せるのは Issue #9 で扱う。
-  function linksOf(entry: (typeof data.years)[number]["entries"][number]) {
-    return [...entry.events.flatMap((event) => parseLinks(event.links)), ...parseLinks(entry.note?.links ?? null)];
+  type Entry = (typeof data.years)[number]["entries"][number];
+
+  /**
+   * リンクは出どころが 2 つある。出来事そのものの出典（events.links）と、
+   * その読みの根拠（notes.links）は別物なので、まとめずに分けて出す
+   * （docs/003-events-and-notes.md 2 章）。
+   */
+  function linksOf(entry: Entry) {
+    return {
+      sources: entry.events.flatMap((event) => parseLinks(event.links)),
+      references: parseLinks(entry.note?.links ?? null),
+    };
   }
 </script>
 
@@ -36,7 +44,8 @@
       {#each group.entries as entry (entry.id)}
         {@const links = linksOf(entry)}
         {@const head = entry.events[0]}
-        <li class="entry">
+        {@const bundled = entry.events.length > 1}
+        <li class="entry" class:entry--bundled={bundled}>
           {#if head?.category || head?.subcategory}
             <p class="entry__tags">
               {#if head.category}
@@ -50,11 +59,16 @@
             </p>
           {/if}
 
-          <!-- 束ねられた行は指すイベントを並べて 1 行として見せる。
-               読み（tagline / body）は束ね全体に掛かっている。 -->
+          <!--
+            束ねられた行は、指しているイベントを 1 件ずつ縦に並べて、
+            まとめて括られていることを左の罫線で示す。読み（tagline / body）は
+            罫線の外に置く。束ね全体に掛かっているものだからで、
+            「1937年は再起動の年」のような読みは個々の出来事の説明ではない。
+          -->
           <h3 class="entry__title">
-            {#each entry.events as event, i (event.id)}{#if i > 0}<span class="entry__join">/</span
-              >{/if}{event.title}{/each}
+            {#each entry.events as event (event.id)}
+              <span class="entry__event">{event.title}</span>
+            {/each}
           </h3>
 
           {#if entry.note?.tagline}
@@ -65,12 +79,24 @@
             <p class="entry__body">{entry.note.body}</p>
           {/if}
 
-          {#if links.length}
-            <ul class="entry__links">
-              {#each links as link}
-                <li><a href={link.href} rel="noreferrer noopener" target="_blank">{link.label}</a></li>
-              {/each}
-            </ul>
+          {#if links.sources.length || links.references.length}
+            <div class="entry__links">
+              {#if links.sources.length}
+                <ul class="linklist">
+                  {#each links.sources as link}
+                    <li><a href={link.href} rel="noreferrer noopener" target="_blank">{link.label}</a></li>
+                  {/each}
+                </ul>
+              {/if}
+              {#if links.references.length}
+                <ul class="linklist linklist--reference">
+                  <li class="linklist__label">読みの根拠</li>
+                  {#each links.references as link}
+                    <li><a href={link.href} rel="noreferrer noopener" target="_blank">{link.label}</a></li>
+                  {/each}
+                </ul>
+              {/if}
+            </div>
           {/if}
 
           {#if data.canEdit}

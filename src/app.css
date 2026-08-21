@@ -212,18 +212,46 @@ h1, h2, h3 {
   font-size: 1.0625rem;
 }
 
-/* 束ねられた行のイベント同士の区切り。元データの "/" をそのまま踏襲している。 */
-.entry__join {
-  color: var(--muted);
-  font-weight: normal;
-  margin: 0 0.375rem;
+.entry__event {
+  display: block;
 }
 
-/* 読みのキャッチコピー。事実であるタイトルと見た目で分ける。 */
+/* 束ねられた行。指しているイベントを罫線でまとめて、これで 1 行だと示す。
+   読みは罫線の外に出す。束ね全体に掛かっているもので、
+   個々の出来事の説明ではないため。
+   
+   罫線を --border にすると背景に沈んで、単に折り返した長いタイトルと
+   見分けが付かなくなる。行頭の点と合わせて、複数あることを二重に示す。 */
+.entry--bundled .entry__title {
+  border-left: 2px solid color-mix(in srgb, var(--muted) 50%, transparent);
+  padding-left: 0.75rem;
+}
+
+.entry--bundled .entry__event {
+  text-indent: -0.9em;
+  padding-left: 0.9em;
+}
+
+.entry--bundled .entry__event::before {
+  content: "・";
+  color: var(--muted);
+  font-weight: normal;
+}
+
+.entry--bundled .entry__event + .entry__event {
+  margin-top: 0.125rem;
+}
+
+/* 読みのキャッチコピー。事実であるタイトルと見た目で分ける。
+   本文より小さく、しかし埋もれない程度に。この年表の読みどころなので。 */
 .entry__tagline {
-  margin: 0.125rem 0 0;
+  margin: 0.25rem 0 0;
   color: var(--muted);
   font-size: 0.9375rem;
+}
+
+.entry__tagline::before {
+  content: "— ";
 }
 
 .entry__body {
@@ -232,17 +260,39 @@ h1, h2, h3 {
 
 .entry__links {
   margin: 0.5rem 0 0;
+  display: grid;
+  gap: 0.125rem;
+  font-size: 0.8125rem;
+}
+
+.linklist {
+  margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem 1rem;
-  font-size: 0.8125rem;
+}
+
+/* 読みの根拠は出来事の出典と別物なので、見出しを添えて分けて出す。 */
+.linklist__label {
+  color: var(--muted);
 }
 
 .entry__actions {
   margin-top: 0.375rem;
   font-size: 0.8125rem;
+}
+
+/* いまは直せないことを伝えるための囲み。エラーではないので色は使わない。 */
+.notice {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.75rem 1rem;
+  margin: 0 0 1.5rem;
+  font-size: 0.875rem;
+  max-width: var(--measure);
 }
 
 /* ── フォーム ───────────────────────────────────────────────────────── */
