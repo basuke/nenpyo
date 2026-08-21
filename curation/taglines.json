@@ -1,6 +1,6 @@
 {
   "$comment": [
-    "Issue #6 — 末尾の括弧を tagline（読み）と事実補足に振り分けた表。",
+    "Issue #6 — 末尾の括弧を tagline（キャッチコピー）と事実補足に振り分けた表。",
     "元データ: data/sf-tech-lifeline.json (matsuo-koya/sf-tech-lifeline @ ad94155)",
     "",
     "scripts/propose-taglines.mjs が作った提案を出発点に、手で直したもの。",
@@ -8,7 +8,7 @@
     "--force で作り直せる。このファイルを直接編集したら、その時点で再生成は禁物。",
     "",
     "newTitle … 分解後のイベントのタイトル（events.title に入る）",
-    "tagline  … 切り出した読み（notes.tagline に入る）。無ければ null",
+    "tagline  … 切り出したキャッチコピー（notes.tagline に入る）。無ければ null",
     "segments … 括弧の中を「。」で割って一つずつ判定した内訳",
     "confidence … low のものは目視の確認が要る"
   ],

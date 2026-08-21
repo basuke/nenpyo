@@ -36,7 +36,7 @@ export function parseTimelineForm(form: FormData): FormResult<TimelineForm> {
 
 /**
  * 年表の 1 行ぶんの入力。事実（year / title / category / links）と
- * 読み（tagline / body）が 1 枚のフォームに同居している。
+ * ノート（tagline / body）が 1 枚のフォームに同居している。
  *
  * DB では events と notes に分かれて入るが、自分の年表に自分で書くあいだは
  * 分けて入力させる意味がないので、フォームは 1 枚のままにしている。

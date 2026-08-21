@@ -79,7 +79,7 @@ async function loadCuration() {
 /**
  * 元データ 1 行 → entry 1 つ以上。
  *
- * entry は年表の 1 行で、note（読み）1 本と event（出来事）1..N を持つ。
+ * entry は年表の 1 行で、ノート 1 本と event（出来事）1..N を持つ。
  * 束ねられた行は event が複数になり、無関係な出来事の並置だった行は
  * entry ごと分かれる。
  */
@@ -101,7 +101,7 @@ function toEntries(src, curation) {
     return [{ ...base, tagline, body, events: [{ ...base, title, links }] }];
   }
 
-  // 無関係な出来事の並置。entry ごと分かれるので、読みもそれぞれに要る。
+  // 無関係な出来事の並置。entry ごと分かれるので、ノートもそれぞれに要る。
   if (item.disposition === "split") {
     return item.events.map((child, index) => {
       const { title, tagline } = splitTagline(child.title, curation);
@@ -115,8 +115,8 @@ function toEntries(src, curation) {
     });
   }
 
-  // 束ね（compound）と、片側が読みだったもの（tagline）。1 entry / N event。
-  // 読みは束ね全体に掛かるので、entry に 1 本だけ持つ。
+  // 束ね（compound）と、片側がキャッチコピーだったもの（tagline）。1 entry / N event。
+  // ノートは束ね全体に掛かるので、entry に 1 本だけ持つ。
   const events = [];
   const readings = item.tagline ? [item.tagline] : [];
 
@@ -130,13 +130,13 @@ function toEntries(src, curation) {
   });
 
   if (readings.length > 1) {
-    throw new Error(`entry に読みが ${readings.length} 本ある: ${src.t}`);
+    throw new Error(`entry にキャッチコピーが ${readings.length} 本ある: ${src.t}`);
   }
 
   return [{ ...base, tagline: readings[0] ?? null, body, events }];
 }
 
-/** 末尾の括弧を、タイトルに残すぶんと読みに分ける。判断は taglines.json にある。 */
+/** 末尾の括弧を、タイトルに残すぶんとキャッチコピーに分ける。判断は taglines.json にある。 */
 function splitTagline(title, curation) {
   const item = curation.taglines.get(title);
   if (!item) {
@@ -372,7 +372,7 @@ function report(byCategory) {
     lines.push(
       `${TIMELINES[category].slug.padEnd(6)} entry ${String(entries.length).padStart(4)}  ` +
         `event ${String(events).padStart(4)}（束ね ${compound}）  ` +
-        `読み ${String(tagged).padStart(3)}  ` +
+        `コピー ${String(tagged).padStart(3)}  ` +
         `${Math.min(...years)}〜${Math.max(...years)}  リンク ${links} 本`,
     );
   }
@@ -381,7 +381,7 @@ function report(byCategory) {
   const events = entries.reduce((n, e) => n + e.events.length, 0);
   lines.push(
     `合計   entry ${String(entries.length).padStart(4)}  event ${String(events).padStart(4)}  ` +
-      `読み ${entries.filter((e) => e.tagline).length}`,
+      `コピー ${entries.filter((e) => e.tagline).length}`,
   );
   return lines.join("\n");
 }

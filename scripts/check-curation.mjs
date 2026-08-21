@@ -68,7 +68,7 @@ for (const item of slash.items) {
     continue;
   }
 
-  // tagline は「'/' の片側が出来事ではなく読み」なので event は 1 つに減る。
+  // tagline は「'/' の片側が出来事ではなくキャッチコピー」なので event は 1 つに減る。
   // 未決のものだけ 0 件を許す（指せる event が存在しないため。unresolved で明示させる）。
   if (item.disposition === "tagline") {
     if (item.events.length === 0 && !item.unresolved) {
@@ -88,7 +88,7 @@ for (const item of slash.items) {
   for (const child of item.events) {
     if (!child.title) fail(`slash.json: 分割後のタイトルが空 — ${item.title}`);
   }
-  // split は entry が分かれるので、読みもそれぞれに要る。
+  // split は entry が分かれるので、ノートもそれぞれに要る。
   // 書き下ろしが要るものは todo を立てて明示させる。
   if (item.disposition === "split") {
     for (const child of item.events) {
@@ -99,9 +99,9 @@ for (const item of slash.items) {
   }
 }
 
-// 子タイトルを作ると、元タイトル末尾の括弧はそこから落ちる。中身が読みなら
+// 子タイトルを作ると、元タイトル末尾の括弧はそこから落ちる。中身がキャッチコピーなら
 // item の tagline へ、事実なら子タイトルの側へ移っていないといけない。
-// この検査が無いと 12 件ぶんの読みが黙って消えていた。
+// この検査が無いと 12 件ぶんのキャッチコピーが黙って消えていた。
 for (const item of slash.items) {
   if (item.disposition === "keep") continue;
   const trailing = item.title.match(/\([^()]*\)\s*$/);
@@ -200,14 +200,14 @@ for (const item of taglines.items) {
   }
 
   // 括弧の中を「。」で割った内訳が、元の中身を過不足なく覆っているか。
-  // 読みを切り出すときに事実まで落としてしまう取りこぼしを、ここで捕まえる。
+  // キャッチコピーを切り出すときに事実まで落としてしまう取りこぼしを、ここで捕まえる。
   const inner = item.title.match(/\(([^()]*)\)\s*$/)[1];
   const rejoined = item.segments.map((segment) => segment.text).join("。");
   if (rejoined !== inner.trim()) {
     fail(`taglines.json: segments が元の括弧と一致しない — ${item.title}\n      ${rejoined} ≠ ${inner}`);
   }
 
-  // 事実と判定した分が newTitle に、読みと判定した分が tagline に入っているか。
+  // 事実と判定した分が newTitle に、キャッチコピーと判定した分が tagline に入っているか。
   const facts = item.segments.filter((s) => s.kind === "fact").map((s) => s.text);
   const kept = item.newTitle.match(/\(([^()]*)\)\s*$/);
   const keptInner = kept ? kept[1] : "";
@@ -252,7 +252,7 @@ console.log(`  keep ${inlineCounts.keep} / tagline ${inlineCounts.tagline}`);
 const withTagline = taglines.items.filter((item) => item.tagline);
 const lowConfidence = taglines.items.filter((item) => item.confidence === "low");
 console.log(`\ntaglines.json: ${taglines.items.length} 件（対象 ${withTrailing.length} 件）`);
-console.log(`  読みを切り出した ${withTagline.length} / 事実補足のみ ${taglines.items.length - withTagline.length}`);
+console.log(`  コピーを切り出した ${withTagline.length} / 事実補足のみ ${taglines.items.length - withTagline.length}`);
 console.log(`  confidence: low ${lowConfidence.length}`);
 
 if (problems.length) {

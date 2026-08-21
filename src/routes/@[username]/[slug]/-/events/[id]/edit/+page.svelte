@@ -26,10 +26,10 @@
 {/if}
 
 {#if data.entry.bundled.length}
-  <!-- 束ねられた行。ここで直せるのは先頭のイベントと、束ね全体に掛かる読みだけ。 -->
+  <!-- 束ねられた行。ここで直せるのは先頭のイベントと、束ね全体に掛かるノートだけ。 -->
   <p class="notice">
     この行は {data.entry.bundled.length + 1} 件のイベントを束ねています。
-    ここで編集できるのは先頭の「{data.entry.title}」と、束ね全体に掛かる読みです。
+    ここで編集できるのは先頭の「{data.entry.title}」と、束ね全体に掛かるノートです。
     <br />
     束ねられている残り: {data.entry.bundled.join("、")}
   </p>
@@ -57,6 +57,6 @@
       }}>
   <button class="danger" type="submit">この行を年表から外す</button>
   <p class="field__hint">
-    年表からは消えますが、他の年表から参照されている出来事と読みは残ります。
+    年表からは消えますが、他の年表から参照されている出来事とノートは残ります。
   </p>
 </form>

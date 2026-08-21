@@ -1,12 +1,12 @@
--- イベントと「読み」を分ける（docs/003-events-and-notes.md）。
+-- イベントとノートを分ける（docs/003-events-and-notes.md）。
 --
 -- これまで 1 つの events 行が「いつ・何が起きたか」と「それをどう読むか」を
 -- まとめて持っていた。後者は属人的で、同じ出来事に複数あってよいものなので、
 -- notes として切り出す。
 --
 --   events                 客観の核。名寄せの対象になる素材。単体では表示しない
---   notes                  属人の読み。1 つの出来事に何本でも
---   timeline_entries       年表の 1 行。採用した読みを固定して指す
+--   notes                  属人のノート。1 つの出来事に何本でも
+--   timeline_entries       年表の 1 行。採用したノートを固定して指す
 --   timeline_entry_events  その行が指すイベント（1..N）。単独は要素数 1
 --   derivations            派生の来歴。Copy on Write の記録
 --
@@ -20,7 +20,7 @@ PRAGMA defer_foreign_keys = ON;
 
 -- tagline はキャッチコピー、body はこれまでの description。
 -- links が events と notes の両方にあるのは意図的で、
--- 「その出来事の出典」と「その読みの根拠」は別物だから（003 の 2 章）。
+-- 「その出来事の出典」と「そのノートの根拠」は別物だから（003 の 2 章）。
 CREATE TABLE notes (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   author_id   INTEGER REFERENCES users(id) ON DELETE SET NULL,
@@ -33,7 +33,7 @@ CREATE TABLE notes (
 
 CREATE INDEX notes_author_id_idx ON notes (author_id);
 
--- 既存の description を、そのタイムラインのオーナーの読みとして移す。
+-- 既存の description を、そのタイムラインのオーナーのノートとして移す。
 -- id を events.id に合わせておくと、このあとの対応づけが素直になる。
 INSERT INTO notes (id, author_id, tagline, body, links, created_at, updated_at)
      SELECT e.id, t.owner_id, NULL, e.description, NULL, e.created_at, e.updated_at

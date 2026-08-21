@@ -34,7 +34,7 @@ export type TimelineWithOwner = TimelineRow & {
 };
 
 /**
- * 客観の核。「いつ・何が起きたか」だけを持ち、読みは持たない。
+ * 客観の核。「いつ・何が起きたか」だけを持ち、ノートは持たない。
  * どの年表に載るかは timeline_entries 経由で決まる（docs/003-events-and-notes.md）。
  */
 export type EventRow = {
@@ -55,7 +55,7 @@ export type EventRow = {
 };
 
 /**
- * 属人の読み。tagline がキャッチコピー、body がこれまでの description。
+ * 属人のノート。tagline がキャッチコピー、body がこれまでの description。
  * 同じ出来事に何本あってもよく、どれを採るかは年表側が決める。
  */
 export type NoteRow = {
@@ -399,7 +399,7 @@ export async function updateEntry(
       .bind(input.tagline, input.body, now(), entry.note.id)
       .run();
   } else if (input.tagline || input.body) {
-    // 読みが無かった行に、初めて読みが付いた。
+    // ノートが無かった行に、初めてノートが付いた。
     const note = await db
       .prepare("INSERT INTO notes (author_id, tagline, body) VALUES (?, ?, ?) RETURNING id")
       .bind(event.created_by, input.tagline, input.body)
