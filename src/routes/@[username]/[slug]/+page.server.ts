@@ -34,5 +34,8 @@ export const load: PageServerLoad = async ({ platform, params, locals }) => {
     years,
     entryCount: entries.length,
     canEdit,
+    // ログインしていれば、他人の年表からでも自分の年表へ載せられる。
+    // どの年表に入れられるかは載せる画面で見る。
+    canPlace: Boolean(locals.user),
   };
 };

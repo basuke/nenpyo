@@ -80,7 +80,7 @@ export const actions: Actions = {
     const parsed = parseEntryForm(form);
     if (!parsed.ok) return fail(400, { message: parsed.message, values: Object.fromEntries(form) });
 
-    await updateEntry(db, timeline.id, entry, parsed.value);
+    await updateEntry(db, timeline.id, entry, parsed.value, locals.user!.id);
 
     throw redirect(303, `/@${owner.username}/${timeline.slug}`);
   },
