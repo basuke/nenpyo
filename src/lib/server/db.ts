@@ -369,15 +369,62 @@ export async function createEntry(
 }
 
 /**
+ * そのノートが凍結されているか。凍結されているものは、持ち主でも直接は直せない。
+ *
+ *   参照が 2 つ以上  … 束ねの切り離しや引用で共有されている。片方を直すと
+ *                      もう片方が動いてしまう
+ *   derivations の親 … 中身が変わると「N' は N から派生した」という記録が嘘になる
+ *
+ * docs/003-events-and-notes.md 5 章。
+ */
+async function noteIsFrozen(db: D1Database, noteId: number): Promise<boolean> {
+  const row = await db
+    .prepare(
+      `SELECT (SELECT COUNT(*) FROM timeline_entries WHERE note_id = ?1)                  AS refs,
+              (SELECT COUNT(*) FROM derivations WHERE kind = 'note' AND ancestor_id = ?1) AS children`,
+    )
+    .bind(noteId)
+    .first<{ refs: number; children: number }>();
+  return Boolean(row && (row.refs > 1 || row.children > 0));
+}
+
+/** 凍結されたノートを、この行のためのノートとして複製する。来歴を 1 行残す。 */
+async function forkNote(
+  db: D1Database,
+  entry: TimelineEntry,
+  tagline: string | null,
+  body: string | null,
+) {
+  const ancestor = entry.note!;
+  const forked = await db
+    .prepare("INSERT INTO notes (author_id, tagline, body, links) VALUES (?, ?, ?, ?) RETURNING id")
+    .bind(ancestor.author_id, tagline, body, ancestor.links)
+    .first<{ id: number }>();
+  if (!forked) throw new Error("failed to fork note");
+
+  await db
+    .prepare(
+      `INSERT OR IGNORE INTO derivations (kind, ancestor_id, descendant_id, reason, created_by)
+            VALUES ('note', ?, ?, '編集による複製', ?)`,
+    )
+    .bind(ancestor.id, forked.id, ancestor.author_id)
+    .run();
+
+  await db
+    .prepare("UPDATE timeline_entries SET note_id = ?, updated_at = ? WHERE id = ?")
+    .bind(forked.id, now(), entry.id)
+    .run();
+}
+
+/**
  * 代表イベントと note を書き換える。
  *
- * いまは複製が起きない。ノートを 2 つ以上の entry から指せるのは束ねの切り離しと
- * 引用だけで、どちらもまだ無いので、参照はつねに 1 本だから。
+ * **ノートは凍結されていれば複製する**（docs/003 の 5 章）。切り離したあとの
+ * 2 行は同じノートを指しているので、これが無いと片方を直したときにもう片方が動く。
  *
- * どちらかを入れるときに Copy on Write を足す（docs/003 の 5 章）。規則は
- * 「参照が 2 つ以上、または derivations の親なら、持ち主でも複製する」。
- * イベントは複製しない — 同じ出来事は同じ行に寄っていてほしいので、
- * 正しくなる更新は参照している全員に届いてよい。
+ * **イベントは複製しない。** 同じ出来事は同じ行に寄っていてほしいので、正しく
+ * なる更新は参照している全員に届いてよい。毎回複製すると、名寄せしたい対象を
+ * 名寄せの逆方向へ散らかすことになる。
  */
 export async function updateEntry(
   db: D1Database,
@@ -398,10 +445,14 @@ export async function updateEntry(
     .run();
 
   if (entry.note) {
-    await db
-      .prepare("UPDATE notes SET tagline = ?, body = ?, updated_at = ? WHERE id = ?")
-      .bind(input.tagline, input.body, now(), entry.note.id)
-      .run();
+    if (await noteIsFrozen(db, entry.note.id)) {
+      await forkNote(db, entry, input.tagline, input.body);
+    } else {
+      await db
+        .prepare("UPDATE notes SET tagline = ?, body = ?, updated_at = ? WHERE id = ?")
+        .bind(input.tagline, input.body, now(), entry.note.id)
+        .run();
+    }
   } else if (input.tagline || input.body) {
     // ノートが無かった行に、初めてノートが付いた。
     const note = await db
@@ -462,6 +513,176 @@ async function collectNoteIfUnreferenced(db: D1Database, noteId: number) {
     )
     .bind(noteId)
     .run();
+}
+
+/* ── 束ねの組み替え ───────────────────────────────────────────────────── */
+
+/**
+ * 束ねが指すイベントの並びを、日付の昇順で振り直す。
+ *
+ * position 0 のイベントがその行の年表上の位置を決めるので、足したり外したり
+ * したあとは必ず通す。(entry_id, position) が主キーなので、
+ * その場で番号をずらすと衝突する。いったん全部消してから入れ直す。
+ */
+async function resequence(db: D1Database, entryId: number, eventIds: number[]) {
+  await db.prepare("DELETE FROM timeline_entry_events WHERE entry_id = ?").bind(entryId).run();
+  for (const [position, eventId] of eventIds.entries()) {
+    await db
+      .prepare("INSERT INTO timeline_entry_events (entry_id, event_id, position) VALUES (?, ?, ?)")
+      .bind(entryId, eventId, position)
+      .run();
+  }
+}
+
+/** 日付の昇順。events の並び順と同じ規則で、同着は元の順を保つ。 */
+function byDate(events: EventRow[]): EventRow[] {
+  const key = (e: EventRow) => [e.year, e.month ?? -1, e.day ?? -1, e.hour ?? -1, e.minute ?? -1];
+  return [...events].sort((a, b) => {
+    const [ka, kb] = [key(a), key(b)];
+    for (let i = 0; i < ka.length; i++) if (ka[i] !== kb[i]) return ka[i] - kb[i];
+    return 0;
+  });
+}
+
+/** 束ねにイベントを 1 件足す。 */
+export async function addEventToEntry(
+  db: D1Database,
+  timelineId: number,
+  entry: TimelineEntry,
+  createdBy: number,
+  input: EntryInput,
+) {
+  const event = await db
+    .prepare(
+      `INSERT INTO events (year, precision, title, category, subcategory, links, created_by)
+            VALUES (?, 'year', ?, ?, ?, ?, ?)
+         RETURNING *`,
+    )
+    .bind(input.year, input.title, input.category, input.subcategory, input.links, createdBy)
+    .first<EventRow>();
+  if (!event) throw new Error("failed to insert event");
+
+  await resequence(db, entry.id, byDate([...entry.events, event]).map((e) => e.id));
+  await touchTimeline(db, timelineId);
+}
+
+/**
+ * 束ねの中の並びを指定どおりに振り直す。
+ *
+ * ここだけは日付順に寄せない。同じ年の出来事をどの順に読ませるかは書き手の
+ * 判断で、`1998年は再起動の年` のような束ねでは並び自体が文章になっている。
+ */
+export async function reorderEntryEvents(
+  db: D1Database,
+  timelineId: number,
+  entry: TimelineEntry,
+  eventIds: number[],
+) {
+  const known = new Set(entry.events.map((event) => event.id));
+  if (eventIds.length !== known.size || !eventIds.every((id) => known.has(id))) {
+    throw new Error(`entry ${entry.id} の並べ替えに、元と違うイベントが混ざっている`);
+  }
+  await resequence(db, entry.id, eventIds);
+  await touchTimeline(db, timelineId);
+}
+
+/**
+ * 束ねからイベントを切り離して、独立した行にする。
+ *
+ * **ノートは複製せず、そのまま共有する**（docs/003-events-and-notes.md 5 章）。
+ * 切り離しは人がやる編集行為で、その人が画面の前にいる。付いていくべきかを
+ * 機械が推測する必要はなく、おかしければその場で直せばよい。
+ *
+ * 共有したままだと片方を直したときにもう片方が動くので、そこは書き込み側で
+ * 複製することで防ぐ。
+ */
+export async function detachEvent(
+  db: D1Database,
+  timelineId: number,
+  entry: TimelineEntry,
+  eventId: number,
+): Promise<number> {
+  const remaining = entry.events.filter((event) => event.id !== eventId);
+  if (remaining.length === entry.events.length) throw new Error(`event ${eventId} is not in the entry`);
+  if (!remaining.length) throw new Error("切り離すと元の行が空になる");
+
+  const created = await db
+    .prepare(
+      `INSERT INTO timeline_entries (timeline_id, note_id, position)
+            VALUES (?, ?, ?)
+         RETURNING id`,
+    )
+    .bind(timelineId, entry.note?.id ?? null, entry.position)
+    .first<{ id: number }>();
+  if (!created) throw new Error("failed to insert timeline entry");
+
+  await resequence(db, created.id, [eventId]);
+  await resequence(db, entry.id, byDate(remaining).map((event) => event.id));
+  await touchTimeline(db, timelineId);
+  return created.id;
+}
+
+/**
+ * 2 つの行を 1 つに束ねる。
+ *
+ * note_id は 1 本しか刺さらないので、**どちらを採るかを必ず決める**必要がある。
+ * 新しく作った場合は元の 2 本が derivations の親になり、親は凍結されるので
+ * どちらも残る。片方をそのまま採った場合、採らなかったほうは参照が切れて
+ * 回収される（6 章）。
+ */
+export type MergeNote =
+  | { kind: "existing"; noteId: number | null }
+  | { kind: "new"; tagline: string | null; body: string | null };
+
+export async function mergeEntries(
+  db: D1Database,
+  timelineId: number,
+  target: TimelineEntry,
+  source: TimelineEntry,
+  choice: MergeNote,
+  createdBy: number,
+) {
+  if (target.id === source.id) throw new Error("同じ行同士は束ねられない");
+
+  let noteId: number | null;
+  if (choice.kind === "existing") {
+    noteId = choice.noteId;
+  } else {
+    const note = await db
+      .prepare("INSERT INTO notes (author_id, tagline, body) VALUES (?, ?, ?) RETURNING id")
+      .bind(createdBy, choice.tagline, choice.body)
+      .first<{ id: number }>();
+    if (!note) throw new Error("failed to insert note");
+    noteId = note.id;
+
+    // 統合したことを来歴に残す。親が 2 つになる初めての例で、
+    // 切り離しのあとは両方の行が同じノートを指していることもあるので重複を潰す。
+    const parents = [...new Set([target.note?.id, source.note?.id].filter((id) => id != null))];
+    for (const ancestor of parents) {
+      await db
+        .prepare(
+          `INSERT OR IGNORE INTO derivations (kind, ancestor_id, descendant_id, reason, created_by)
+                VALUES ('note', ?, ?, '束ねによる統合', ?)`,
+        )
+        .bind(ancestor, noteId, createdBy)
+        .run();
+    }
+  }
+
+  const events = byDate([...target.events, ...source.events]).map((event) => event.id);
+
+  await db.prepare("DELETE FROM timeline_entries WHERE id = ?").bind(source.id).run();
+  await db
+    .prepare("UPDATE timeline_entries SET note_id = ?, updated_at = ? WHERE id = ?")
+    .bind(noteId, now(), target.id)
+    .run();
+  await resequence(db, target.id, events);
+
+  // 採らなかったノートは、他から参照されていなければ回収する。
+  for (const id of [target.note?.id, source.note?.id]) {
+    if (id != null && id !== noteId) await collectNoteIfUnreferenced(db, id);
+  }
+  await touchTimeline(db, timelineId);
 }
 
 /** そのタイムラインで実際に使われているカテゴリ。入力フォームの候補に使う。 */

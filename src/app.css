@@ -272,6 +272,91 @@ h1, h2, h3 {
   max-width: var(--measure);
 }
 
+/* ── 束ねの組み替え ─────────────────────────────────────────────────── */
+
+.bundle {
+  margin-top: 2.5rem;
+  max-width: var(--measure);
+}
+
+.bundle__title {
+  font-size: 0.9375rem;
+  margin: 0 0 0.5rem;
+}
+
+.bundle__list {
+  margin: 0.5rem 0 0;
+  padding-left: 1.5rem;
+  display: grid;
+  gap: 0.375rem;
+}
+
+/* li を flex にすると list-item ではなくなって番号が消える。
+   先頭が年表上の位置を決めるので、番号は出したい。中に一枚かませる。 */
+.bundle__row {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.bundle__item::marker {
+  color: var(--muted);
+}
+
+.bundle__ops {
+  display: flex;
+  gap: 0.75rem;
+  flex: none;
+  font-size: 0.8125rem;
+}
+
+/* 並べ替えと切り離しは 1 つずつ別のフォームなので、横並びに畳んでおく。 */
+.bundle__ops form {
+  display: inline;
+}
+
+.linkish {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.linkish:disabled {
+  color: var(--muted);
+  cursor: default;
+  text-decoration: none;
+}
+
+.bundle__add {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+}
+
+/* どちらのノートを採るかの選択。中身を並べて見比べられるようにする。 */
+.choice {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.875rem 1rem;
+  background: var(--surface);
+}
+
+.choice__option {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  font-weight: 700;
+}
+
+.choice__note {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
 /* ── フォーム ───────────────────────────────────────────────────────── */
 
 .form {
