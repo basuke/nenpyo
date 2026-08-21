@@ -840,8 +840,11 @@ export async function detachEvent(
     .first<{ id: number }>();
   if (!created) throw new Error("failed to insert timeline entry");
 
-  await resequence(db, timelineId, created.id, [eventId]);
+  // **元の行から外すのが先。** UNIQUE (timeline_id, event_id) があるので
+  // （migrations/0005）、外す前に新しい行へ挿すと、同じ出来事が同じ年表に
+  // 2 回刺さった瞬間ができてしまい、そこで落ちる。
   await resequence(db, timelineId, entry.id, byDate(remaining).map((event) => event.id));
+  await resequence(db, timelineId, created.id, [eventId]);
   await touchTimeline(db, timelineId);
   return created.id;
 }
