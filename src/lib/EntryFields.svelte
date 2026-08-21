@@ -19,9 +19,12 @@
     links?: string | null;
   };
 
-  let { values, used }: {
+  // factsOnly は「束ねにイベントを足す」経路で使う。ノートは行に付いているので、
+  // 足すときに書かせる相手がいない。
+  let { values, used, factsOnly = false }: {
     values?: Values;
     used: { category: string | null; subcategory: string | null; count: number }[];
+    factsOnly?: boolean;
   } = $props();
 
   // 既にそのタイムラインで使われている値を候補に出す。
@@ -42,6 +45,7 @@
   <input id="title" name="title" type="text" required value={values?.title ?? ""} />
 </div>
 
+{#if !factsOnly}
 <div class="field">
   <label for="tagline">キャッチコピー（任意）</label>
   <input id="tagline" name="tagline" type="text" maxlength="100" value={values?.tagline ?? ""} />
@@ -55,6 +59,7 @@
   <label for="body">説明（任意）</label>
   <textarea id="body" name="body">{values?.body ?? ""}</textarea>
 </div>
+{/if}
 
 <div class="field">
   <label for="category">カテゴリ（任意）</label>
