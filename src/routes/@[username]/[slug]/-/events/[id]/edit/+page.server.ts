@@ -27,8 +27,10 @@ async function loadEntry(
 export const load: PageServerLoad = async ({ platform, params, locals, url }) => {
   const { db, owner, timeline, entry } = await loadEntry(platform, params, locals.user, url.pathname);
 
-  // 束ねられた行は代表イベントだけを編集できる。束ねの編集は Issue #9 で扱う。
-  const head = entry.events[0];
+  // 束ねられた行で編集できるのは代表イベント（position 0）だけ。
+  // 束ねそのものを組み替える画面はまだ無いので、残りは読み取りで見せて、
+  // 何が編集できないかが分かるようにしておく。
+  const [head, ...bundled] = entry.events;
 
   return {
     username: owner.username,
@@ -42,7 +44,7 @@ export const load: PageServerLoad = async ({ platform, params, locals, url }) =>
       category: head?.category ?? null,
       subcategory: head?.subcategory ?? null,
       links: formatLinksInput(head?.links ?? null),
-      eventCount: entry.events.length,
+      bundled: bundled.map((event) => event.title),
     },
     used: await listUsedCategories(db, timeline.id),
   };
