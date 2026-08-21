@@ -13,12 +13,17 @@ import {
   toId,
   type AppContext,
   type EntryRef,
+  type TimelineRef,
 } from "../context";
 import { parseMergeChoice, type RawInput } from "../input";
 import * as sql from "../db";
 
 /** 2 つの行を 1 つに束ね、どちらのノートを採るかを決める。 */
-export async function mergeEntries(ctx: AppContext, ref: EntryRef, raw: RawInput) {
+export async function mergeEntries(
+  ctx: AppContext,
+  ref: EntryRef,
+  raw: RawInput,
+): Promise<TimelineRef> {
   const pair = await requireMergeablePair(ctx, ref, raw.with);
   const { user, owner, timeline, target, source } = pair;
 
@@ -38,7 +43,7 @@ export async function mergeEntries(ctx: AppContext, ref: EntryRef, raw: RawInput
  * ノートは共有したまま残る。片方を直したときにもう片方が動かないよう、
  * 複製は書き込み側で起きる（docs/003 の 5 章）。
  */
-export async function detachEvent(ctx: AppContext, ref: EntryRef, raw: RawInput) {
+export async function detachEvent(ctx: AppContext, ref: EntryRef, raw: RawInput): Promise<void> {
   const { timeline, entry } = await requireOwnEntry(ctx, ref);
 
   const eventId = toId(raw.eventId, "イベントが指定されていません");
@@ -56,7 +61,11 @@ export async function detachEvent(ctx: AppContext, ref: EntryRef, raw: RawInput)
  * 日付順に寄せないのは、同じ年の出来事をどの順に読ませるかが書き手の判断
  * だから。先頭のイベントが年表上の位置を決める。
  */
-export async function reorderEvents(ctx: AppContext, ref: EntryRef, raw: RawInput) {
+export async function reorderEvents(
+  ctx: AppContext,
+  ref: EntryRef,
+  raw: RawInput,
+): Promise<void> {
   const { timeline, entry } = await requireOwnEntry(ctx, ref);
 
   const eventId = toId(raw.eventId, "イベントが指定されていません");

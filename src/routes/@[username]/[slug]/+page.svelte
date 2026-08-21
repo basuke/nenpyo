@@ -102,8 +102,8 @@
                       <a class="entry__ancestors" href="{base}/-/notes/{entry.note?.id}"
                          title="このノートの歴代を見る">
                         {#each entry.ancestors as person (person.id)}
-                          {#if person.avatar_url}
-                            <img class="avatar avatar--stacked" src={person.avatar_url}
+                          {#if person.avatarUrl}
+                            <img class="avatar avatar--stacked" src={person.avatarUrl}
                                  alt={person.username} width="18" height="18" loading="lazy" />
                           {:else}
                             <span class="avatar avatar--stacked avatar--blank">{person.username.slice(0, 1)}</span>
@@ -111,11 +111,11 @@
                         {/each}
                       </a>
                     {/if}
-                    {#if entry.author.avatar_url}
-                      <img class="avatar" src={entry.author.avatar_url} alt=""
+                    {#if entry.author.avatarUrl}
+                      <img class="avatar" src={entry.author.avatarUrl} alt=""
                            width="18" height="18" loading="lazy" />
                     {/if}
-                    <a href="/@{entry.author.username}">{entry.author.display_name ?? entry.author.username}</a>
+                    <a href="/@{entry.author.username}">{entry.author.displayName ?? entry.author.username}</a>
                   </p>
                 {/if}
 

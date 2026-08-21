@@ -19,6 +19,12 @@ import * as sql from "../db";
 
 const INTO_NOT_FOUND = "足す先の行が見つかりません";
 
+/**
+ * 足したあとの行。
+ *
+ * `entryId` が `number` なのは、これが出ていく値だから。受け取るときの
+ * `Id`（文字列も数値も受ける）とは別（context.ts）。
+ */
 export type AddedEntry = {
   entryId: number;
   /** 既にある束ねに足したのか、新しい行を作ったのか。戻り先の判断に使う */
@@ -54,7 +60,11 @@ export async function addEntry(
 }
 
 /** 代表イベントとノートを書き換える。凍結されたノートの複製は sql 側で起きる。 */
-export async function updateEntry(ctx: AppContext, ref: EntryRef, raw: RawInput) {
+export async function updateEntry(
+  ctx: AppContext,
+  ref: EntryRef,
+  raw: RawInput,
+): Promise<TimelineRef> {
   const { user, owner, timeline, entry } = await requireOwnEntry(ctx, ref);
   const input = parseEntryInput(raw);
 
@@ -63,7 +73,7 @@ export async function updateEntry(ctx: AppContext, ref: EntryRef, raw: RawInput)
   return { username: owner.username, slug: timeline.slug };
 }
 
-export async function deleteEntry(ctx: AppContext, ref: EntryRef) {
+export async function deleteEntry(ctx: AppContext, ref: EntryRef): Promise<TimelineRef> {
   const { owner, timeline, entry } = await requireOwnEntry(ctx, ref);
 
   await sql.deleteEntry(ctx.db, timeline.id, entry);

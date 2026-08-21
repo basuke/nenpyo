@@ -11,7 +11,7 @@
 
 import { invalid } from "./errors";
 import { normalizeSlug, slugError } from "$lib/slug";
-import type { MergeNote, PlacedNote } from "./db";
+import type { EntryInput, MergeNote, PlacedNote, TimelineInput } from "./db";
 
 /**
  * 検証前の入力。値が `unknown` なのは、フォームなら文字列、JSON なら数値や
@@ -32,8 +32,6 @@ function optionalText(raw: RawInput, name: string): string | null {
 }
 
 /* ── timeline ─────────────────────────────────────────────────────────── */
-
-export type TimelineInput = { slug: string; title: string; description: string | null };
 
 export function parseTimelineInput(raw: RawInput): TimelineInput {
   const title = text(raw, "title");
@@ -58,17 +56,10 @@ export function parseTimelineInput(raw: RawInput): TimelineInput {
  *
  * DB では events と notes に分かれて入るが、自分の年表に自分で書くあいだは
  * 分けて入力させる意味がないので、入力は 1 組のままにしている。
+ *
+ * 形そのものは `db.ts` が持つ。**検証を通った値の置き場は書き込む側が決める**
+ * ほうが、同じ形を 2 か所で宣言するより崩れにくい。
  */
-export type EntryInput = {
-  year: number;
-  title: string;
-  tagline: string | null;
-  body: string | null;
-  category: string | null;
-  subcategory: string | null;
-  links: string | null;
-};
-
 export function parseEntryInput(raw: RawInput): EntryInput {
   const rawYear = text(raw, "year");
   if (!rawYear) throw invalid("年を入力してください", "year_required");

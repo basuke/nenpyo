@@ -89,7 +89,54 @@ lib は失敗を `AppError` で投げる。`kind` から HTTP の status が決�
 `already_placed` / `not_bundleable` …）。**API のクライアントに message で
 分岐させない。** 文言を直した瞬間に壊れる。
 
-## 5. 参照は URL の params ではなく ref で渡す
+## 5. 層をまたぐ形には名前を付ける
+
+`views/` と `actions/` の戻り値は、**そのままページが受け取る `data` であり、
+API のレスポンスの契約でもある**。推論に任せると、他所から指せないし、
+うっかり形が変わっても誰も気づかない。だから名前を付ける。
+
+```ts
+export type TimelineView = {
+  owner: OwnerView;
+  timeline: { slug: string; title: string; description: string | null; updatedAt: string };
+  years: YearGroup[];
+  entryCount: number;
+  canEdit: boolean;
+  canPlace: boolean;
+};
+
+export async function timelineView(ctx: AppContext, ref: TimelineRef): Promise<TimelineView> {
+```
+
+`interface` ではなく `type` にするのは、`ErrorKind` や `PlacedNote` のような
+union と書き方を揃えるため。宣言のマージが要る `app.d.ts` の
+`declare global` だけが `interface`。
+
+### 同じ形は 1 か所でだけ宣言する
+
+`EntryInput` が `db.ts` と `input.ts` の両方にあった。構造が同じなので
+コンパイルは通ってしまうが、名前が 2 つある時点で 2 つに割れている。
+**検証を通った値の形は、それを書き込む側（`db.ts`）が持つ。**
+`input.ts` はそこへ import して、`parseEntryInput` の戻り値に使う。
+
+### DB の行をそのまま外へ出さない
+
+名前を付けたことで、一覧ページが `TimelineWithOwner` を、年表ページが
+`TimelineEntry` をそのまま渡していたのが見えた。`owner_username` や
+`avatar_url` という **SQL の都合の列名が、画面と、いずれ API のレスポンスに
+そのまま出る**。`views/common.ts` の `toTimelineCard` / `toPersonView` で
+詰め替える。
+
+### 受け取る型と、返す型を分ける
+
+`Id = string | number` は**受け取るときだけ**の型。URL から来ると文字列、
+JSON から来ると数値なので両方受けて `toId` で揃える。返すほうは `number`。
+出ていく値まで曖昧なままにすると、受け手がもう一度整えることになる。
+
+逆に `TimelineRef` は引数と戻り値の両方で使う。「どこを指しているか」と
+「次にどこを指せばよいか」は同じことなので、型を分ける理由がない。
+
+## 6. 参照は URL の params ではなく ref で渡す
 
 ```ts
 type TimelineRef = { username: string; slug: string };
@@ -101,7 +148,7 @@ type EntryRef = TimelineRef & { entryId: string | number };
 ものの名前なので、これを参照の形にする。`entryId` が `string | number` なのは、
 URL から来ると文字列、JSON から来ると数値だから。どちらも受けて中で揃える。
 
-## 6. 絞り込みは検査ではない
+## 7. 絞り込みは検査ではない
 
 画面は「束ねられる相手」だけを候補に出すし、「既に載っている年表」は塞ぐ。
 これは親切であって、**守っているわけではない**。URL は直に叩ける。
@@ -110,7 +157,7 @@ URL から来ると文字列、JSON から来ると数値だから。どちら�
 重複しているように見えるが、役割が違う。`views/` 側を消しても壊れないが、
 `actions/` 側を消すと壊れる。
 
-## 7. API を足すとき
+## 8. API を足すとき
 
 `route.ts` に JSON 用の入り口を並べるだけで済む。操作には触らない。
 
@@ -131,6 +178,8 @@ export async function json(event, fn) {
 認証の方式（セッション Cookie を使い回すか、トークンを別に持つか）は
 `contextOf` の中の話で、操作からは見えない。
 
-## 8. 履歴
+## 9. 履歴
 
 - 2026-08-21 #28 でこの形に整理。`+page.server.ts` の合計 500 行が 169 行になった
+- 2026-08-21 同 PR で、層をまたぐ戻り値に名前を付けた（5 章）。
+  `EntryInput` の二重定義と、一覧・年表ページへの DB 行の素通しもここで直した

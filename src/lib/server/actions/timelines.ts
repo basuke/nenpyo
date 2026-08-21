@@ -7,7 +7,13 @@
  */
 
 import { conflict } from "../errors";
-import { requireOwnTimeline, requireOwnUser, type AppContext, type TimelineRef } from "../context";
+import {
+  requireOwnTimeline,
+  requireOwnUser,
+  type AppContext,
+  type TimelineRef,
+  type UserRef,
+} from "../context";
 import { parseTimelineInput, type RawInput } from "../input";
 import * as sql from "../db";
 
@@ -25,7 +31,11 @@ function rethrowSlugConflict(cause: unknown, slug: string): never {
   throw cause;
 }
 
-export async function createTimeline(ctx: AppContext, username: string, raw: RawInput) {
+export async function createTimeline(
+  ctx: AppContext,
+  username: string,
+  raw: RawInput,
+): Promise<TimelineRef> {
   const { owner } = await requireOwnUser(ctx, username);
   const input = parseTimelineInput(raw);
 
@@ -38,7 +48,11 @@ export async function createTimeline(ctx: AppContext, username: string, raw: Raw
   return { username: owner.username, slug: input.slug };
 }
 
-export async function updateTimeline(ctx: AppContext, ref: TimelineRef, raw: RawInput) {
+export async function updateTimeline(
+  ctx: AppContext,
+  ref: TimelineRef,
+  raw: RawInput,
+): Promise<TimelineRef> {
   const { owner, timeline } = await requireOwnTimeline(ctx, ref);
   const input = parseTimelineInput(raw);
 
@@ -51,7 +65,7 @@ export async function updateTimeline(ctx: AppContext, ref: TimelineRef, raw: Raw
   return { username: owner.username, slug: input.slug };
 }
 
-export async function deleteTimeline(ctx: AppContext, ref: TimelineRef) {
+export async function deleteTimeline(ctx: AppContext, ref: TimelineRef): Promise<UserRef> {
   const { owner, timeline } = await requireOwnTimeline(ctx, ref);
 
   // 物理削除。イベントは ON DELETE CASCADE で一緒に消える。

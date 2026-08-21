@@ -17,13 +17,29 @@ import { formatLinksInput } from "../input";
 import { bundleable } from "$lib/period";
 import * as sql from "../db";
 import type { AppContext, EntryRef, Id, TimelineRef } from "../context";
-import type { TimelineEntry } from "../db";
+import type { CategoryUsage, TimelineEntry } from "../db";
+import type { TimelineLabel, TimelineOrigin } from "./common";
+
+/** 束ねを 1 行で示すときの形。中身のイベント名を並べて見せる。 */
+export type BundleSummary = { id: number; titles: string[]; year: number | undefined };
 
 /**
  * イベントを足すフォーム。`into` が付いていたら、新しい行ではなく
  * 既にある束ねに足す画面になる。
  */
-export async function newEntryView(ctx: AppContext, ref: TimelineRef, into: Id | null) {
+export type NewEntryView = {
+  username: string;
+  timeline: TimelineLabel;
+  /** 足す先の束ね。新しい行を作るときは null */
+  into: BundleSummary | null;
+  used: CategoryUsage[];
+};
+
+export async function newEntryView(
+  ctx: AppContext,
+  ref: TimelineRef,
+  into: Id | null,
+): Promise<NewEntryView> {
   const { owner, timeline } = await requireOwnTimeline(ctx, ref);
 
   const entry =
@@ -34,17 +50,51 @@ export async function newEntryView(ctx: AppContext, ref: TimelineRef, into: Id |
   return {
     username: owner.username,
     timeline: { slug: timeline.slug, title: timeline.title },
-    into: entry && {
-      id: entry.id,
-      titles: entry.events.map((event) => event.title),
-      year: entry.events[0]?.year,
-    },
+    into: entry && summarize(entry),
     used: await sql.listUsedCategories(ctx.db, timeline.id),
   };
 }
 
+function summarize(entry: TimelineEntry): BundleSummary {
+  return {
+    id: entry.id,
+    titles: entry.events.map((event) => event.title),
+    year: entry.events[0]?.year,
+  };
+}
+
+/**
+ * 編集フォームに詰める値。
+ *
+ * `EntryFields.svelte` がそのまま欄に流し込む。`links` が文字列なのは、
+ * 1 行 1 本のテキストエリアで受けているため（input.ts の `formatLinksInput`）。
+ */
+export type EntryFormValues = {
+  id: number;
+  year: number | undefined;
+  title: string | undefined;
+  tagline: string | null;
+  body: string | null;
+  category: string | null;
+  subcategory: string | null;
+  links: string;
+  /** 束ねが指しているイベント。並べ替えと切り離しの対象 */
+  events: { id: number; title: string }[];
+};
+
+/** 束ねる相手の候補。`label` はイベント名を並べたもの。 */
+export type BundleCandidate = { id: number; label: string };
+
+export type EditEntryView = {
+  username: string;
+  timeline: TimelineLabel;
+  entry: EntryFormValues;
+  siblings: BundleCandidate[];
+  used: CategoryUsage[];
+};
+
 /** 行を編集するフォームと、束ねの中身と、束ねる相手の候補。 */
-export async function editEntryView(ctx: AppContext, ref: EntryRef) {
+export async function editEntryView(ctx: AppContext, ref: EntryRef): Promise<EditEntryView> {
   const { owner, timeline, entry } = await requireOwnEntry(ctx, ref, "そのイベントは見つかりません");
 
   // 編集できるのは代表イベント（position 0）。残りは一覧として見せて、
@@ -54,7 +104,7 @@ export async function editEntryView(ctx: AppContext, ref: EntryRef) {
   // 束ねる相手の候補。同じ年表であることと、束ねた結果が 1 つの期間に収まること。
   // 「同じ年」ではないのは、1998 年と 1998 年 3 月は束ねられるが 1998 年 3 月と
   // 5 月は束ねられない、という差があるため（$lib/period）。
-  const siblings = (await sql.listEntries(ctx.db, timeline.id))
+  const siblings: BundleCandidate[] = (await sql.listEntries(ctx.db, timeline.id))
     .filter((other) => other.id !== entry.id && bundleable([...entry.events, ...other.events]))
     .map((other) => ({
       id: other.id,
@@ -80,8 +130,31 @@ export async function editEntryView(ctx: AppContext, ref: EntryRef) {
   };
 }
 
+/**
+ * 束ねるときに並べる 1 行。
+ *
+ * `noteId` が要るのは、どちらのノートを採るかを選ばせるため。
+ * ノートが無い行もあるので null を許す。
+ */
+export type MergeCandidate = BundleSummary & {
+  noteId: number | null;
+  tagline: string | null;
+  body: string | null;
+};
+
+export type MergeView = {
+  username: string;
+  timeline: TimelineLabel;
+  target: MergeCandidate;
+  source: MergeCandidate;
+};
+
 /** 束ねる 2 行を並べて、どちらのノートを採るか選ばせる。 */
-export async function mergeView(ctx: AppContext, ref: EntryRef, withId: unknown) {
+export async function mergeView(
+  ctx: AppContext,
+  ref: EntryRef,
+  withId: unknown,
+): Promise<MergeView> {
   const { owner, timeline, target, source } = await requireMergeablePair(ctx, ref, withId);
 
   return {
@@ -92,18 +165,41 @@ export async function mergeView(ctx: AppContext, ref: EntryRef, withId: unknown)
   };
 }
 
-function noteChoice(entry: TimelineEntry) {
+function noteChoice(entry: TimelineEntry): MergeCandidate {
   return {
-    id: entry.id,
-    titles: entry.events.map((event) => event.title),
+    ...summarize(entry),
     noteId: entry.note?.id ?? null,
     tagline: entry.note?.tagline ?? null,
     body: entry.note?.body ?? null,
   };
 }
 
+/** 載せる元の行。誰が書いたノートなのかまで見せる。 */
+export type PlaceSource = BundleSummary & {
+  tagline: string | null;
+  body: string | null;
+  /** ノートの持ち主の表示名。ノートが無ければ null */
+  author: string | null;
+  hasNote: boolean;
+};
+
+/**
+ * 載せ先の候補。
+ *
+ * `taken` は「その年表に既にある出来事の数」。0 でなければ載せられないが、
+ * 候補からは消さない（下の `listPlaceTargets` を見よ）。
+ */
+export type PlaceTarget = { id: number; title: string; slug: string; taken: number };
+
+export type PlaceView = {
+  /** どの年表から持ってくるのか */
+  from: TimelineOrigin;
+  source: PlaceSource;
+  targets: PlaceTarget[];
+};
+
 /** 他人の年表の行を、自分のどの年表に載せるか選ぶ画面。 */
-export async function placeView(ctx: AppContext, ref: EntryRef) {
+export async function placeView(ctx: AppContext, ref: EntryRef): Promise<PlaceView> {
   const { user, owner, timeline, entry: source } = await requireSignedInEntry(ctx, ref);
   const eventIds = source.events.map((event) => event.id);
 
@@ -113,9 +209,7 @@ export async function placeView(ctx: AppContext, ref: EntryRef) {
   return {
     from: { username: owner.username, slug: timeline.slug, title: timeline.title },
     source: {
-      id: source.id,
-      titles: source.events.map((event) => event.title),
-      year: source.events[0]?.year,
+      ...summarize(source),
       tagline: source.note?.tagline ?? null,
       body: source.note?.body ?? null,
       author: author ? author.display_name ?? author.username : null,
@@ -136,8 +230,8 @@ async function listPlaceTargets(
   userId: number,
   exclude: number,
   eventIds: number[],
-) {
-  const targets = [];
+): Promise<PlaceTarget[]> {
+  const targets: PlaceTarget[] = [];
   for (const candidate of await sql.listTimelinesByOwner(ctx.db, userId)) {
     if (candidate.id === exclude) continue;
     const already = await sql.eventsAlreadyIn(ctx.db, candidate.id, eventIds);

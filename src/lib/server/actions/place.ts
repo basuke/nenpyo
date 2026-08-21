@@ -7,11 +7,20 @@
  */
 
 import { conflict, forbidden, invalid } from "../errors";
-import { requireSignedInEntry, type AppContext, type EntryRef } from "../context";
+import {
+  requireSignedInEntry,
+  type AppContext,
+  type EntryRef,
+  type TimelineRef,
+} from "../context";
 import { parsePlacedNote, type RawInput } from "../input";
 import * as sql from "../db";
 
-export async function placeEntry(ctx: AppContext, ref: EntryRef, raw: RawInput) {
+export async function placeEntry(
+  ctx: AppContext,
+  ref: EntryRef,
+  raw: RawInput,
+): Promise<TimelineRef> {
   const { user, entry } = await requireSignedInEntry(ctx, ref);
 
   // 載せ先が自分の年表かどうかは、ここで必ず確かめる。入力の値は信用しない。

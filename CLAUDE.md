@@ -153,6 +153,12 @@ routes  →  route.ts  →  actions / views  →  context / input  →  db
 - 検証は `src/lib/server/input.ts`。**`FormData` ではなく plain object を受ける。**
   検証は操作の中で走らせる。ルートで走らせると API から呼んだときに素通りする
 - `AppError` を HTTP に翻訳するのは `src/lib/server/route.ts` だけ
+- **`views/` と `actions/` の戻り値には名前を付ける**（`Promise<TimelineView>`）。
+  その形はページが受け取る `data` であり、API のレスポンスの契約でもある
+- **DB の行をそのまま外へ出さない。** `owner_username` のような SQL の都合の
+  列名が画面と API に漏れる。`views/common.ts` の `to*View` で詰め替える
+- 同じ形を 2 か所で宣言しない。検証を通った入力の形は `db.ts` が持ち、
+  `input.ts` はそれを import して戻り値に使う
 - 新しい操作を足すときは、まず `actions/` に置いてからルートを繋ぐ。逆をやらない
 
 ### SvelteKit / Svelte

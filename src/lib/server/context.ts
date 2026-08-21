@@ -29,10 +29,20 @@ export type AppContext = {
  * 「SvelteKit の params を組み立てる」という妙な仕事が要る。
  * `@username/slug` は URL の都合ではなく年表そのものの名前なので、
  * これを参照の形にする。
+ *
+ * **`actions/` の戻り値にもこれを使う。** 書き込んだあとに「次はどこを指せば
+ * よいか」を返すのは、引数で「どこを指しているか」を受けるのと同じことなので、
+ * 型を分ける理由がない。ルートはこれを見てリダイレクト先を組む。
  */
-export type TimelineRef = { username: string; slug: string };
+export type UserRef = { username: string };
+export type TimelineRef = UserRef & { slug: string };
 
-/** id は URL から来ると文字列、JSON から来ると数値。どちらも受ける。 */
+/**
+ * id は URL から来ると文字列、JSON から来ると数値。どちらも受ける。
+ *
+ * **受け取るときだけの型**。返すものは `toId` を通した `number` にする。
+ * 出ていく値まで曖昧なままにすると、受け手がもう一度整えることになる。
+ */
 export type Id = string | number;
 
 export type EntryRef = TimelineRef & { entryId: Id };
