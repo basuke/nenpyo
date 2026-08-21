@@ -18,7 +18,7 @@
         </h2>
         <p class="timeline-card__meta">
           <a href="/@{timeline.owner_username}">@{timeline.owner_username}</a>
-          ・{timeline.event_count} 件
+          ・{timeline.entry_count} 件
         </p>
         {#if timeline.description}
           <p class="timeline-card__desc">{timeline.description}</p>

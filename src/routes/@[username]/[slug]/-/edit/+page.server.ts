@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ platform, params, locals, url }) =>
       slug: timeline.slug,
       title: timeline.title,
       description: timeline.description,
-      eventCount: timeline.event_count,
+      entryCount: timeline.entry_count,
     },
   };
 };

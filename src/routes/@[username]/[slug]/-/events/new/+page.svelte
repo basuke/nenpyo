@@ -1,5 +1,5 @@
 <script lang="ts">
-  import EventFields from "$lib/EventFields.svelte";
+  import EntryFields from "$lib/EntryFields.svelte";
 
   let { data, form } = $props();
 
@@ -19,7 +19,7 @@
 {/if}
 
 <form class="form" method="POST">
-  <EventFields values={form?.values} used={data.used} />
+  <EntryFields values={form?.values} used={data.used} />
 
   <div class="actions">
     <button type="submit">追加する</button>

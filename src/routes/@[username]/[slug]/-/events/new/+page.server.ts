@@ -1,8 +1,8 @@
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { createEvent, listUsedCategories } from "$lib/server/db";
+import { createEntry, listUsedCategories } from "$lib/server/db";
 import { loadTimelineContext, requireOwner } from "$lib/server/guards";
-import { parseEventForm } from "$lib/server/forms";
+import { parseEntryForm } from "$lib/server/forms";
 
 export const load: PageServerLoad = async ({ platform, params, locals, url }) => {
   const { db, owner, timeline } = await loadTimelineContext(platform, params, locals.user);
@@ -21,10 +21,11 @@ export const actions: Actions = {
     const user = requireOwner(locals.user, owner.id, url.pathname);
 
     const form = await request.formData();
-    const parsed = parseEventForm(form);
+    const parsed = parseEntryForm(form);
     if (!parsed.ok) return fail(400, { message: parsed.message, values: Object.fromEntries(form) });
 
-    await createEvent(db, timeline.id, user.id, parsed.value);
+    // 事実と読みを 1 枚のフォームで受け、event / note / entry に分けて置く。
+    await createEntry(db, timeline.id, user.id, parsed.value);
 
     throw redirect(303, `/@${owner.username}/${timeline.slug}`);
   },

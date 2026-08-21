@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { listEvents } from "$lib/server/db";
+import { listEntries } from "$lib/server/db";
 import { loadTimelineContext } from "$lib/server/guards";
 
 // 読むだけのページなので、クライアント側では何もしない。
@@ -10,14 +10,17 @@ export const csr = false;
 export const load: PageServerLoad = async ({ platform, params, locals }) => {
   const { db, owner, timeline, canEdit } = await loadTimelineContext(platform, params, locals.user);
 
-  const events = await listEvents(db, timeline.id);
+  const entries = await listEntries(db, timeline.id);
 
-  // 年ごとにまとめる。events は既に year 昇順なので、隣り合うものを畳むだけでよい。
-  const years: { year: number; events: typeof events }[] = [];
-  for (const event of events) {
+  // 年ごとにまとめる。entries は既に代表イベントの年で昇順なので、
+  // 隣り合うものを畳むだけでよい。
+  const years: { year: number; entries: typeof entries }[] = [];
+  for (const entry of entries) {
+    const year = entry.events[0]?.year;
+    if (year === undefined) continue;
     const last = years.at(-1);
-    if (last?.year === event.year) last.events.push(event);
-    else years.push({ year: event.year, events: [event] });
+    if (last?.year === year) last.entries.push(entry);
+    else years.push({ year, entries: [entry] });
   }
 
   return {
@@ -29,7 +32,7 @@ export const load: PageServerLoad = async ({ platform, params, locals }) => {
       updatedAt: timeline.updated_at,
     },
     years,
-    eventCount: events.length,
+    entryCount: entries.length,
     canEdit,
   };
 };
