@@ -20,6 +20,7 @@
     "db:migrate": "wrangler d1 migrations apply nenpyo --remote",
     "data:convert": "node scripts/convert-lifeline.mjs",
     "data:check": "node scripts/check-curation.mjs",
+    "data:propose-taglines": "node scripts/propose-taglines.mjs",
     "data:import:local": "wrangler d1 execute nenpyo --local --file=data/sf-tech-lifeline.sql",
     "data:import": "wrangler d1 execute nenpyo --remote --file=data/sf-tech-lifeline.sql"
   },
