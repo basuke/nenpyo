@@ -4,7 +4,8 @@
     "元データ: data/sf-tech-lifeline.json (matsuo-koya/sf-tech-lifeline @ ad94155)",
     "",
     "scripts/propose-taglines.mjs が作った提案を出発点に、手で直したもの。",
-    "**再生成しないこと。** 直すときはこのファイルを直接編集する。",
+    "**目視で決めたぶんはスクリプトの OVERRIDE に書いてある**ので、いまはまだ",
+    "--force で作り直せる。このファイルを直接編集したら、その時点で再生成は禁物。",
     "",
     "newTitle … 分解後のイベントのタイトル（events.title に入る）",
     "tagline  … 切り出した読み（notes.tagline に入る）。無ければ null",
@@ -13,1247 +14,17 @@
   ],
   "items": [
     {
-      "title": "宇宙船ビーグル号の冒険 短編発表(〜50年長編化)",
-      "year": 1939,
-      "category": "sf",
-      "from": null,
-      "newTitle": "宇宙船ビーグル号の冒険 短編発表(〜50年長編化)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "〜50年長編化",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ファウンデーション 連載開始(〜53年三部作)",
-      "year": 1942,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ファウンデーション 連載開始(〜53年三部作)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "〜53年三部作",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ロボット工学三原則(短編「堂々めぐり」で明文化)",
-      "year": 1942,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ロボット工学三原則(短編「堂々めぐり」で明文化)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "短編「堂々めぐり」で明文化",
-          "kind": "fact",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ニュースピーク(言葉を減らして思考を減らす)",
-      "year": 1949,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ニュースピーク",
-      "tagline": "言葉を減らして思考を減らす",
-      "segments": [
-        {
-          "text": "言葉を減らして思考を減らす",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "われはロボット 刊行(ロボットシリーズの始まり)",
-      "year": 1950,
-      "category": "sf",
-      "from": null,
-      "newTitle": "われはロボット 刊行",
-      "tagline": "ロボットシリーズの始まり",
-      "segments": [
-        {
-          "text": "ロボットシリーズの始まり",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "鋼鉄都市 刊行(人間とロボットの相棒もの)",
-      "year": 1954,
-      "category": "sf",
-      "from": null,
-      "newTitle": "鋼鉄都市 刊行",
-      "tagline": "人間とロボットの相棒もの",
-      "segments": [
-        {
-          "text": "人間とロボットの相棒もの",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "指輪物語 刊行(物語より先に言語があった)",
-      "year": 1954,
-      "category": "sf",
-      "from": null,
-      "newTitle": "指輪物語 刊行",
-      "tagline": "物語より先に言語があった",
-      "segments": [
-        {
-          "text": "物語より先に言語があった",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "鉄人28号 連載開始(横山光輝)",
-      "year": 1956,
-      "category": "sf",
-      "from": null,
-      "newTitle": "鉄人28号 連載開始(横山光輝)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "横山光輝",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "夏への扉 発表(文化女中器と万能フランク)",
-      "year": 1956,
-      "category": "sf",
-      "from": null,
-      "newTitle": "夏への扉 発表",
-      "tagline": "文化女中器と万能フランク",
-      "segments": [
-        {
-          "text": "文化女中器と万能フランク",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "宇宙家族ジェットソン 米国放映(日本は63年頃)",
-      "year": 1962,
-      "category": "sf",
-      "from": null,
-      "newTitle": "宇宙家族ジェットソン 米国放映(日本は63年頃)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "日本は63年頃",
-          "kind": "fact",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "宇宙少年ソラン 放映(相棒のチャッピー)",
-      "year": 1965,
-      "category": "sf",
-      "from": null,
-      "newTitle": "宇宙少年ソラン 放映",
-      "tagline": "相棒のチャッピー",
-      "segments": [
-        {
-          "text": "相棒のチャッピー",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "スーパージェッター(「流星号、応答せよ」)",
-      "year": 1965,
-      "category": "sf",
-      "from": null,
-      "newTitle": "スーパージェッター(「流星号、応答せよ」)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "「流星号、応答せよ」",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "サンダーバード(発進シーケンスという発明)",
-      "year": 1965,
-      "category": "sf",
-      "from": null,
-      "newTitle": "サンダーバード",
-      "tagline": "発進シーケンスという発明",
-      "segments": [
-        {
-          "text": "発進シーケンスという発明",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ウルトラマン 放映開始(科特隊の流星バッジ)",
-      "year": 1966,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ウルトラマン 放映開始",
-      "tagline": "科特隊の流星バッジ",
-      "segments": [
-        {
-          "text": "科特隊の流星バッジ",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "アンシブル登場(ル=グウィン。瞬時通信の代名詞)",
-      "year": 1966,
-      "category": "sf",
-      "from": null,
-      "newTitle": "アンシブル登場(ル=グウィン)",
-      "tagline": "瞬時通信の代名詞",
-      "segments": [
-        {
-          "text": "ル=グウィン",
-          "kind": "fact",
-          "why": "人名"
-        },
-        {
-          "text": "瞬時通信の代名詞",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "果しなき流れの果に 刊行(小松左京)",
-      "year": 1966,
-      "category": "sf",
-      "from": null,
-      "newTitle": "果しなき流れの果に 刊行(小松左京)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "小松左京",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ウルトラセブン 放映(アマギ隊員・ビデオシーバー)",
-      "year": 1967,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ウルトラセブン 放映(アマギ隊員・ビデオシーバー)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "アマギ隊員・ビデオシーバー",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "火の鳥 未来編 連載(〜68年)",
-      "year": 1967,
-      "category": "sf",
-      "from": null,
-      "newTitle": "火の鳥 未来編 連載(〜68年)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "〜68年",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "マッハGoGoGo 放映(車から飛び立つ偵察ドローン)",
-      "year": 1967,
-      "category": "sf",
-      "from": null,
-      "newTitle": "マッハGoGoGo 放映",
-      "tagline": "車から飛び立つ偵察ドローン",
-      "segments": [
-        {
-          "text": "車から飛び立つ偵察ドローン",
-          "kind": "tagline",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "2001年宇宙の旅 公開(日本公開も同年)",
-      "year": 1968,
-      "category": "sf",
-      "from": null,
-      "newTitle": "2001年宇宙の旅 公開(日本公開も同年)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "日本公開も同年",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ドラえもん 連載開始(小学館学習誌)",
-      "year": 1969,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ドラえもん 連載開始(小学館学習誌)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "小学館学習誌",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "臆病者の未来 刊行(ポールのジョイメーカー)",
-      "year": 1969,
-      "category": "sf",
-      "from": null,
-      "newTitle": "臆病者の未来 刊行",
-      "tagline": "ポールのジョイメーカー",
-      "segments": [
-        {
-          "text": "ポールのジョイメーカー",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "謎の円盤UFO 英日放映(コンピュータ衛星SID)",
-      "year": 1970,
-      "category": "sf",
-      "from": null,
-      "newTitle": "謎の円盤UFO 英日放映(コンピュータ衛星SID)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "コンピュータ衛星SID",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "肩の上の秘書(星新一。AIエージェントの原型)",
-      "year": 1971,
-      "category": "sf",
-      "from": null,
-      "newTitle": "肩の上の秘書(星新一)",
-      "tagline": "AIエージェントの原型",
-      "segments": [
-        {
-          "text": "星新一",
-          "kind": "fact",
-          "why": "人名"
-        },
-        {
-          "text": "AIエージェントの原型",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "ワンダバ(出撃の音楽が様式になる)",
-      "year": 1971,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ワンダバ",
-      "tagline": "出撃の音楽が様式になる",
-      "segments": [
-        {
-          "text": "出撃の音楽が様式になる",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "マジンガーZ 連載開始・TVアニメ化(永井豪)",
-      "year": 1972,
-      "category": "sf",
-      "from": null,
-      "newTitle": "マジンガーZ 連載開始・TVアニメ化(永井豪)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "永井豪",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "人造人間キカイダー 放映・連載(未完成の良心回路)",
-      "year": 1972,
-      "category": "sf",
-      "from": null,
-      "newTitle": "人造人間キカイダー 放映・連載",
-      "tagline": "未完成の良心回路",
-      "segments": [
-        {
-          "text": "未完成の良心回路",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ポーの一族 連載開始(萩尾望都)",
-      "year": 1972,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ポーの一族 連載開始(萩尾望都)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "萩尾望都",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "惑星ソラリス 公開(未来都市は東京の首都高だった)",
-      "year": 1972,
-      "category": "sf",
-      "from": null,
-      "newTitle": "惑星ソラリス 公開",
-      "tagline": "未来都市は東京の首都高だった",
-      "segments": [
-        {
-          "text": "未来都市は東京の首都高だった",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "新造人間キャシャーン 放映開始(公害を解くとAIが人類を敵と判断する)",
-      "year": 1973,
-      "category": "sf",
-      "from": null,
-      "newTitle": "新造人間キャシャーン 放映開始",
-      "tagline": "公害を解くとAIが人類を敵と判断する",
-      "segments": [
-        {
-          "text": "公害を解くとAIが人類を敵と判断する",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ジェットスクランダー登場(合体して空を飛ぶ赤い翼)",
-      "year": 1973,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ジェットスクランダー登場",
-      "tagline": "合体して空を飛ぶ赤い翼",
-      "segments": [
-        {
-          "text": "合体して空を飛ぶ赤い翼",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "神の目の小さな塵 刊行(ポケット・コンピューター)",
-      "year": 1974,
-      "category": "sf",
-      "from": null,
-      "newTitle": "神の目の小さな塵 刊行(ポケット・コンピューター)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "ポケット・コンピューター",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "宇宙戦艦ヤマト 放映(「こんなこともあろうかと」)",
-      "year": 1974,
-      "category": "sf",
-      "from": null,
-      "newTitle": "宇宙戦艦ヤマト 放映",
-      "tagline": "「こんなこともあろうかと」",
-      "segments": [
-        {
-          "text": "「こんなこともあろうかと」",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "帝国地球 刊行(クラークのミニセック)",
-      "year": 1975,
-      "category": "sf",
-      "from": null,
-      "newTitle": "帝国地球 刊行",
-      "tagline": "クラークのミニセック",
-      "segments": [
-        {
-          "text": "クラークのミニセック",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "なぞの転校生 放映(NHK少年ドラマシリーズ)",
-      "year": 1975,
-      "category": "sf",
-      "from": null,
-      "newTitle": "なぞの転校生 放映(NHK少年ドラマシリーズ)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "NHK少年ドラマシリーズ",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "スター・ウォーズ 公開(日本公開は1978年)",
-      "year": 1977,
-      "category": "sf",
-      "from": null,
-      "newTitle": "スター・ウォーズ 公開(日本公開は1978年)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "日本公開は1978年",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "未来からの挑戦 放映(ねらわれた学園)",
-      "year": 1977,
-      "category": "sf",
-      "from": null,
-      "newTitle": "未来からの挑戦 放映(ねらわれた学園)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "ねらわれた学園",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "百億の昼と千億の夜 漫画版(萩尾望都)",
-      "year": 1977,
-      "category": "sf",
-      "from": null,
-      "newTitle": "百億の昼と千億の夜 漫画版(萩尾望都)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "萩尾望都",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "銀河ヒッチハイク・ガイド BBCラジオ(79年小説化)",
-      "year": 1978,
-      "category": "sf",
-      "from": null,
-      "newTitle": "銀河ヒッチハイク・ガイド BBCラジオ(79年小説化)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "79年小説化",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "トロン 公開(コンピューターの中が舞台になる)",
-      "year": 1982,
-      "category": "sf",
-      "from": null,
-      "newTitle": "トロン 公開",
-      "tagline": "コンピューターの中が舞台になる",
-      "segments": [
-        {
-          "text": "コンピューターの中が舞台になる",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ファウンデーションの彼方へ 刊行(第2期開始。〜93年)",
-      "year": 1982,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ファウンデーションの彼方へ 刊行(第2期開始。〜93年)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "第2期開始",
-          "kind": "fact",
-          "why": "名詞の並び"
-        },
-        {
-          "text": "〜93年",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "ナイトライダー放映(会話するクルマKITT)",
-      "year": 1982,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ナイトライダー放映",
-      "tagline": "会話するクルマKITT",
-      "segments": [
-        {
-          "text": "会話するクルマKITT",
-          "kind": "tagline",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ウォー・ゲーム 公開(少年ハッカーとWOPR)",
-      "year": 1983,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ウォー・ゲーム 公開",
-      "tagline": "少年ハッカーとWOPR",
-      "segments": [
-        {
-          "text": "少年ハッカーとWOPR",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "映画「時をかける少女」公開(大林宣彦)",
-      "year": 1983,
-      "category": "sf",
-      "from": null,
-      "newTitle": "映画「時をかける少女」公開(大林宣彦)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "大林宣彦",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "幻魔大戦 公開(音楽はキース・エマーソン)",
-      "year": 1983,
-      "category": "sf",
-      "from": null,
-      "newTitle": "幻魔大戦 公開(音楽はキース・エマーソン)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "音楽はキース・エマーソン",
-          "kind": "fact",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ガラパゴスの箱舟 刊行(ゴクビ/マンダラックス)",
-      "year": 1985,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ガラパゴスの箱舟 刊行(ゴクビ/マンダラックス)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "ゴクビ/マンダラックス",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "マックス・ヘッドルーム登場(AIのTV司会者)",
-      "year": 1985,
-      "category": "sf",
-      "from": null,
-      "newTitle": "マックス・ヘッドルーム登場",
-      "tagline": "AIのTV司会者",
-      "segments": [
-        {
-          "text": "AIのTV司会者",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "クリンゴン語辞典(架空の言語に文法書ができる)",
-      "year": 1985,
-      "category": "sf",
-      "from": null,
-      "newTitle": "クリンゴン語辞典",
-      "tagline": "架空の言語に文法書ができる",
-      "segments": [
-        {
-          "text": "架空の言語に文法書ができる",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "スタートレックIV(スコッティとMac Plus)",
-      "year": 1986,
-      "category": "sf",
-      "from": null,
-      "newTitle": "スタートレックIV",
-      "tagline": "スコッティとMac Plus",
-      "segments": [
-        {
-          "text": "スコッティとMac Plus",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "2061年宇宙の旅 刊行(ダイヤモンドの山とビートルズ)",
-      "year": 1987,
-      "category": "sf",
-      "from": null,
-      "newTitle": "2061年宇宙の旅 刊行",
-      "tagline": "ダイヤモンドの山とビートルズ",
-      "segments": [
-        {
-          "text": "ダイヤモンドの山とビートルズ",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "たったひとつの冴えたやりかた 邦訳(表紙は川原由美子)",
-      "year": 1987,
-      "category": "sf",
-      "from": null,
-      "newTitle": "たったひとつの冴えたやりかた 邦訳(表紙は川原由美子)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "表紙は川原由美子",
-          "kind": "fact",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "AKIRA 公開(金田のバイクと2019年のネオ東京)",
-      "year": 1988,
-      "category": "sf",
-      "from": null,
-      "newTitle": "AKIRA 公開(金田のバイクと2019年のネオ東京)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "金田のバイクと2019年のネオ東京",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "スノウ・クラッシュ 刊行(スティーヴンスン)",
-      "year": 1992,
-      "category": "sf",
-      "from": null,
-      "newTitle": "スノウ・クラッシュ 刊行(スティーヴンスン)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "スティーヴンスン",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "ジュラシック・パーク 公開(SGIワークステーション登場)",
-      "year": 1993,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ジュラシック・パーク 公開(SGIワークステーション登場)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "SGIワークステーション登場",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "トイ・ストーリー 公開(世界初の長編フルCG映画)",
-      "year": 1995,
-      "category": "sf",
-      "from": null,
-      "newTitle": "トイ・ストーリー 公開",
-      "tagline": "世界初の長編フルCG映画",
-      "segments": [
-        {
-          "text": "世界初の長編フルCG映画",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "新世紀エヴァンゲリオン 放映(MAGIシステム)",
-      "year": 1995,
-      "category": "sf",
-      "from": null,
-      "newTitle": "新世紀エヴァンゲリオン 放映(MAGIシステム)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "MAGIシステム",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "JM 公開(ヘッドセット+グローブで電脳空間ダイブ)",
-      "year": 1995,
-      "category": "sf",
-      "from": null,
-      "newTitle": "JM 公開",
-      "tagline": "ヘッドセット+グローブで電脳空間ダイブ",
-      "segments": [
-        {
-          "text": "ヘッドセット+グローブで電脳空間ダイブ",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ザ・インターネット 公開(ID乗っ取りスリラー)",
-      "year": 1995,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ザ・インターネット 公開",
-      "tagline": "ID乗っ取りスリラー",
-      "segments": [
-        {
-          "text": "ID乗っ取りスリラー",
-          "kind": "tagline",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "まるいち的風景 連載開始(柳原望)",
-      "year": 1995,
-      "category": "sf",
-      "from": null,
-      "newTitle": "まるいち的風景 連載開始(柳原望)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "柳原望",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "インデペンデンス・デイ 公開(PowerBookでウイルス注入)",
-      "year": 1996,
-      "category": "sf",
-      "from": null,
-      "newTitle": "インデペンデンス・デイ 公開",
-      "tagline": "PowerBookでウイルス注入",
-      "segments": [
-        {
-          "text": "PowerBookでウイルス注入",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "スカイネット自我覚醒(作中設定・8月29日)",
-      "year": 1997,
-      "category": "sf",
-      "from": null,
-      "newTitle": "スカイネット自我覚醒(作中設定・8月29日)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "作中設定・8月29日",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "マイノリティ・リポート 公開(空中ジェスチャーUI)",
-      "year": 2002,
-      "category": "sf",
-      "from": null,
-      "newTitle": "マイノリティ・リポート 公開(空中ジェスチャーUI)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "空中ジェスチャーUI",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "火の鳥 NHKアニメ版(未来編を映像化)",
-      "year": 2004,
-      "category": "sf",
-      "from": null,
-      "newTitle": "火の鳥 NHKアニメ版(未来編を映像化)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "未来編を映像化",
-          "kind": "fact",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "沈黙のフライバイ 刊行(野尻抱介)",
-      "year": 2007,
-      "category": "sf",
-      "from": null,
-      "newTitle": "沈黙のフライバイ 刊行(野尻抱介)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "野尻抱介",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "三体 刊行(智子=ソフォン。量子もつれの兵器化)",
-      "year": 2008,
-      "category": "sf",
-      "from": null,
-      "newTitle": "三体 刊行(智子=ソフォン)",
-      "tagline": "量子もつれの兵器化",
-      "segments": [
-        {
-          "text": "智子=ソフォン",
-          "kind": "fact",
-          "why": "名詞の並び"
-        },
-        {
-          "text": "量子もつれの兵器化",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "東のエデン 放映(ジュイス)",
-      "year": 2009,
-      "category": "sf",
-      "from": null,
-      "newTitle": "東のエデン 放映(ジュイス)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "ジュイス",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "ソードアート・オンライン TVアニメ化(原作は2009年刊行)",
-      "year": 2012,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ソードアート・オンライン TVアニメ化(原作は2009年刊行)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "原作は2009年刊行",
-          "kind": "fact",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "PSYCHO-PASS 放映(シビュラシステム)",
-      "year": 2012,
-      "category": "sf",
-      "from": null,
-      "newTitle": "PSYCHO-PASS 放映(シビュラシステム)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "シビュラシステム",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "南極点のピアピア動画 刊行(ボカロとMakerが宇宙へ)",
-      "year": 2012,
-      "category": "sf",
-      "from": null,
-      "newTitle": "南極点のピアピア動画 刊行",
-      "tagline": "ボカロとMakerが宇宙へ",
-      "segments": [
-        {
-          "text": "ボカロとMakerが宇宙へ",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "her/世界でひとつの彼女 公開(日本公開は2014年)",
-      "year": 2013,
-      "category": "sf",
-      "from": null,
-      "newTitle": "her/世界でひとつの彼女 公開(日本公開は2014年)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "日本公開は2014年",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "オービタル・クラウド 刊行(藤井太洋)",
-      "year": 2014,
-      "category": "sf",
-      "from": null,
-      "newTitle": "オービタル・クラウド 刊行(藤井太洋)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "藤井太洋",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "AIの遺電子 連載開始(山田胡瓜。TVアニメ化は2023年)",
-      "year": 2015,
-      "category": "sf",
-      "from": null,
-      "newTitle": "AIの遺電子 連載開始(山田胡瓜。TVアニメ化は2023年)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "山田胡瓜",
-          "kind": "fact",
-          "why": "人名"
-        },
-        {
-          "text": "TVアニメ化は2023年",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ストレンジャー・シングス配信開始(D&Dで語られる80年代)",
-      "year": 2016,
-      "category": "sf",
-      "from": null,
-      "newTitle": "ストレンジャー・シングス配信開始(D&Dで語られる80年代)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "D&Dで語られる80年代",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "公正的戦闘規範 刊行(藤井太洋。ゲームが戦争だった)",
-      "year": 2017,
-      "category": "sf",
-      "from": null,
-      "newTitle": "公正的戦闘規範 刊行(藤井太洋)",
-      "tagline": "ゲームが戦争だった",
-      "segments": [
-        {
-          "text": "藤井太洋",
-          "kind": "fact",
-          "why": "人名"
-        },
-        {
-          "text": "ゲームが戦争だった",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "プロジェクト・ヘイル・メアリー 刊行(ビートルズと異星の相棒)",
-      "year": 2021,
-      "category": "sf",
-      "from": null,
-      "newTitle": "プロジェクト・ヘイル・メアリー 刊行",
-      "tagline": "ビートルズと異星の相棒",
-      "segments": [
-        {
-          "text": "ビートルズと異星の相棒",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
       "title": "世界最古の写真(ニエプスとカメラ・オブスクラ)",
       "year": 1826,
       "category": "tech",
       "from": null,
-      "newTitle": "世界最古の写真",
-      "tagline": "ニエプスとカメラ・オブスクラ",
+      "newTitle": "世界最古の写真(ニエプスとカメラ・オブスクラ)",
+      "tagline": null,
       "segments": [
         {
           "text": "ニエプスとカメラ・オブスクラ",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -1295,13 +66,13 @@
       "year": 1859,
       "category": "tech",
       "from": null,
-      "newTitle": "写真は芸術か",
-      "tagline": "画家たちの反発とボードレール",
+      "newTitle": "写真は芸術か(画家たちの反発とボードレール)",
+      "tagline": null,
       "segments": [
         {
           "text": "画家たちの反発とボードレール",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -1327,13 +98,13 @@
       "year": 1861,
       "category": "tech",
       "from": null,
-      "newTitle": "世界初のカラー写真",
-      "tagline": "マクスウェルの三色分解",
+      "newTitle": "世界初のカラー写真(マクスウェルの三色分解)",
+      "tagline": null,
       "segments": [
         {
           "text": "マクスウェルの三色分解",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -1483,6 +254,22 @@
       "confidence": "high"
     },
     {
+      "title": "サティ「家具の音楽」(聴かれないための音楽)",
+      "year": 1917,
+      "category": "music",
+      "from": null,
+      "newTitle": "サティ「家具の音楽」",
+      "tagline": "聴かれないための音楽",
+      "segments": [
+        {
+          "text": "聴かれないための音楽",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "テルミン発明(触れずに演奏する楽器)",
       "year": 1920,
       "category": "tech",
@@ -1583,13 +370,13 @@
       "year": 1935,
       "category": "tech",
       "from": null,
-      "newTitle": "EPR論文",
-      "tagline": "アインシュタインの「不気味な遠隔作用」",
+      "newTitle": "EPR論文(アインシュタインの「不気味な遠隔作用」)",
+      "tagline": null,
       "segments": [
         {
           "text": "アインシュタインの「不気味な遠隔作用」",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -1663,13 +450,29 @@
       "year": 1937,
       "category": "tech",
       "from": null,
-      "newTitle": "シャノン 修士論文",
-      "tagline": "スイッチ回路とブール代数",
+      "newTitle": "シャノン 修士論文(スイッチ回路とブール代数)",
+      "tagline": null,
       "segments": [
         {
           "text": "スイッチ回路とブール代数",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "宇宙船ビーグル号の冒険 短編発表(〜50年長編化)",
+      "year": 1939,
+      "category": "sf",
+      "from": null,
+      "newTitle": "宇宙船ビーグル号の冒険 短編発表(〜50年長編化)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "〜50年長編化",
+          "kind": "fact",
+          "why": "年・日付の補足"
         }
       ],
       "confidence": "high"
@@ -1707,17 +510,49 @@
       "confidence": "low"
     },
     {
+      "title": "ファウンデーション 連載開始(〜53年三部作)",
+      "year": 1942,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ファウンデーション 連載開始(〜53年三部作)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "〜53年三部作",
+          "kind": "fact",
+          "why": "年・日付の補足"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ロボット工学三原則(短編「堂々めぐり」で明文化)",
+      "year": 1942,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ロボット工学三原則(短編「堂々めぐり」で明文化)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "短編「堂々めぐり」で明文化",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "コロッサス稼働(ブレッチリー・パークの暗号解読機)",
       "year": 1943,
       "category": "tech",
       "from": null,
-      "newTitle": "コロッサス稼働",
-      "tagline": "ブレッチリー・パークの暗号解読機",
+      "newTitle": "コロッサス稼働(ブレッチリー・パークの暗号解読機)",
+      "tagline": null,
       "segments": [
         {
           "text": "ブレッチリー・パークの暗号解読機",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -1835,17 +670,33 @@
       "confidence": "high"
     },
     {
+      "title": "ニュースピーク(言葉を減らして思考を減らす)",
+      "year": 1949,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ニュースピーク",
+      "tagline": "言葉を減らして思考を減らす",
+      "segments": [
+        {
+          "text": "言葉を減らして思考を減らす",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "チューリングテスト提案(「計算する機械と知性」)",
       "year": 1950,
       "category": "tech",
       "from": null,
-      "newTitle": "チューリングテスト提案",
-      "tagline": "「計算する機械と知性」",
+      "newTitle": "チューリングテスト提案(「計算する機械と知性」)",
+      "tagline": null,
       "segments": [
         {
           "text": "「計算する機械と知性」",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -1865,6 +716,22 @@
         }
       ],
       "confidence": "low"
+    },
+    {
+      "title": "われはロボット 刊行(ロボットシリーズの始まり)",
+      "year": 1950,
+      "category": "sf",
+      "from": null,
+      "newTitle": "われはロボット 刊行",
+      "tagline": "ロボットシリーズの始まり",
+      "segments": [
+        {
+          "text": "ロボットシリーズの始まり",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
     },
     {
       "title": "UNIVAC I納入(商用コンピューター第1号)",
@@ -1894,6 +761,22 @@
           "text": "多重録音の父の名を冠したギター",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ジョン・ケージ「4分33秒」(演奏しない音楽)",
+      "year": 1952,
+      "category": "music",
+      "from": null,
+      "newTitle": "ジョン・ケージ「4分33秒」",
+      "tagline": "演奏しない音楽",
+      "segments": [
+        {
+          "text": "演奏しない音楽",
+          "kind": "tagline",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -1931,6 +814,38 @@
       "confidence": "high"
     },
     {
+      "title": "鋼鉄都市 刊行(人間とロボットの相棒もの)",
+      "year": 1954,
+      "category": "sf",
+      "from": null,
+      "newTitle": "鋼鉄都市 刊行",
+      "tagline": "人間とロボットの相棒もの",
+      "segments": [
+        {
+          "text": "人間とロボットの相棒もの",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "指輪物語 刊行(物語より先に言語があった)",
+      "year": 1954,
+      "category": "sf",
+      "from": null,
+      "newTitle": "指輪物語 刊行",
+      "tagline": "物語より先に言語があった",
+      "segments": [
+        {
+          "text": "物語より先に言語があった",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "ストラトキャスター発売(そして70年後の著作権判決)",
       "year": 1954,
       "category": "tech",
@@ -1963,6 +878,22 @@
       "confidence": "high"
     },
     {
+      "title": "鉄人28号 連載開始(横山光輝)",
+      "year": 1956,
+      "category": "sf",
+      "from": null,
+      "newTitle": "鉄人28号 連載開始(横山光輝)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "横山光輝",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "ダートマス会議(「人工知能」という語の誕生)",
       "year": 1956,
       "category": "tech",
@@ -1988,6 +919,38 @@
       "segments": [
         {
           "text": "世界初のハードディスク",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "エルヴィス・プレスリー 全米制覇(ロック時代の開幕)",
+      "year": 1956,
+      "category": "music",
+      "from": null,
+      "newTitle": "エルヴィス・プレスリー 全米制覇",
+      "tagline": "ロック時代の開幕",
+      "segments": [
+        {
+          "text": "ロック時代の開幕",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "夏への扉 発表(文化女中器と万能フランク)",
+      "year": 1956,
+      "category": "sf",
+      "from": null,
+      "newTitle": "夏への扉 発表",
+      "tagline": "文化女中器と万能フランク",
+      "segments": [
+        {
+          "text": "文化女中器と万能フランク",
           "kind": "tagline",
           "why": "助詞を含む句"
         }
@@ -2111,13 +1074,13 @@
       "year": 1959,
       "category": "tech",
       "from": null,
-      "newTitle": "COBOL策定",
-      "tagline": "事務処理言語とグレース・ホッパー",
+      "newTitle": "COBOL策定(事務処理言語とグレース・ホッパー)",
+      "tagline": null,
       "segments": [
         {
           "text": "事務処理言語とグレース・ホッパー",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -2175,13 +1138,13 @@
       "year": 1960,
       "category": "tech",
       "from": null,
-      "newTitle": "オズマ計画",
-      "tagline": "SETIの始まりとドレイクの方程式",
+      "newTitle": "オズマ計画(SETIの始まりとドレイクの方程式)",
+      "tagline": null,
       "segments": [
         {
           "text": "SETIの始まりとドレイクの方程式",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -2246,6 +1209,38 @@
           "text": "活字球とオフィスの標準",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "宇宙家族ジェットソン 米国放映(日本は63年頃)",
+      "year": 1962,
+      "category": "sf",
+      "from": null,
+      "newTitle": "宇宙家族ジェットソン 米国放映(日本は63年頃)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "日本は63年頃",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ビートルズ デビュー(Love Me Do)",
+      "year": 1962,
+      "category": "music",
+      "from": null,
+      "newTitle": "ビートルズ デビュー(Love Me Do)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "Love Me Do",
+          "kind": "fact",
+          "why": "製品名・略称"
         }
       ],
       "confidence": "high"
@@ -2420,13 +1415,13 @@
       "year": 1964,
       "category": "tech",
       "from": null,
-      "newTitle": "東京オリンピック",
-      "tagline": "コンピューター中継と新幹線",
+      "newTitle": "東京オリンピック(コンピューター中継と新幹線)",
+      "tagline": null,
       "segments": [
         {
           "text": "コンピューター中継と新幹線",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -2480,6 +1475,70 @@
       "confidence": "high"
     },
     {
+      "title": "宇宙少年ソラン 放映(相棒のチャッピー)",
+      "year": 1965,
+      "category": "sf",
+      "from": null,
+      "newTitle": "宇宙少年ソラン 放映",
+      "tagline": "相棒のチャッピー",
+      "segments": [
+        {
+          "text": "相棒のチャッピー",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "スーパージェッター(「流星号、応答せよ」)",
+      "year": 1965,
+      "category": "sf",
+      "from": null,
+      "newTitle": "スーパージェッター(「流星号、応答せよ」)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "「流星号、応答せよ」",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "title": "サンダーバード(発進シーケンスという発明)",
+      "year": 1965,
+      "category": "sf",
+      "from": null,
+      "newTitle": "サンダーバード",
+      "tagline": "発進シーケンスという発明",
+      "segments": [
+        {
+          "text": "発進シーケンスという発明",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ウルトラマン 放映開始(科特隊の流星バッジ)",
+      "year": 1966,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ウルトラマン 放映開始",
+      "tagline": "科特隊の流星バッジ",
+      "segments": [
+        {
+          "text": "科特隊の流星バッジ",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "ELIZA公開(ワイゼンバウム。対話プログラム=人工無脳の祖)",
       "year": 1966,
       "category": "tech",
@@ -2501,6 +1560,91 @@
       "confidence": "low"
     },
     {
+      "title": "ビートルズ来日公演(日本武道館)",
+      "year": 1966,
+      "category": "music",
+      "from": null,
+      "newTitle": "ビートルズ来日公演(日本武道館)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "日本武道館",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "アンシブル登場(ル=グウィン。瞬時通信の代名詞)",
+      "year": 1966,
+      "category": "sf",
+      "from": null,
+      "newTitle": "アンシブル登場(ル=グウィン)",
+      "tagline": "瞬時通信の代名詞",
+      "segments": [
+        {
+          "text": "ル=グウィン",
+          "kind": "fact",
+          "why": "人名"
+        },
+        {
+          "text": "瞬時通信の代名詞",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "title": "果しなき流れの果に 刊行(小松左京)",
+      "year": 1966,
+      "category": "sf",
+      "from": null,
+      "newTitle": "果しなき流れの果に 刊行(小松左京)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "小松左京",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ウルトラセブン 放映(アマギ隊員・ビデオシーバー)",
+      "year": 1967,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ウルトラセブン 放映(アマギ隊員・ビデオシーバー)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "アマギ隊員・ビデオシーバー",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "title": "火の鳥 未来編 連載(〜68年)",
+      "year": 1967,
+      "category": "sf",
+      "from": null,
+      "newTitle": "火の鳥 未来編 連載(〜68年)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "〜68年",
+          "kind": "fact",
+          "why": "年・日付の補足"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "甘利俊一が確率的勾配降下による多層回路の学習を提案(誤差逆伝播の先駆)",
       "year": 1967,
       "category": "tech",
@@ -2517,6 +1661,38 @@
       "confidence": "high"
     },
     {
+      "title": "グループサウンズ全盛(エレキと若者文化)",
+      "year": 1967,
+      "category": "music",
+      "from": null,
+      "newTitle": "グループサウンズ全盛",
+      "tagline": "エレキと若者文化",
+      "segments": [
+        {
+          "text": "エレキと若者文化",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "マッハGoGoGo 放映(車から飛び立つ偵察ドローン)",
+      "year": 1967,
+      "category": "sf",
+      "from": null,
+      "newTitle": "マッハGoGoGo 放映",
+      "tagline": "車から飛び立つ偵察ドローン",
+      "segments": [
+        {
+          "text": "車から飛び立つ偵察ドローン",
+          "kind": "tagline",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "ブラックホールと事象の地平線(名前が概念を作る)",
       "year": 1967,
       "category": "tech",
@@ -2528,6 +1704,22 @@
           "text": "名前が概念を作る",
           "kind": "tagline",
           "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "2001年宇宙の旅 公開(日本公開も同年)",
+      "year": 1968,
+      "category": "sf",
+      "from": null,
+      "newTitle": "2001年宇宙の旅 公開(日本公開も同年)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "日本公開も同年",
+          "kind": "fact",
+          "why": "年・日付の補足"
         }
       ],
       "confidence": "high"
@@ -2618,6 +1810,22 @@
       "confidence": "high"
     },
     {
+      "title": "ドラえもん 連載開始(小学館学習誌)",
+      "year": 1969,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ドラえもん 連載開始(小学館学習誌)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "小学館学習誌",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
       "title": "アポロ11号 月面着陸(計算機が人を月へ運んだ)",
       "year": 1969,
       "category": "tech",
@@ -2680,6 +1888,70 @@
         }
       ],
       "confidence": "high"
+    },
+    {
+      "title": "ウッドストック開催(ロックが文化になった3日間)",
+      "year": 1969,
+      "category": "music",
+      "from": null,
+      "newTitle": "ウッドストック開催(ロックが文化になった3日間)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "ロックが文化になった3日間",
+          "kind": "fact",
+          "why": "年・日付の補足"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "臆病者の未来 刊行(ポールのジョイメーカー)",
+      "year": 1969,
+      "category": "sf",
+      "from": null,
+      "newTitle": "臆病者の未来 刊行",
+      "tagline": "ポールのジョイメーカー",
+      "segments": [
+        {
+          "text": "ポールのジョイメーカー",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "スペイス・オディティ(アポロの5日前に出た歌)",
+      "year": 1969,
+      "category": "music",
+      "from": null,
+      "newTitle": "スペイス・オディティ(アポロの5日前に出た歌)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "アポロの5日前に出た歌",
+          "kind": "fact",
+          "why": "年・日付の補足"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "謎の円盤UFO 英日放映(コンピュータ衛星SID)",
+      "year": 1970,
+      "category": "sf",
+      "from": null,
+      "newTitle": "謎の円盤UFO 英日放映(コンピュータ衛星SID)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "コンピュータ衛星SID",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
     },
     {
       "title": "大阪万博(未来がテーマパークになった)",
@@ -2782,16 +2054,37 @@
       "year": 1971,
       "category": "tech",
       "from": null,
-      "newTitle": "電卓戦争",
-      "tagline": "カシオミニと半導体の量産競争",
+      "newTitle": "電卓戦争(カシオミニと半導体の量産競争)",
+      "tagline": null,
       "segments": [
         {
           "text": "カシオミニと半導体の量産競争",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "肩の上の秘書(星新一。AIエージェントの原型)",
+      "year": 1971,
+      "category": "sf",
+      "from": null,
+      "newTitle": "肩の上の秘書(星新一)",
+      "tagline": "AIエージェントの原型",
+      "segments": [
+        {
+          "text": "星新一",
+          "kind": "fact",
+          "why": "人名"
+        },
+        {
+          "text": "AIエージェントの原型",
           "kind": "tagline",
           "why": "助詞を含む句"
         }
       ],
-      "confidence": "high"
+      "confidence": "low"
     },
     {
       "title": "IBM 3270(メインフレームの緑の画面)",
@@ -2826,6 +2119,22 @@
       "confidence": "high"
     },
     {
+      "title": "ワンダバ(出撃の音楽が様式になる)",
+      "year": 1971,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ワンダバ",
+      "tagline": "出撃の音楽が様式になる",
+      "segments": [
+        {
+          "text": "出撃の音楽が様式になる",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "Star Trek(初期のストラテジーゲーム)",
       "year": 1971,
       "category": "tech",
@@ -2837,6 +2146,22 @@
           "text": "初期のストラテジーゲーム",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "マジンガーZ 連載開始・TVアニメ化(永井豪)",
+      "year": 1972,
+      "category": "sf",
+      "from": null,
+      "newTitle": "マジンガーZ 連載開始・TVアニメ化(永井豪)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "永井豪",
+          "kind": "fact",
+          "why": "人名"
         }
       ],
       "confidence": "high"
@@ -2890,6 +2215,86 @@
       "confidence": "high"
     },
     {
+      "title": "人造人間キカイダー 放映・連載(未完成の良心回路)",
+      "year": 1972,
+      "category": "sf",
+      "from": null,
+      "newTitle": "人造人間キカイダー 放映・連載",
+      "tagline": "未完成の良心回路",
+      "segments": [
+        {
+          "text": "未完成の良心回路",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ポーの一族 連載開始(萩尾望都)",
+      "year": 1972,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ポーの一族 連載開始(萩尾望都)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "萩尾望都",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "スモーク・オン・ザ・ウォーター(教室にギターが増える)",
+      "year": 1972,
+      "category": "music",
+      "from": null,
+      "newTitle": "スモーク・オン・ザ・ウォーター",
+      "tagline": "教室にギターが増える",
+      "segments": [
+        {
+          "text": "教室にギターが増える",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "惑星ソラリス 公開(未来都市は東京の首都高だった)",
+      "year": 1972,
+      "category": "sf",
+      "from": null,
+      "newTitle": "惑星ソラリス 公開",
+      "tagline": "未来都市は東京の首都高だった",
+      "segments": [
+        {
+          "text": "未来都市は東京の首都高だった",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ELP「悪の教典#9」発表(恐怖の頭脳改革)",
+      "year": 1973,
+      "category": "music",
+      "from": null,
+      "newTitle": "ELP「悪の教典#9」発表",
+      "tagline": "恐怖の頭脳改革",
+      "segments": [
+        {
+          "text": "恐怖の頭脳改革",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "WABOT-1完成(早稲田大学。世界初の人型ロボット)",
       "year": 1973,
       "category": "tech",
@@ -2927,6 +2332,54 @@
       "confidence": "low"
     },
     {
+      "title": "荒井由実 デビュー(のちのユーミン)",
+      "year": 1973,
+      "category": "music",
+      "from": null,
+      "newTitle": "荒井由実 デビュー(のちのユーミン)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "のちのユーミン",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "新造人間キャシャーン 放映開始(公害を解くとAIが人類を敵と判断する)",
+      "year": 1973,
+      "category": "sf",
+      "from": null,
+      "newTitle": "新造人間キャシャーン 放映開始",
+      "tagline": "公害を解くとAIが人類を敵と判断する",
+      "segments": [
+        {
+          "text": "公害を解くとAIが人類を敵と判断する",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ジェットスクランダー登場(合体して空を飛ぶ赤い翼)",
+      "year": 1973,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ジェットスクランダー登場",
+      "tagline": "合体して空を飛ぶ赤い翼",
+      "segments": [
+        {
+          "text": "合体して空を飛ぶ赤い翼",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "FACOM M-190発表(国産大型機の反攻)",
       "year": 1974,
       "category": "tech",
@@ -2943,17 +2396,33 @@
       "confidence": "high"
     },
     {
+      "title": "神の目の小さな塵 刊行(ポケット・コンピューター)",
+      "year": 1974,
+      "category": "sf",
+      "from": null,
+      "newTitle": "神の目の小さな塵 刊行(ポケット・コンピューター)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "ポケット・コンピューター",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "カット&ペーストの発明(PARCのラリー・テスラー)",
       "year": 1974,
       "category": "tech",
       "from": null,
-      "newTitle": "カット&ペーストの発明",
-      "tagline": "PARCのラリー・テスラー",
+      "newTitle": "カット&ペーストの発明(PARCのラリー・テスラー)",
+      "tagline": null,
       "segments": [
         {
           "text": "PARCのラリー・テスラー",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -2963,13 +2432,45 @@
       "year": 1974,
       "category": "tech",
       "from": null,
-      "newTitle": "スペースコロニー構想",
-      "tagline": "オニールとラグランジュ点",
+      "newTitle": "スペースコロニー構想(オニールとラグランジュ点)",
+      "tagline": null,
       "segments": [
         {
           "text": "オニールとラグランジュ点",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "宇宙戦艦ヤマト 放映(「こんなこともあろうかと」)",
+      "year": 1974,
+      "category": "sf",
+      "from": null,
+      "newTitle": "宇宙戦艦ヤマト 放映",
+      "tagline": "「こんなこともあろうかと」",
+      "segments": [
+        {
+          "text": "「こんなこともあろうかと」",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "冨田勲「月の光」(シンセサイザーが世界に認められる)",
+      "year": 1974,
+      "category": "music",
+      "from": null,
+      "newTitle": "冨田勲「月の光」",
+      "tagline": "シンセサイザーが世界に認められる",
+      "segments": [
+        {
+          "text": "シンセサイザーが世界に認められる",
+          "kind": "tagline",
+          "why": "文になっている"
         }
       ],
       "confidence": "high"
@@ -3071,6 +2572,54 @@
       "confidence": "high"
     },
     {
+      "title": "ニューミュージックの台頭(自作自演とアルバムの時代)",
+      "year": 1975,
+      "category": "music",
+      "from": null,
+      "newTitle": "ニューミュージックの台頭",
+      "tagline": "自作自演とアルバムの時代",
+      "segments": [
+        {
+          "text": "自作自演とアルバムの時代",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "帝国地球 刊行(クラークのミニセック)",
+      "year": 1975,
+      "category": "sf",
+      "from": null,
+      "newTitle": "帝国地球 刊行",
+      "tagline": "クラークのミニセック",
+      "segments": [
+        {
+          "text": "クラークのミニセック",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "なぞの転校生 放映(NHK少年ドラマシリーズ)",
+      "year": 1975,
+      "category": "sf",
+      "from": null,
+      "newTitle": "なぞの転校生 放映(NHK少年ドラマシリーズ)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "NHK少年ドラマシリーズ",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
       "title": "TK-80発売(日本のマイコン史の原点)",
       "year": 1976,
       "category": "tech",
@@ -3096,6 +2645,22 @@
       "segments": [
         {
           "text": "スーパーコンピューターの象徴",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ピンク・レディー デビュー(振り付けの時代)",
+      "year": 1976,
+      "category": "music",
+      "from": null,
+      "newTitle": "ピンク・レディー デビュー",
+      "tagline": "振り付けの時代",
+      "segments": [
+        {
+          "text": "振り付けの時代",
           "kind": "tagline",
           "why": "位置づけを与える言い回し"
         }
@@ -3135,6 +2700,22 @@
       "confidence": "high"
     },
     {
+      "title": "スター・ウォーズ 公開(日本公開は1978年)",
+      "year": 1977,
+      "category": "sf",
+      "from": null,
+      "newTitle": "スター・ウォーズ 公開(日本公開は1978年)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "日本公開は1978年",
+          "kind": "fact",
+          "why": "年・日付の補足"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "Roland MC-8発売(マイクロコンポーザー)",
       "year": 1977,
       "category": "tech",
@@ -3167,6 +2748,22 @@
       "confidence": "low"
     },
     {
+      "title": "セックス・ピストルズ「勝手にしやがれ!!」(パンク爆発)",
+      "year": 1977,
+      "category": "music",
+      "from": null,
+      "newTitle": "セックス・ピストルズ「勝手にしやがれ!!」",
+      "tagline": "パンク爆発",
+      "segments": [
+        {
+          "text": "パンク爆発",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "DEC VAX-11/780発売(32ビットミニコンの傑作)",
       "year": 1977,
       "category": "tech",
@@ -3181,6 +2778,22 @@
         }
       ],
       "confidence": "high"
+    },
+    {
+      "title": "未来からの挑戦 放映(ねらわれた学園)",
+      "year": 1977,
+      "category": "sf",
+      "from": null,
+      "newTitle": "未来からの挑戦 放映(ねらわれた学園)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "ねらわれた学園",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
     },
     {
       "title": "Wow!シグナル(72秒間の未解決)",
@@ -3213,6 +2826,38 @@
         }
       ],
       "confidence": "low"
+    },
+    {
+      "title": "百億の昼と千億の夜 漫画版(萩尾望都)",
+      "year": 1977,
+      "category": "sf",
+      "from": null,
+      "newTitle": "百億の昼と千億の夜 漫画版(萩尾望都)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "萩尾望都",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "銀河ヒッチハイク・ガイド BBCラジオ(79年小説化)",
+      "year": 1978,
+      "category": "sf",
+      "from": null,
+      "newTitle": "銀河ヒッチハイク・ガイド BBCラジオ(79年小説化)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "79年小説化",
+          "kind": "fact",
+          "why": "年・日付の補足"
+        }
+      ],
+      "confidence": "high"
     },
     {
       "title": "MZ-80K発売(セミキットのマイコン)",
@@ -3290,6 +2935,22 @@
           "text": "歌にもなった技術",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "Music for Airports(アンビエントという言葉ができる)",
+      "year": 1978,
+      "category": "music",
+      "from": null,
+      "newTitle": "Music for Airports",
+      "tagline": "アンビエントという言葉ができる",
+      "segments": [
+        {
+          "text": "アンビエントという言葉ができる",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
         }
       ],
       "confidence": "high"
@@ -3460,6 +3121,43 @@
       "confidence": "high"
     },
     {
+      "title": "SENSE OF WONDER(難波弘之。SFに捧げられたアルバム)",
+      "year": 1979,
+      "category": "music",
+      "from": null,
+      "newTitle": "SENSE OF WONDER(難波弘之)",
+      "tagline": "SFに捧げられたアルバム",
+      "segments": [
+        {
+          "text": "難波弘之",
+          "kind": "fact",
+          "why": "人名"
+        },
+        {
+          "text": "SFに捧げられたアルバム",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "title": "Are 'Friends' Electric?(アンドロイドの孤独)",
+      "year": 1979,
+      "category": "music",
+      "from": null,
+      "newTitle": "Are 'Friends' Electric?",
+      "tagline": "アンドロイドの孤独",
+      "segments": [
+        {
+          "text": "アンドロイドの孤独",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "ネオコグニトロン発表(福島邦彦)",
       "year": 1980,
       "category": "tech",
@@ -3556,6 +3254,22 @@
       "confidence": "low"
     },
     {
+      "title": "テクノポップ・ブーム(YMOと電子音の大衆化)",
+      "year": 1980,
+      "category": "music",
+      "from": null,
+      "newTitle": "テクノポップ・ブーム",
+      "tagline": "YMOと電子音の大衆化",
+      "segments": [
+        {
+          "text": "YMOと電子音の大衆化",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "バトルゾーン稼働(ベクター3Dの戦車戦)",
       "year": 1980,
       "category": "tech",
@@ -3625,6 +3339,22 @@
       "confidence": "high"
     },
     {
+      "title": "コンピューターおばあちゃん(みんなのうた)",
+      "year": 1981,
+      "category": "music",
+      "from": "コンピューターおばあちゃん(みんなのうた)/クラフトワーク「コンピューター・ワールド」",
+      "newTitle": "コンピューターおばあちゃん(みんなのうた)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "みんなのうた",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "Roland MC-4発売(打ち込みの定番機に)",
       "year": 1981,
       "category": "tech",
@@ -3677,13 +3407,13 @@
       "year": 1981,
       "category": "tech",
       "from": null,
-      "newTitle": "Symbolics創業",
-      "tagline": "Lispマシンとドメイン名第1号",
+      "newTitle": "Symbolics創業(Lispマシンとドメイン名第1号)",
+      "tagline": null,
       "segments": [
         {
           "text": "Lispマシンとドメイン名第1号",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -3709,13 +3439,13 @@
       "year": 1981,
       "category": "tech",
       "from": null,
-      "newTitle": "PC-6001発売",
-      "tagline": "パピコンと武田鉄矢",
+      "newTitle": "PC-6001発売(パピコンと武田鉄矢)",
+      "tagline": null,
       "segments": [
         {
           "text": "パピコンと武田鉄矢",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -3725,13 +3455,13 @@
       "year": 1981,
       "category": "tech",
       "from": null,
-      "newTitle": "東芝 パソピア発売",
-      "tagline": "CMは横山やすし",
+      "newTitle": "東芝 パソピア発売(CMは横山やすし)",
+      "tagline": null,
       "segments": [
         {
           "text": "CMは横山やすし",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -3799,6 +3529,43 @@
         }
       ],
       "confidence": "high"
+    },
+    {
+      "title": "トロン 公開(コンピューターの中が舞台になる)",
+      "year": 1982,
+      "category": "sf",
+      "from": null,
+      "newTitle": "トロン 公開",
+      "tagline": "コンピューターの中が舞台になる",
+      "segments": [
+        {
+          "text": "コンピューターの中が舞台になる",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ファウンデーションの彼方へ 刊行(第2期開始。〜93年)",
+      "year": 1982,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ファウンデーションの彼方へ 刊行(第2期開始。〜93年)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "第2期開始",
+          "kind": "fact",
+          "why": "名詞の並び"
+        },
+        {
+          "text": "〜93年",
+          "kind": "fact",
+          "why": "年・日付の補足"
+        }
+      ],
+      "confidence": "low"
     },
     {
       "title": "第五世代コンピュータ計画開始(通産省・ICOT。〜92年)",
@@ -3906,13 +3673,13 @@
       "year": 1982,
       "category": "tech",
       "from": null,
-      "newTitle": "FM-7発売",
-      "tagline": "CMはタモリ",
+      "newTitle": "FM-7発売(CMはタモリ)",
+      "tagline": null,
       "segments": [
         {
           "text": "CMはタモリ",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -3954,13 +3721,13 @@
       "year": 1982,
       "category": "tech",
       "from": null,
-      "newTitle": "機種別パソコン雑誌の時代",
-      "tagline": "Oh!シリーズとベーマガ",
+      "newTitle": "機種別パソコン雑誌の時代(Oh!シリーズとベーマガ)",
+      "tagline": null,
       "segments": [
         {
           "text": "Oh!シリーズとベーマガ",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -3993,6 +3760,22 @@
           "text": "クラムシェルの原型",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ナイトライダー放映(会話するクルマKITT)",
+      "year": 1982,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ナイトライダー放映",
+      "tagline": "会話するクルマKITT",
+      "segments": [
+        {
+          "text": "会話するクルマKITT",
+          "kind": "tagline",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -4046,6 +3829,22 @@
       "confidence": "high"
     },
     {
+      "title": "ウォー・ゲーム 公開(少年ハッカーとWOPR)",
+      "year": 1983,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ウォー・ゲーム 公開",
+      "tagline": "少年ハッカーとWOPR",
+      "segments": [
+        {
+          "text": "少年ハッカーとWOPR",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "モトローラ DynaTAC 8000X発売(初の商用携帯電話)",
       "year": 1983,
       "category": "tech",
@@ -4057,6 +3856,22 @@
           "text": "初の商用携帯電話",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "セガ SG-1000発売(ファミコンと同日)",
+      "year": 1983,
+      "category": "tech",
+      "from": "セガ SC-3000/SG-1000発売(ファミコンと同日)",
+      "newTitle": "セガ SG-1000発売(ファミコンと同日)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "ファミコンと同日",
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -4082,13 +3897,13 @@
       "year": 1983,
       "category": "tech",
       "from": null,
-      "newTitle": "マイコンブーム",
-      "tagline": "ベーマガとナイコン族",
+      "newTitle": "マイコンブーム(ベーマガとナイコン族)",
+      "tagline": null,
       "segments": [
         {
           "text": "ベーマガとナイコン族",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -4158,6 +3973,22 @@
       "confidence": "high"
     },
     {
+      "title": "映画「時をかける少女」公開(大林宣彦)",
+      "year": 1983,
+      "category": "sf",
+      "from": null,
+      "newTitle": "映画「時をかける少女」公開(大林宣彦)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "大林宣彦",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "TRS-80 Model 100(電池で動く本物の携帯機)",
       "year": 1983,
       "category": "tech",
@@ -4185,6 +4016,38 @@
           "text": "互換機市場の突破口",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "Mr. Roboto(ドウモアリガト)",
+      "year": 1983,
+      "category": "music",
+      "from": null,
+      "newTitle": "Mr. Roboto(ドウモアリガト)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "ドウモアリガト",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "title": "幻魔大戦 公開(音楽はキース・エマーソン)",
+      "year": 1983,
+      "category": "sf",
+      "from": null,
+      "newTitle": "幻魔大戦 公開(音楽はキース・エマーソン)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "音楽はキース・エマーソン",
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -4258,11 +4121,27 @@
       "year": 1984,
       "category": "tech",
       "from": null,
-      "newTitle": "DTPの誕生",
-      "tagline": "LaserWriterとページレイアウトソフト",
+      "newTitle": "DTPの誕生(LaserWriterとページレイアウトソフト)",
+      "tagline": null,
       "segments": [
         {
           "text": "LaserWriterとページレイアウトソフト",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "チェッカーズ ブレイク(バンドとアイドルの間)",
+      "year": 1984,
+      "category": "music",
+      "from": null,
+      "newTitle": "チェッカーズ ブレイク",
+      "tagline": "バンドとアイドルの間",
+      "segments": [
+        {
+          "text": "バンドとアイドルの間",
           "kind": "tagline",
           "why": "助詞を含む句"
         }
@@ -4355,6 +4234,38 @@
       "confidence": "high"
     },
     {
+      "title": "ガラパゴスの箱舟 刊行(ゴクビ/マンダラックス)",
+      "year": 1985,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ガラパゴスの箱舟 刊行(ゴクビ/マンダラックス)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "ゴクビ/マンダラックス",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "title": "マックス・ヘッドルーム登場(AIのTV司会者)",
+      "year": 1985,
+      "category": "sf",
+      "from": null,
+      "newTitle": "マックス・ヘッドルーム登場",
+      "tagline": "AIのTV司会者",
+      "segments": [
+        {
+          "text": "AIのTV司会者",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "つくば科学万博(EXPO'85)",
       "year": 1985,
       "category": "tech",
@@ -4375,11 +4286,43 @@
       "year": 1985,
       "category": "tech",
       "from": null,
-      "newTitle": "電電公社民営化",
-      "tagline": "NTT発足と通信自由化",
+      "newTitle": "電電公社民営化(NTT発足と通信自由化)",
+      "tagline": null,
       "segments": [
         {
           "text": "NTT発足と通信自由化",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ライブエイド(衛星中継で世界同時)",
+      "year": 1985,
+      "category": "music",
+      "from": null,
+      "newTitle": "ライブエイド",
+      "tagline": "衛星中継で世界同時",
+      "segments": [
+        {
+          "text": "衛星中継で世界同時",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "おニャン子クラブ登場(素人性のアイドル化)",
+      "year": 1985,
+      "category": "music",
+      "from": null,
+      "newTitle": "おニャン子クラブ登場",
+      "tagline": "素人性のアイドル化",
+      "segments": [
+        {
+          "text": "素人性のアイドル化",
           "kind": "tagline",
           "why": "助詞を含む句"
         }
@@ -4552,6 +4495,22 @@
       "confidence": "high"
     },
     {
+      "title": "クリンゴン語辞典(架空の言語に文法書ができる)",
+      "year": 1985,
+      "category": "sf",
+      "from": null,
+      "newTitle": "クリンゴン語辞典",
+      "tagline": "架空の言語に文法書ができる",
+      "segments": [
+        {
+          "text": "架空の言語に文法書ができる",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "サンクコストの誤謬(やめられない理由に名前が付く)",
       "year": 1985,
       "category": "tech",
@@ -4579,6 +4538,22 @@
           "text": "ジョブズが買収",
           "kind": "fact",
           "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "スタートレックIV(スコッティとMac Plus)",
+      "year": 1986,
+      "category": "sf",
+      "from": null,
+      "newTitle": "スタートレックIV",
+      "tagline": "スコッティとMac Plus",
+      "segments": [
+        {
+          "text": "スコッティとMac Plus",
+          "kind": "tagline",
+          "why": "助詞を含む句"
         }
       ],
       "confidence": "high"
@@ -4744,6 +4719,22 @@
       "confidence": "high"
     },
     {
+      "title": "2061年宇宙の旅 刊行(ダイヤモンドの山とビートルズ)",
+      "year": 1987,
+      "category": "sf",
+      "from": null,
+      "newTitle": "2061年宇宙の旅 刊行",
+      "tagline": "ダイヤモンドの山とビートルズ",
+      "segments": [
+        {
+          "text": "ダイヤモンドの山とビートルズ",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "X Window SystemとX端末(画面をネットワークに流す)",
       "year": 1987,
       "category": "tech",
@@ -4792,6 +4783,22 @@
       "confidence": "high"
     },
     {
+      "title": "たったひとつの冴えたやりかた 邦訳(表紙は川原由美子)",
+      "year": 1987,
+      "category": "sf",
+      "from": null,
+      "newTitle": "たったひとつの冴えたやりかた 邦訳(表紙は川原由美子)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "表紙は川原由美子",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "NetHack公開(ネット越しに育て続けられるゲーム)",
       "year": 1987,
       "category": "tech",
@@ -4817,6 +4824,22 @@
       "segments": [
         {
           "text": "「DTM」の始まり",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "B'z デビュー(バンドブームとCDバブルへ)",
+      "year": 1988,
+      "category": "music",
+      "from": null,
+      "newTitle": "B'z デビュー",
+      "tagline": "バンドブームとCDバブルへ",
+      "segments": [
+        {
+          "text": "バンドブームとCDバブルへ",
           "kind": "tagline",
           "why": "位置づけを与える言い回し"
         }
@@ -4883,6 +4906,22 @@
           "text": "Macが外付けCD-ROMで先行した",
           "kind": "tagline",
           "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "AKIRA 公開(金田のバイクと2019年のネオ東京)",
+      "year": 1988,
+      "category": "sf",
+      "from": null,
+      "newTitle": "AKIRA 公開(金田のバイクと2019年のネオ東京)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "金田のバイクと2019年のネオ東京",
+          "kind": "fact",
+          "why": "年・日付の補足"
         }
       ],
       "confidence": "high"
@@ -4968,6 +5007,22 @@
       "confidence": "high"
     },
     {
+      "title": "バンドブーム(イカ天と楽器を持つ若者)",
+      "year": 1989,
+      "category": "music",
+      "from": null,
+      "newTitle": "バンドブーム",
+      "tagline": "イカ天と楽器を持つ若者",
+      "segments": [
+        {
+          "text": "イカ天と楽器を持つ若者",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "シムシティ発売(勝利条件のない箱庭)",
       "year": 1989,
       "category": "tech",
@@ -5011,6 +5066,22 @@
           "text": "膝を潰す重さの初代",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "芳賀ゆい デビュー(実在しないアイドル)",
+      "year": 1989,
+      "category": "music",
+      "from": null,
+      "newTitle": "芳賀ゆい デビュー",
+      "tagline": "実在しないアイドル",
+      "segments": [
+        {
+          "text": "実在しないアイドル",
+          "kind": "tagline",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -5176,6 +5247,22 @@
       "confidence": "high"
     },
     {
+      "title": "ニルヴァーナ「Nevermind」(オルタナ革命)",
+      "year": 1991,
+      "category": "music",
+      "from": null,
+      "newTitle": "ニルヴァーナ「Nevermind」",
+      "tagline": "オルタナ革命",
+      "segments": [
+        {
+          "text": "オルタナ革命",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "ストリートファイターII稼働(対戦格闘ブーム)",
       "year": 1991,
       "category": "tech",
@@ -5288,6 +5375,22 @@
       "confidence": "high"
     },
     {
+      "title": "スノウ・クラッシュ 刊行(スティーヴンスン)",
+      "year": 1992,
+      "category": "sf",
+      "from": null,
+      "newTitle": "スノウ・クラッシュ 刊行(スティーヴンスン)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "スティーヴンスン",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
       "title": "ThinkPad 700C発売(黒い弁当箱と赤いポチ)",
       "year": 1992,
       "category": "tech",
@@ -5366,6 +5469,22 @@
         }
       ],
       "confidence": "high"
+    },
+    {
+      "title": "ジュラシック・パーク 公開(SGIワークステーション登場)",
+      "year": 1993,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ジュラシック・パーク 公開(SGIワークステーション登場)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "SGIワークステーション登場",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
     },
     {
       "title": "CU-SeeMe公開(コーネル大。ネットビデオ会議の草分け)",
@@ -5526,13 +5645,13 @@
       "year": 1993,
       "category": "tech",
       "from": null,
-      "newTitle": "携帯電話のデジタル化",
-      "tagline": "2Gとショートメッセージ",
+      "newTitle": "携帯電話のデジタル化(2Gとショートメッセージ)",
+      "tagline": null,
       "segments": [
         {
           "text": "2Gとショートメッセージ",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -5552,6 +5671,22 @@
         }
       ],
       "confidence": "low"
+    },
+    {
+      "title": "ポケベルが鳴らなくて(通信機器が曲名になる)",
+      "year": 1993,
+      "category": "music",
+      "from": null,
+      "newTitle": "ポケベルが鳴らなくて",
+      "tagline": "通信機器が曲名になる",
+      "segments": [
+        {
+          "text": "通信機器が曲名になる",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
     },
     {
       "title": "トルネコの大冒険(ローグライクの商用化)",
@@ -5581,6 +5716,22 @@
           "text": "ネット書店から始まった",
           "kind": "tagline",
           "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "小室哲哉ブーム(打ち込みがヒットの標準に)",
+      "year": 1994,
+      "category": "music",
+      "from": null,
+      "newTitle": "小室哲哉ブーム",
+      "tagline": "打ち込みがヒットの標準に",
+      "segments": [
+        {
+          "text": "打ち込みがヒットの標準に",
+          "kind": "tagline",
+          "why": "助詞を含む句"
         }
       ],
       "confidence": "high"
@@ -5645,6 +5796,70 @@
           "text": "民生用デジカメの先駆",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "トイ・ストーリー 公開(世界初の長編フルCG映画)",
+      "year": 1995,
+      "category": "sf",
+      "from": null,
+      "newTitle": "トイ・ストーリー 公開",
+      "tagline": "世界初の長編フルCG映画",
+      "segments": [
+        {
+          "text": "世界初の長編フルCG映画",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "新世紀エヴァンゲリオン 放映(MAGIシステム)",
+      "year": 1995,
+      "category": "sf",
+      "from": null,
+      "newTitle": "新世紀エヴァンゲリオン 放映(MAGIシステム)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "MAGIシステム",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "title": "JM 公開(ヘッドセット+グローブで電脳空間ダイブ)",
+      "year": 1995,
+      "category": "sf",
+      "from": null,
+      "newTitle": "JM 公開",
+      "tagline": "ヘッドセット+グローブで電脳空間ダイブ",
+      "segments": [
+        {
+          "text": "ヘッドセット+グローブで電脳空間ダイブ",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ザ・インターネット 公開(ID乗っ取りスリラー)",
+      "year": 1995,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ザ・インターネット 公開",
+      "tagline": "ID乗っ取りスリラー",
+      "segments": [
+        {
+          "text": "ID乗っ取りスリラー",
+          "kind": "tagline",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -5746,6 +5961,22 @@
       "confidence": "high"
     },
     {
+      "title": "まるいち的風景 連載開始(柳原望)",
+      "year": 1995,
+      "category": "sf",
+      "from": null,
+      "newTitle": "まるいち的風景 連載開始(柳原望)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "柳原望",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "プレデター投入(遠隔操縦される戦争)",
       "year": 1995,
       "category": "tech",
@@ -5789,6 +6020,22 @@
           "text": "不思議のダンジョンの完成形",
           "kind": "tagline",
           "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "インデペンデンス・デイ 公開(PowerBookでウイルス注入)",
+      "year": 1996,
+      "category": "sf",
+      "from": null,
+      "newTitle": "インデペンデンス・デイ 公開(PowerBookでウイルス注入)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "PowerBookでウイルス注入",
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -5869,6 +6116,22 @@
           "text": "挿すだけで使える",
           "kind": "tagline",
           "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "スカイネット自我覚醒(作中設定・8月29日)",
+      "year": 1997,
+      "category": "sf",
+      "from": null,
+      "newTitle": "スカイネット自我覚醒(作中設定・8月29日)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "作中設定・8月29日",
+          "kind": "fact",
+          "why": "年・日付の補足"
         }
       ],
       "confidence": "high"
@@ -5968,6 +6231,22 @@
         }
       ],
       "confidence": "high"
+    },
+    {
+      "title": "ビジュアル系ブーム(GLAY、L'Arc、LUNA SEA)",
+      "year": 1997,
+      "category": "music",
+      "from": null,
+      "newTitle": "ビジュアル系ブーム(GLAY、L'Arc、LUNA SEA)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "GLAY、L'Arc、LUNA SEA",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
     },
     {
       "title": "LSTM発表(長い文脈を覚えるニューラルネット)",
@@ -6102,13 +6381,13 @@
       "year": 1998,
       "category": "tech",
       "from": null,
-      "newTitle": "MP3プレーヤー登場",
-      "tagline": "MPManとRio",
+      "newTitle": "MP3プレーヤー登場(MPManとRio)",
+      "tagline": null,
       "segments": [
         {
           "text": "MPManとRio",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -6226,6 +6505,22 @@
       "confidence": "high"
     },
     {
+      "title": "モーニング娘。「LOVEマシーン」(テレビ発の集団アイドル)",
+      "year": 1999,
+      "category": "music",
+      "from": null,
+      "newTitle": "モーニング娘。「LOVEマシーン」",
+      "tagline": "テレビ発の集団アイドル",
+      "segments": [
+        {
+          "text": "テレビ発の集団アイドル",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "GeForce 256発表(「GPU」という言葉の誕生)",
       "year": 1999,
       "category": "tech",
@@ -6315,6 +6610,38 @@
       "segments": [
         {
           "text": "拡張スロットを持ったPalm機",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "All Is Full of Love(ロボットが愛し合うMV)",
+      "year": 1999,
+      "category": "music",
+      "from": null,
+      "newTitle": "All Is Full of Love",
+      "tagline": "ロボットが愛し合うMV",
+      "segments": [
+        {
+          "text": "ロボットが愛し合うMV",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "If You Had My Love(ウェブで見る音楽の予告編)",
+      "year": 1999,
+      "category": "music",
+      "from": null,
+      "newTitle": "If You Had My Love",
+      "tagline": "ウェブで見る音楽の予告編",
+      "segments": [
+        {
+          "text": "ウェブで見る音楽の予告編",
           "kind": "tagline",
           "why": "助詞を含む句"
         }
@@ -6487,6 +6814,22 @@
       "confidence": "high"
     },
     {
+      "title": "ダフト・パンク「Discovery」(ロボットとしてのアーティスト)",
+      "year": 2001,
+      "category": "music",
+      "from": null,
+      "newTitle": "ダフト・パンク「Discovery」",
+      "tagline": "ロボットとしてのアーティスト",
+      "segments": [
+        {
+          "text": "ロボットとしてのアーティスト",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "グランド・セフト・オートIII(オープンワールドの確立)",
       "year": 2001,
       "category": "tech",
@@ -6517,6 +6860,38 @@
         }
       ],
       "confidence": "high"
+    },
+    {
+      "title": "ゴリラズ デビュー(実在しないバンドが世界を回る)",
+      "year": 2001,
+      "category": "music",
+      "from": null,
+      "newTitle": "ゴリラズ デビュー",
+      "tagline": "実在しないバンドが世界を回る",
+      "segments": [
+        {
+          "text": "実在しないバンドが世界を回る",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "マイノリティ・リポート 公開(空中ジェスチャーUI)",
+      "year": 2002,
+      "category": "sf",
+      "from": null,
+      "newTitle": "マイノリティ・リポート 公開(空中ジェスチャーUI)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "空中ジェスチャーUI",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
     },
     {
       "title": "ルンバ発売(家庭に入った最初のロボット)",
@@ -6721,6 +7096,22 @@
       "confidence": "high"
     },
     {
+      "title": "インターステラ5555(ダフト・パンクと松本零士)",
+      "year": 2003,
+      "category": "music",
+      "from": null,
+      "newTitle": "インターステラ5555(ダフト・パンクと松本零士)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "ダフト・パンクと松本零士",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "GarageBand登場(すべてのMacにDAW)",
       "year": 2004,
       "category": "tech",
@@ -6732,6 +7123,22 @@
           "text": "すべてのMacにDAW",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "火の鳥 NHKアニメ版(未来編を映像化)",
+      "year": 2004,
+      "category": "sf",
+      "from": null,
+      "newTitle": "火の鳥 NHKアニメ版(未来編を映像化)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "未来編を映像化",
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -6922,6 +7329,22 @@
       "segments": [
         {
           "text": "自動運転の号砲",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "AKB48 劇場オープン(会いに行けるアイドル)",
+      "year": 2005,
+      "category": "music",
+      "from": null,
+      "newTitle": "AKB48 劇場オープン",
+      "tagline": "会いに行けるアイドル",
+      "segments": [
+        {
+          "text": "会いに行けるアイドル",
           "kind": "tagline",
           "why": "助詞を含む句"
         }
@@ -7169,6 +7592,22 @@
       "confidence": "low"
     },
     {
+      "title": "沈黙のフライバイ 刊行(野尻抱介)",
+      "year": 2007,
+      "category": "sf",
+      "from": null,
+      "newTitle": "沈黙のフライバイ 刊行(野尻抱介)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "野尻抱介",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "Spotifyサービス開始(日本上陸は2016年)",
       "year": 2008,
       "category": "tech",
@@ -7233,6 +7672,27 @@
       "confidence": "high"
     },
     {
+      "title": "三体 刊行(智子=ソフォン。量子もつれの兵器化)",
+      "year": 2008,
+      "category": "sf",
+      "from": null,
+      "newTitle": "三体 刊行(智子=ソフォン)",
+      "tagline": "量子もつれの兵器化",
+      "segments": [
+        {
+          "text": "智子=ソフォン",
+          "kind": "fact",
+          "why": "名詞の並び"
+        },
+        {
+          "text": "量子もつれの兵器化",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
       "title": "EOS 5D Mark II(一眼で映画が撮れるようになる)",
       "year": 2008,
       "category": "tech",
@@ -7242,6 +7702,22 @@
       "segments": [
         {
           "text": "一眼で映画が撮れるようになる",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "808s & Heartbreak(型番がアルバム名になる)",
+      "year": 2008,
+      "category": "music",
+      "from": null,
+      "newTitle": "808s & Heartbreak",
+      "tagline": "型番がアルバム名になる",
+      "segments": [
+        {
+          "text": "型番がアルバム名になる",
           "kind": "tagline",
           "why": "文になっている"
         }
@@ -7263,6 +7739,22 @@
         }
       ],
       "confidence": "high"
+    },
+    {
+      "title": "東のエデン 放映(ジュイス)",
+      "year": 2009,
+      "category": "sf",
+      "from": null,
+      "newTitle": "東のエデン 放映(ジュイス)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "ジュイス",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
     },
     {
       "title": "ビットコイン稼働(中央のない通貨の実験)",
@@ -7301,13 +7793,13 @@
       "year": 2009,
       "category": "tech",
       "from": null,
-      "newTitle": "活動量計の普及",
-      "tagline": "Fitbitと歩数のデータ化",
+      "newTitle": "活動量計の普及(Fitbitと歩数のデータ化)",
+      "tagline": null,
       "segments": [
         {
           "text": "Fitbitと歩数のデータ化",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -7377,6 +7869,22 @@
       "confidence": "high"
     },
     {
+      "title": "K-POPの日本進出(少女時代・KARA)",
+      "year": 2010,
+      "category": "music",
+      "from": null,
+      "newTitle": "K-POPの日本進出",
+      "tagline": "少女時代・KARA",
+      "segments": [
+        {
+          "text": "少女時代・KARA",
+          "kind": "tagline",
+          "why": "位置づけを与える言い回し"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "DeepMind設立(ゲームで知能を育てるという賭け)",
       "year": 2010,
       "category": "tech",
@@ -7441,6 +7949,38 @@
       "confidence": "high"
     },
     {
+      "title": "ソードアート・オンライン TVアニメ化(原作は2009年刊行)",
+      "year": 2012,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ソードアート・オンライン TVアニメ化(原作は2009年刊行)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "原作は2009年刊行",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "PSYCHO-PASS 放映(シビュラシステム)",
+      "year": 2012,
+      "category": "sf",
+      "from": null,
+      "newTitle": "PSYCHO-PASS 放映(シビュラシステム)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "シビュラシステム",
+          "kind": "fact",
+          "why": "名詞の並び"
+        }
+      ],
+      "confidence": "low"
+    },
+    {
       "title": "Raspberry Pi発売(35ドルのコンピューター)",
       "year": 2012,
       "category": "tech",
@@ -7489,6 +8029,38 @@
       "confidence": "high"
     },
     {
+      "title": "イーハトーヴ交響曲(冨田勲と初音ミクの共演)",
+      "year": 2012,
+      "category": "music",
+      "from": null,
+      "newTitle": "イーハトーヴ交響曲(冨田勲と初音ミクの共演)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "冨田勲と初音ミクの共演",
+          "kind": "fact",
+          "why": "目視で判断"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "南極点のピアピア動画 刊行(ボカロとMakerが宇宙へ)",
+      "year": 2012,
+      "category": "sf",
+      "from": null,
+      "newTitle": "南極点のピアピア動画 刊行",
+      "tagline": "ボカロとMakerが宇宙へ",
+      "segments": [
+        {
+          "text": "ボカロとMakerが宇宙へ",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "テスラ Model S発売(車がソフトウェアで更新される)",
       "year": 2012,
       "category": "tech",
@@ -7500,6 +8072,22 @@
           "text": "車がソフトウェアで更新される",
           "kind": "tagline",
           "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "her/世界でひとつの彼女 公開(日本公開は2014年)",
+      "year": 2013,
+      "category": "sf",
+      "from": null,
+      "newTitle": "her/世界でひとつの彼女 公開(日本公開は2014年)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "日本公開は2014年",
+          "kind": "fact",
+          "why": "年・日付の補足"
         }
       ],
       "confidence": "high"
@@ -7633,6 +8221,43 @@
       "confidence": "high"
     },
     {
+      "title": "オービタル・クラウド 刊行(藤井太洋)",
+      "year": 2014,
+      "category": "sf",
+      "from": null,
+      "newTitle": "オービタル・クラウド 刊行(藤井太洋)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "藤井太洋",
+          "kind": "fact",
+          "why": "人名"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "AIの遺電子 連載開始(山田胡瓜。TVアニメ化は2023年)",
+      "year": 2015,
+      "category": "sf",
+      "from": null,
+      "newTitle": "AIの遺電子 連載開始(山田胡瓜。TVアニメ化は2023年)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "山田胡瓜",
+          "kind": "fact",
+          "why": "人名"
+        },
+        {
+          "text": "TVアニメ化は2023年",
+          "kind": "fact",
+          "why": "年・日付の補足"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "Falcon 9第1段の着陸成功(再使用ロケット)",
       "year": 2015,
       "category": "tech",
@@ -7679,22 +8304,6 @@
         }
       ],
       "confidence": "low"
-    },
-    {
-      "title": "PSVR・Oculus Rift 発売(VR元年)",
-      "year": 2016,
-      "category": "tech",
-      "from": "AlphaGoが李世乭に勝利/VR元年",
-      "newTitle": "PSVR・Oculus Rift 発売",
-      "tagline": "VR元年",
-      "segments": [
-        {
-          "text": "VR元年",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
     },
     {
       "title": "コンピュテーショナルフォトグラフィ本格化(Pixel HDR+など)",
@@ -7761,6 +8370,22 @@
       "confidence": "high"
     },
     {
+      "title": "超歌舞伎(初音ミクと歌舞伎が同じ舞台に)",
+      "year": 2016,
+      "category": "music",
+      "from": null,
+      "newTitle": "超歌舞伎",
+      "tagline": "初音ミクと歌舞伎が同じ舞台に",
+      "segments": [
+        {
+          "text": "初音ミクと歌舞伎が同じ舞台に",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "WaveNet(波形を直接作るニューラルネット)",
       "year": 2016,
       "category": "tech",
@@ -7772,6 +8397,22 @@
           "text": "波形を直接作るニューラルネット",
           "kind": "tagline",
           "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ストレンジャー・シングス配信開始(D&Dで語られる80年代)",
+      "year": 2016,
+      "category": "sf",
+      "from": null,
+      "newTitle": "ストレンジャー・シングス配信開始(D&Dで語られる80年代)",
+      "tagline": null,
+      "segments": [
+        {
+          "text": "D&Dで語られる80年代",
+          "kind": "fact",
+          "why": "年・日付の補足"
         }
       ],
       "confidence": "high"
@@ -7861,13 +8502,13 @@
       "year": 2017,
       "category": "tech",
       "from": null,
-      "newTitle": "バトルロイヤル系の爆発",
-      "tagline": "PUBGとフォートナイト",
+      "newTitle": "バトルロイヤル系の爆発(PUBGとフォートナイト)",
+      "tagline": null,
       "segments": [
         {
           "text": "PUBGとフォートナイト",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -7887,6 +8528,27 @@
         }
       ],
       "confidence": "high"
+    },
+    {
+      "title": "公正的戦闘規範 刊行(藤井太洋。ゲームが戦争だった)",
+      "year": 2017,
+      "category": "sf",
+      "from": null,
+      "newTitle": "公正的戦闘規範 刊行(藤井太洋)",
+      "tagline": "ゲームが戦争だった",
+      "segments": [
+        {
+          "text": "藤井太洋",
+          "kind": "fact",
+          "why": "人名"
+        },
+        {
+          "text": "ゲームが戦争だった",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "low"
     },
     {
       "title": "ディープフェイクの登場(顔を貼り替える技術が誰の手にも)",
@@ -7932,6 +8594,22 @@
           "text": "個人データの権利が制度になる",
           "kind": "tagline",
           "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "米津玄師「Lemon」(ボカロ発の作家が国民的に)",
+      "year": 2018,
+      "category": "music",
+      "from": null,
+      "newTitle": "米津玄師「Lemon」",
+      "tagline": "ボカロ発の作家が国民的に",
+      "segments": [
+        {
+          "text": "ボカロ発の作家が国民的に",
+          "kind": "tagline",
+          "why": "助詞を含む句"
         }
       ],
       "confidence": "high"
@@ -7994,6 +8672,22 @@
       "segments": [
         {
           "text": "LEDウォールのバーチャルプロダクション",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "ビリー・アイリッシュ グラミー席巻(寝室から世界へ)",
+      "year": 2019,
+      "category": "music",
+      "from": null,
+      "newTitle": "ビリー・アイリッシュ グラミー席巻",
+      "tagline": "寝室から世界へ",
+      "segments": [
+        {
+          "text": "寝室から世界へ",
           "kind": "tagline",
           "why": "助詞を含む句"
         }
@@ -8069,13 +8763,13 @@
       "year": 2019,
       "category": "tech",
       "from": null,
-      "newTitle": "ブラックホールの撮影",
-      "tagline": "地球サイズの望遠鏡と再構成アルゴリズム",
+      "newTitle": "ブラックホールの撮影(地球サイズの望遠鏡と再構成アルゴリズム)",
+      "tagline": null,
       "segments": [
         {
           "text": "地球サイズの望遠鏡と再構成アルゴリズム",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -8118,6 +8812,22 @@
       "confidence": "high"
     },
     {
+      "title": "YOASOBI「夜に駆ける」(小説を歌にする)",
+      "year": 2020,
+      "category": "music",
+      "from": null,
+      "newTitle": "YOASOBI「夜に駆ける」",
+      "tagline": "小説を歌にする",
+      "segments": [
+        {
+          "text": "小説を歌にする",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "あつまれ どうぶつの森(巣ごもりの社交場)",
       "year": 2020,
       "category": "tech",
@@ -8127,6 +8837,22 @@
       "segments": [
         {
           "text": "巣ごもりの社交場",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "BTS「Dynamite」全米1位(K-POPの世界制覇)",
+      "year": 2020,
+      "category": "music",
+      "from": null,
+      "newTitle": "BTS「Dynamite」全米1位",
+      "tagline": "K-POPの世界制覇",
+      "segments": [
+        {
+          "text": "K-POPの世界制覇",
           "kind": "tagline",
           "why": "助詞を含む句"
         }
@@ -8193,6 +8919,22 @@
           "text": "AIがコードを書き始める",
           "kind": "tagline",
           "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "title": "プロジェクト・ヘイル・メアリー 刊行(ビートルズと異星の相棒)",
+      "year": 2021,
+      "category": "sf",
+      "from": null,
+      "newTitle": "プロジェクト・ヘイル・メアリー 刊行",
+      "tagline": "ビートルズと異星の相棒",
+      "segments": [
+        {
+          "text": "ビートルズと異星の相棒",
+          "kind": "tagline",
+          "why": "助詞を含む句"
         }
       ],
       "confidence": "high"
@@ -8278,6 +9020,22 @@
       "confidence": "high"
     },
     {
+      "title": "ビートルズ「Now and Then」発表(AIが完結させた最後の新曲)",
+      "year": 2023,
+      "category": "music",
+      "from": null,
+      "newTitle": "ビートルズ「Now and Then」発表",
+      "tagline": "AIが完結させた最後の新曲",
+      "segments": [
+        {
+          "text": "AIが完結させた最後の新曲",
+          "kind": "tagline",
+          "why": "助詞を含む句"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "生成AIブーム(仕事と教育の現場が揺れる)",
       "year": 2023,
       "category": "tech",
@@ -8314,13 +9072,13 @@
       "year": 2023,
       "category": "tech",
       "from": null,
-      "newTitle": "AIの安全性が主流の議題に",
-      "tagline": "公開書簡とブレッチリー宣言",
+      "newTitle": "AIの安全性が主流の議題に(公開書簡とブレッチリー宣言)",
+      "tagline": null,
       "segments": [
         {
           "text": "公開書簡とブレッチリー宣言",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -8554,13 +9312,13 @@
       "year": 2024,
       "category": "tech",
       "from": null,
-      "newTitle": "ノーベル賞がAIに",
-      "tagline": "物理学賞と化学賞",
+      "newTitle": "ノーベル賞がAIに(物理学賞と化学賞)",
+      "tagline": null,
       "segments": [
         {
           "text": "物理学賞と化学賞",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -8678,6 +9436,22 @@
       "confidence": "high"
     },
     {
+      "title": "Wormhole / Yumi AraI(自分の若い歌声とデュエットする)",
+      "year": 2025,
+      "category": "music",
+      "from": null,
+      "newTitle": "Wormhole / Yumi AraI",
+      "tagline": "自分の若い歌声とデュエットする",
+      "segments": [
+        {
+          "text": "自分の若い歌声とデュエットする",
+          "kind": "tagline",
+          "why": "文になっている"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
       "title": "AGI到達論争(もう来たのか、まだなのか)",
       "year": 2026,
       "category": "tech",
@@ -8698,13 +9472,13 @@
       "year": 2026,
       "category": "tech",
       "from": null,
-      "newTitle": "AIが自力で檻を出た",
-      "tagline": "MythosとSolのサンドボックス脱出",
+      "newTitle": "AIが自力で檻を出た(MythosとSolのサンドボックス脱出)",
+      "tagline": null,
       "segments": [
         {
           "text": "MythosとSolのサンドボックス脱出",
-          "kind": "tagline",
-          "why": "助詞を含む句"
+          "kind": "fact",
+          "why": "目視で判断"
         }
       ],
       "confidence": "high"
@@ -8719,779 +9493,6 @@
       "segments": [
         {
           "text": "シンギュラリティが動詞になる",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "サティ「家具の音楽」(聴かれないための音楽)",
-      "year": 1917,
-      "category": "music",
-      "from": null,
-      "newTitle": "サティ「家具の音楽」",
-      "tagline": "聴かれないための音楽",
-      "segments": [
-        {
-          "text": "聴かれないための音楽",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ジョン・ケージ「4分33秒」(演奏しない音楽)",
-      "year": 1952,
-      "category": "music",
-      "from": null,
-      "newTitle": "ジョン・ケージ「4分33秒」",
-      "tagline": "演奏しない音楽",
-      "segments": [
-        {
-          "text": "演奏しない音楽",
-          "kind": "tagline",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "エルヴィス・プレスリー 全米制覇(ロック時代の開幕)",
-      "year": 1956,
-      "category": "music",
-      "from": null,
-      "newTitle": "エルヴィス・プレスリー 全米制覇",
-      "tagline": "ロック時代の開幕",
-      "segments": [
-        {
-          "text": "ロック時代の開幕",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ビートルズ デビュー(Love Me Do)",
-      "year": 1962,
-      "category": "music",
-      "from": null,
-      "newTitle": "ビートルズ デビュー(Love Me Do)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "Love Me Do",
-          "kind": "fact",
-          "why": "製品名・略称"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ビートルズ来日公演(日本武道館)",
-      "year": 1966,
-      "category": "music",
-      "from": null,
-      "newTitle": "ビートルズ来日公演(日本武道館)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "日本武道館",
-          "kind": "fact",
-          "why": "人名"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "グループサウンズ全盛(エレキと若者文化)",
-      "year": 1967,
-      "category": "music",
-      "from": null,
-      "newTitle": "グループサウンズ全盛",
-      "tagline": "エレキと若者文化",
-      "segments": [
-        {
-          "text": "エレキと若者文化",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ウッドストック開催(ロックが文化になった3日間)",
-      "year": 1969,
-      "category": "music",
-      "from": null,
-      "newTitle": "ウッドストック開催(ロックが文化になった3日間)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "ロックが文化になった3日間",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "スペイス・オディティ(アポロの5日前に出た歌)",
-      "year": 1969,
-      "category": "music",
-      "from": null,
-      "newTitle": "スペイス・オディティ(アポロの5日前に出た歌)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "アポロの5日前に出た歌",
-          "kind": "fact",
-          "why": "年・日付の補足"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "スモーク・オン・ザ・ウォーター(教室にギターが増える)",
-      "year": 1972,
-      "category": "music",
-      "from": null,
-      "newTitle": "スモーク・オン・ザ・ウォーター",
-      "tagline": "教室にギターが増える",
-      "segments": [
-        {
-          "text": "教室にギターが増える",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ELP「悪の教典#9」発表(恐怖の頭脳改革)",
-      "year": 1973,
-      "category": "music",
-      "from": null,
-      "newTitle": "ELP「悪の教典#9」発表",
-      "tagline": "恐怖の頭脳改革",
-      "segments": [
-        {
-          "text": "恐怖の頭脳改革",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "荒井由実 デビュー(のちのユーミン)",
-      "year": 1973,
-      "category": "music",
-      "from": null,
-      "newTitle": "荒井由実 デビュー(のちのユーミン)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "のちのユーミン",
-          "kind": "fact",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "冨田勲「月の光」(シンセサイザーが世界に認められる)",
-      "year": 1974,
-      "category": "music",
-      "from": null,
-      "newTitle": "冨田勲「月の光」",
-      "tagline": "シンセサイザーが世界に認められる",
-      "segments": [
-        {
-          "text": "シンセサイザーが世界に認められる",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ニューミュージックの台頭(自作自演とアルバムの時代)",
-      "year": 1975,
-      "category": "music",
-      "from": null,
-      "newTitle": "ニューミュージックの台頭",
-      "tagline": "自作自演とアルバムの時代",
-      "segments": [
-        {
-          "text": "自作自演とアルバムの時代",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ピンク・レディー デビュー(振り付けの時代)",
-      "year": 1976,
-      "category": "music",
-      "from": null,
-      "newTitle": "ピンク・レディー デビュー",
-      "tagline": "振り付けの時代",
-      "segments": [
-        {
-          "text": "振り付けの時代",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "セックス・ピストルズ「勝手にしやがれ!!」(パンク爆発)",
-      "year": 1977,
-      "category": "music",
-      "from": null,
-      "newTitle": "セックス・ピストルズ「勝手にしやがれ!!」",
-      "tagline": "パンク爆発",
-      "segments": [
-        {
-          "text": "パンク爆発",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "Music for Airports(アンビエントという言葉ができる)",
-      "year": 1978,
-      "category": "music",
-      "from": null,
-      "newTitle": "Music for Airports",
-      "tagline": "アンビエントという言葉ができる",
-      "segments": [
-        {
-          "text": "アンビエントという言葉ができる",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "SENSE OF WONDER(難波弘之。SFに捧げられたアルバム)",
-      "year": 1979,
-      "category": "music",
-      "from": null,
-      "newTitle": "SENSE OF WONDER(難波弘之)",
-      "tagline": "SFに捧げられたアルバム",
-      "segments": [
-        {
-          "text": "難波弘之",
-          "kind": "fact",
-          "why": "人名"
-        },
-        {
-          "text": "SFに捧げられたアルバム",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "Are 'Friends' Electric?(アンドロイドの孤独)",
-      "year": 1979,
-      "category": "music",
-      "from": null,
-      "newTitle": "Are 'Friends' Electric?",
-      "tagline": "アンドロイドの孤独",
-      "segments": [
-        {
-          "text": "アンドロイドの孤独",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "テクノポップ・ブーム(YMOと電子音の大衆化)",
-      "year": 1980,
-      "category": "music",
-      "from": null,
-      "newTitle": "テクノポップ・ブーム",
-      "tagline": "YMOと電子音の大衆化",
-      "segments": [
-        {
-          "text": "YMOと電子音の大衆化",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "コンピューターおばあちゃん(みんなのうた)",
-      "year": 1981,
-      "category": "music",
-      "from": "コンピューターおばあちゃん(みんなのうた)/クラフトワーク「コンピューター・ワールド」",
-      "newTitle": "コンピューターおばあちゃん(みんなのうた)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "みんなのうた",
-          "kind": "fact",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "Mr. Roboto(ドウモアリガト)",
-      "year": 1983,
-      "category": "music",
-      "from": null,
-      "newTitle": "Mr. Roboto(ドウモアリガト)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "ドウモアリガト",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "チェッカーズ ブレイク(バンドとアイドルの間)",
-      "year": 1984,
-      "category": "music",
-      "from": null,
-      "newTitle": "チェッカーズ ブレイク",
-      "tagline": "バンドとアイドルの間",
-      "segments": [
-        {
-          "text": "バンドとアイドルの間",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ライブエイド(衛星中継で世界同時)",
-      "year": 1985,
-      "category": "music",
-      "from": null,
-      "newTitle": "ライブエイド",
-      "tagline": "衛星中継で世界同時",
-      "segments": [
-        {
-          "text": "衛星中継で世界同時",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "おニャン子クラブ登場(素人性のアイドル化)",
-      "year": 1985,
-      "category": "music",
-      "from": null,
-      "newTitle": "おニャン子クラブ登場",
-      "tagline": "素人性のアイドル化",
-      "segments": [
-        {
-          "text": "素人性のアイドル化",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "B'z デビュー(バンドブームとCDバブルへ)",
-      "year": 1988,
-      "category": "music",
-      "from": null,
-      "newTitle": "B'z デビュー",
-      "tagline": "バンドブームとCDバブルへ",
-      "segments": [
-        {
-          "text": "バンドブームとCDバブルへ",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "バンドブーム(イカ天と楽器を持つ若者)",
-      "year": 1989,
-      "category": "music",
-      "from": null,
-      "newTitle": "バンドブーム",
-      "tagline": "イカ天と楽器を持つ若者",
-      "segments": [
-        {
-          "text": "イカ天と楽器を持つ若者",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "芳賀ゆい デビュー(実在しないアイドル)",
-      "year": 1989,
-      "category": "music",
-      "from": null,
-      "newTitle": "芳賀ゆい デビュー",
-      "tagline": "実在しないアイドル",
-      "segments": [
-        {
-          "text": "実在しないアイドル",
-          "kind": "tagline",
-          "why": "目視で判断"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ニルヴァーナ「Nevermind」(オルタナ革命)",
-      "year": 1991,
-      "category": "music",
-      "from": null,
-      "newTitle": "ニルヴァーナ「Nevermind」",
-      "tagline": "オルタナ革命",
-      "segments": [
-        {
-          "text": "オルタナ革命",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ポケベルが鳴らなくて(通信機器が曲名になる)",
-      "year": 1993,
-      "category": "music",
-      "from": null,
-      "newTitle": "ポケベルが鳴らなくて",
-      "tagline": "通信機器が曲名になる",
-      "segments": [
-        {
-          "text": "通信機器が曲名になる",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "小室哲哉ブーム(打ち込みがヒットの標準に)",
-      "year": 1994,
-      "category": "music",
-      "from": null,
-      "newTitle": "小室哲哉ブーム",
-      "tagline": "打ち込みがヒットの標準に",
-      "segments": [
-        {
-          "text": "打ち込みがヒットの標準に",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ビジュアル系ブーム(GLAY、L'Arc、LUNA SEA)",
-      "year": 1997,
-      "category": "music",
-      "from": null,
-      "newTitle": "ビジュアル系ブーム(GLAY、L'Arc、LUNA SEA)",
-      "tagline": null,
-      "segments": [
-        {
-          "text": "GLAY、L'Arc、LUNA SEA",
-          "kind": "fact",
-          "why": "名詞の並び"
-        }
-      ],
-      "confidence": "low"
-    },
-    {
-      "title": "モーニング娘。「LOVEマシーン」(テレビ発の集団アイドル)",
-      "year": 1999,
-      "category": "music",
-      "from": null,
-      "newTitle": "モーニング娘。「LOVEマシーン」",
-      "tagline": "テレビ発の集団アイドル",
-      "segments": [
-        {
-          "text": "テレビ発の集団アイドル",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "All Is Full of Love(ロボットが愛し合うMV)",
-      "year": 1999,
-      "category": "music",
-      "from": null,
-      "newTitle": "All Is Full of Love",
-      "tagline": "ロボットが愛し合うMV",
-      "segments": [
-        {
-          "text": "ロボットが愛し合うMV",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "If You Had My Love(ウェブで見る音楽の予告編)",
-      "year": 1999,
-      "category": "music",
-      "from": null,
-      "newTitle": "If You Had My Love",
-      "tagline": "ウェブで見る音楽の予告編",
-      "segments": [
-        {
-          "text": "ウェブで見る音楽の予告編",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ダフト・パンク「Discovery」(ロボットとしてのアーティスト)",
-      "year": 2001,
-      "category": "music",
-      "from": null,
-      "newTitle": "ダフト・パンク「Discovery」",
-      "tagline": "ロボットとしてのアーティスト",
-      "segments": [
-        {
-          "text": "ロボットとしてのアーティスト",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ゴリラズ デビュー(実在しないバンドが世界を回る)",
-      "year": 2001,
-      "category": "music",
-      "from": null,
-      "newTitle": "ゴリラズ デビュー",
-      "tagline": "実在しないバンドが世界を回る",
-      "segments": [
-        {
-          "text": "実在しないバンドが世界を回る",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "インターステラ5555(ダフト・パンクと松本零士)",
-      "year": 2003,
-      "category": "music",
-      "from": null,
-      "newTitle": "インターステラ5555",
-      "tagline": "ダフト・パンクと松本零士",
-      "segments": [
-        {
-          "text": "ダフト・パンクと松本零士",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "AKB48 劇場オープン(会いに行けるアイドル)",
-      "year": 2005,
-      "category": "music",
-      "from": null,
-      "newTitle": "AKB48 劇場オープン",
-      "tagline": "会いに行けるアイドル",
-      "segments": [
-        {
-          "text": "会いに行けるアイドル",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "808s & Heartbreak(型番がアルバム名になる)",
-      "year": 2008,
-      "category": "music",
-      "from": null,
-      "newTitle": "808s & Heartbreak",
-      "tagline": "型番がアルバム名になる",
-      "segments": [
-        {
-          "text": "型番がアルバム名になる",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "K-POPの日本進出(少女時代・KARA)",
-      "year": 2010,
-      "category": "music",
-      "from": null,
-      "newTitle": "K-POPの日本進出",
-      "tagline": "少女時代・KARA",
-      "segments": [
-        {
-          "text": "少女時代・KARA",
-          "kind": "tagline",
-          "why": "位置づけを与える言い回し"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "イーハトーヴ交響曲(冨田勲と初音ミクの共演)",
-      "year": 2012,
-      "category": "music",
-      "from": null,
-      "newTitle": "イーハトーヴ交響曲",
-      "tagline": "冨田勲と初音ミクの共演",
-      "segments": [
-        {
-          "text": "冨田勲と初音ミクの共演",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "超歌舞伎(初音ミクと歌舞伎が同じ舞台に)",
-      "year": 2016,
-      "category": "music",
-      "from": null,
-      "newTitle": "超歌舞伎",
-      "tagline": "初音ミクと歌舞伎が同じ舞台に",
-      "segments": [
-        {
-          "text": "初音ミクと歌舞伎が同じ舞台に",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "米津玄師「Lemon」(ボカロ発の作家が国民的に)",
-      "year": 2018,
-      "category": "music",
-      "from": null,
-      "newTitle": "米津玄師「Lemon」",
-      "tagline": "ボカロ発の作家が国民的に",
-      "segments": [
-        {
-          "text": "ボカロ発の作家が国民的に",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ビリー・アイリッシュ グラミー席巻(寝室から世界へ)",
-      "year": 2019,
-      "category": "music",
-      "from": null,
-      "newTitle": "ビリー・アイリッシュ グラミー席巻",
-      "tagline": "寝室から世界へ",
-      "segments": [
-        {
-          "text": "寝室から世界へ",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "YOASOBI「夜に駆ける」(小説を歌にする)",
-      "year": 2020,
-      "category": "music",
-      "from": null,
-      "newTitle": "YOASOBI「夜に駆ける」",
-      "tagline": "小説を歌にする",
-      "segments": [
-        {
-          "text": "小説を歌にする",
-          "kind": "tagline",
-          "why": "文になっている"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "BTS「Dynamite」全米1位(K-POPの世界制覇)",
-      "year": 2020,
-      "category": "music",
-      "from": null,
-      "newTitle": "BTS「Dynamite」全米1位",
-      "tagline": "K-POPの世界制覇",
-      "segments": [
-        {
-          "text": "K-POPの世界制覇",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "ビートルズ「Now and Then」発表(AIが完結させた最後の新曲)",
-      "year": 2023,
-      "category": "music",
-      "from": null,
-      "newTitle": "ビートルズ「Now and Then」発表",
-      "tagline": "AIが完結させた最後の新曲",
-      "segments": [
-        {
-          "text": "AIが完結させた最後の新曲",
-          "kind": "tagline",
-          "why": "助詞を含む句"
-        }
-      ],
-      "confidence": "high"
-    },
-    {
-      "title": "Wormhole / Yumi AraI(自分の若い歌声とデュエットする)",
-      "year": 2025,
-      "category": "music",
-      "from": null,
-      "newTitle": "Wormhole / Yumi AraI",
-      "tagline": "自分の若い歌声とデュエットする",
-      "segments": [
-        {
-          "text": "自分の若い歌声とデュエットする",
           "kind": "tagline",
           "why": "文になっている"
         }

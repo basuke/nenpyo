@@ -10,16 +10,20 @@
 
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SOURCE = path.join(ROOT, "data", "sf-tech-lifeline.json");
+import { ROOT, loadSourceEvents, toPlainRows } from "./source.mjs";
 
 const problems = [];
 const fail = (message) => problems.push(message);
 
-const source = JSON.parse(await readFile(SOURCE, "utf8"));
-const events = Object.values(source.byCategory).flat();
+// 仕分け表の答え合わせは元データに対して行う。convert が吐く
+// data/sf-tech-lifeline.json は変換結果なので使えない。
+// 検査のために取りに行くのは筋が違うので、無ければ止める。
+const source = await loadSourceEvents({ fetchIfMissing: false });
+if (!source) {
+  console.error("元データのキャッシュが無い。先に pnpm data:convert を流すこと。");
+  process.exit(1);
+}
+const events = toPlainRows(source);
 
 /* ── slash.json（Issue #5） ──────────────────────────────────────────── */
 
@@ -92,6 +96,22 @@ for (const item of slash.items) {
         fail(`slash.json: split の body も todo も無い — ${item.title} / ${child.title}`);
       }
     }
+  }
+}
+
+// 子タイトルを作ると、元タイトル末尾の括弧はそこから落ちる。中身が読みなら
+// item の tagline へ、事実なら子タイトルの側へ移っていないといけない。
+// この検査が無いと 12 件ぶんの読みが黙って消えていた。
+for (const item of slash.items) {
+  if (item.disposition === "keep") continue;
+  const trailing = item.title.match(/\([^()]*\)\s*$/);
+  if (!trailing) continue;
+
+  const carried =
+    item.tagline ||
+    item.events.some((child) => child.tagline || /\([^()]*\)\s*$/.test(child.title));
+  if (!carried) {
+    fail(`slash.json: 末尾の括弧 ${trailing[0]} の行き先がない — ${item.title}`);
   }
 }
 

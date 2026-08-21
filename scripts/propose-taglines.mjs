@@ -13,9 +13,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { ROOT, loadSourceEvents, toPlainRows } from "./source.mjs";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUTPUT = path.join(ROOT, "curation", "taglines.json");
 
 // 出力先には手で直したものが入っている。うっかり流して消さないように止める。
@@ -123,13 +122,48 @@ const OVERRIDE = {
   "日本初、そしてピンポイント着陸": "tagline",
   "映像も破られた": "tagline",
   "コードも操作も委任": "tagline",
+  // #5 で子タイトルへ残した事実。助詞を含むので規則は読みと見てしまう
+  "ファミコンと同日": "fact",
+  // 固有名詞を「と」「は」で並べただけのもの。助詞があるので規則は読みと見るが、
+  // 中身は誰が・何が、の事実。タイトルの側が読みになっている逆転も多い。
+  "MPManとRio": "fact",
+  "Lispマシンとドメイン名第1号": "fact",
+  "パピコンと武田鉄矢": "fact",
+  "CMは横山やすし": "fact",
+  "CMはタモリ": "fact",
+  "Oh!シリーズとベーマガ": "fact",
+  "LaserWriterとページレイアウトソフト": "fact",
+  "NTT発足と通信自由化": "fact",
+  "Fitbitと歩数のデータ化": "fact",
+  "PUBGとフォートナイト": "fact",
+  "物理学賞と化学賞": "fact",
+  "MythosとSolのサンドボックス脱出": "fact",
+  "ダフト・パンクと松本零士": "fact",
+  "冨田勲と初音ミクの共演": "fact",
+  "ニエプスとカメラ・オブスクラ": "fact",
+  "マクスウェルの三色分解": "fact",
+  "アインシュタインの「不気味な遠隔作用」": "fact",
+  "ブレッチリー・パークの暗号解読機": "fact",
+  "PARCのラリー・テスラー": "fact",
+  "オニールとラグランジュ点": "fact",
+  "SETIの始まりとドレイクの方程式": "fact",
+  "PowerBookでウイルス注入": "fact",
+  "画家たちの反発とボードレール": "fact",
+  "スイッチ回路とブール代数": "fact",
+  "「計算する機械と知性」": "fact",
+  "事務処理言語とグレース・ホッパー": "fact",
+  "コンピューター中継と新幹線": "fact",
+  "カシオミニと半導体の量産競争": "fact",
+  "ベーマガとナイコン族": "fact",
+  "2Gとショートメッセージ": "fact",
+  "公開書簡とブレッチリー宣言": "fact",
+  "地球サイズの望遠鏡と再構成アルゴリズム": "fact",
 };
 
 /* ── 対象を組み立てる ─────────────────────────────────────────────────── */
 
-const source = JSON.parse(await readFile(path.join(ROOT, "data", "sf-tech-lifeline.json"), "utf8"));
+const events = toPlainRows(await loadSourceEvents());
 const slash = JSON.parse(await readFile(path.join(ROOT, "curation", "slash.json"), "utf8"));
-const events = Object.values(source.byCategory).flat();
 const splitBySlash = new Map(
   slash.items.filter((item) => item.disposition !== "keep").map((item) => [item.title, item]),
 );
@@ -188,7 +222,8 @@ const doc = {
     "元データ: data/sf-tech-lifeline.json (matsuo-koya/sf-tech-lifeline @ ad94155)",
     "",
     "scripts/propose-taglines.mjs が作った提案を出発点に、手で直したもの。",
-    "**再生成しないこと。** 直すときはこのファイルを直接編集する。",
+    "**目視で決めたぶんはスクリプトの OVERRIDE に書いてある**ので、いまはまだ",
+    "--force で作り直せる。このファイルを直接編集したら、その時点で再生成は禁物。",
     "",
     "newTitle … 分解後のイベントのタイトル（events.title に入る）",
     "tagline  … 切り出した読み（notes.tagline に入る）。無ければ null",
