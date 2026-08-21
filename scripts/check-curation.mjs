@@ -149,6 +149,57 @@ for (const item of inline.items) {
   }
 }
 
+/* ── taglines.json（Issue #6） ───────────────────────────────────────── */
+
+// #6 が見るのは末尾に括弧を持つタイトル。#7 と同じ curatedTitles の上に乗る。
+const withTrailing = curatedTitles.filter((row) => /\([^()]*\)\s*$/.test(row.title));
+const taglines = JSON.parse(await readFile(path.join(ROOT, "curation", "taglines.json"), "utf8"));
+
+const taglineListed = new Map();
+for (const item of taglines.items) {
+  if (taglineListed.has(item.title)) fail(`taglines.json: 二重に載っている — ${item.title}`);
+  taglineListed.set(item.title, item);
+}
+
+for (const row of withTrailing) {
+  const item = taglineListed.get(row.title);
+  if (!item) {
+    fail(`taglines.json: 対象なのに載っていない — ${row.title}`);
+    continue;
+  }
+  if (item.year !== row.year) fail(`taglines.json: year が違う — ${row.title}`);
+}
+
+for (const item of taglines.items) {
+  if (!withTrailing.some((row) => row.title === item.title)) {
+    fail(`taglines.json: 対象ではないタイトル — ${item.title}`);
+  }
+  if (!item.newTitle?.trim()) fail(`taglines.json: newTitle が空 — ${item.title}`);
+  if (item.tagline !== null && !item.tagline?.trim()) {
+    fail(`taglines.json: tagline が空文字 — ${item.title}`);
+  }
+
+  // 括弧の中を「。」で割った内訳が、元の中身を過不足なく覆っているか。
+  // 読みを切り出すときに事実まで落としてしまう取りこぼしを、ここで捕まえる。
+  const inner = item.title.match(/\(([^()]*)\)\s*$/)[1];
+  const rejoined = item.segments.map((segment) => segment.text).join("。");
+  if (rejoined !== inner.trim()) {
+    fail(`taglines.json: segments が元の括弧と一致しない — ${item.title}\n      ${rejoined} ≠ ${inner}`);
+  }
+
+  // 事実と判定した分が newTitle に、読みと判定した分が tagline に入っているか。
+  const facts = item.segments.filter((s) => s.kind === "fact").map((s) => s.text);
+  const kept = item.newTitle.match(/\(([^()]*)\)\s*$/);
+  const keptInner = kept ? kept[1] : "";
+  if (facts.join("。") !== keptInner) {
+    fail(`taglines.json: fact と newTitle の括弧が食い違う — ${item.title}`);
+  }
+  const reading = item.segments.filter((s) => s.kind === "tagline").map((s) => s.text).join("。");
+  if ((reading || null) !== item.tagline) {
+    fail(`taglines.json: tagline と segments が食い違う — ${item.title}`);
+  }
+}
+
 /* ── まとめ ──────────────────────────────────────────────────────────── */
 
 const counts = { keep: 0, compound: 0, split: 0, tagline: 0 };
@@ -177,6 +228,12 @@ const inlineCounts = { keep: 0, tagline: 0 };
 for (const item of inline.items) inlineCounts[item.disposition] += 1;
 console.log(`\ninline-parens.json: ${inline.items.length} 件（対象 ${withInline.length} 件）`);
 console.log(`  keep ${inlineCounts.keep} / tagline ${inlineCounts.tagline}`);
+
+const withTagline = taglines.items.filter((item) => item.tagline);
+const lowConfidence = taglines.items.filter((item) => item.confidence === "low");
+console.log(`\ntaglines.json: ${taglines.items.length} 件（対象 ${withTrailing.length} 件）`);
+console.log(`  読みを切り出した ${withTagline.length} / 事実補足のみ ${taglines.items.length - withTagline.length}`);
+console.log(`  confidence: low ${lowConfidence.length}`);
 
 if (problems.length) {
   console.error(`\n${problems.length} 件の問題:`);
