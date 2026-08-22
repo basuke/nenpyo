@@ -13,6 +13,8 @@
     "start": "vite dev",
     "prepare": "svelte-kit sync",
     "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:d1": "vitest run --project d1",
     "test:watch": "vitest",
     "cf-typegen": "wrangler types",
     "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -25,6 +27,7 @@
     "data:import": "wrangler d1 execute nenpyo --remote --file=data/sf-tech-lifeline.sql"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@sveltejs/adapter-cloudflare": "^7.2.9",
     "@sveltejs/kit": "^2.70.3",
     "@sveltejs/vite-plugin-svelte": "^7.3.0",
