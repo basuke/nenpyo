@@ -47,6 +47,19 @@ export type Id = string | number;
 
 export type EntryRef = TimelineRef & { entryId: Id };
 
+/**
+ * URL の params を `EntryRef` にする。
+ *
+ * `entryId` が `params.id` なのは URL 側の都合で、操作にとっては「どの行か」
+ * でしかない。この詰め替えを各ルートに散らすと、1 か所で綴りを間違えても
+ * 気づけない。画面と API の両方がここを通る。
+ */
+export const entryRef = (params: { username: string; slug: string; id: string }): EntryRef => ({
+  username: params.username,
+  slug: params.slug,
+  entryId: params.id,
+});
+
 /** 引き当てた年表と、それを見ている人の立場。 */
 export type ResolvedTimeline = {
   owner: UserRow;
