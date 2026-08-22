@@ -74,7 +74,9 @@ export function isRetryable(error: AppError): boolean {
 export const invalid = (message: string, code?: string) =>
   new AppError("invalid", message, code);
 
-export const unauthenticated = (message = "ログインしてください", code?: string) =>
+// 既定の code を持たせてあるのは、これが API でいちばん出るエラーだから。
+// code が無いと、呼ぶ側は message で分岐するしかなくなる。
+export const unauthenticated = (message = "ログインしてください", code = "sign_in_required") =>
   new AppError("unauthenticated", message, code);
 
 export const forbidden = (message: string, code?: string) =>

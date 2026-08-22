@@ -24,6 +24,7 @@
 - `docs/003-events-and-notes.md` — イベントとノートの分離、entry、CoW
 - `docs/004-layers.md` — 層の分け方。ロジックは lib に、ルートは入り口だけ
 - `docs/005-testing.md` — テストの分け方。大枠は D1 を知らない、最低限だけが知っている
+- `docs/006-api.md` — JSON API。読みは公開、書きは Cookie で同一オリジン専用
 
 ## 2. Issue の運用
 
@@ -153,7 +154,9 @@ routes  →  route.ts  →  actions / views  →  context / input  →  db
   ルートで直接 `locals.user` を判定しない
 - 検証は `src/lib/server/input.ts`。**`FormData` ではなく plain object を受ける。**
   検証は操作の中で走らせる。ルートで走らせると API から呼んだときに素通りする
-- `AppError` を HTTP に翻訳するのは `src/lib/server/route.ts` だけ
+- `AppError` を HTTP に翻訳するのは `src/lib/server/route.ts` だけ。
+  画面は `page()` / `submit()`、API は `json()`。**同じ操作を呼ぶ**
+- API に **CORS を開けない。** Cookie 認証の前提が崩れる（`docs/006-api.md` 2 章）
 - **`views/` と `actions/` の戻り値には名前を付ける**（`Promise<TimelineView>`）。
   その形はページが受け取る `data` であり、API のレスポンスの契約でもある
 - **DB の行をそのまま外へ出さない。** `owner_username` のような SQL の都合の
