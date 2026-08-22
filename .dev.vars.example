@@ -9,3 +9,13 @@
 
 GITHUB_CLIENT_ID=
 GITHUB_CLIENT_SECRET=
+
+# MCP のトークンをどの資源に結びつけるか（docs/007-mcp.md 4 章）は
+# wrangler.jsonc の vars にある PUBLIC_ORIGIN で決まる。
+#
+# **ふつうは上書き不要。** wrangler dev は wrangler.jsonc の routes にある
+# custom_domain を模すので、開発中も Worker からは nenpyo.net に見えている。
+#
+# ただし OAuth の認可サーバーは HTTPS でなければならず、provider が
+# 起動時に弾く。MCP を試すときは https で立てること:
+#   npx wrangler dev --local-protocol https

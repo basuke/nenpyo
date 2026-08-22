@@ -13,10 +13,21 @@
   "routes": [
     { "pattern": "nenpyo.net", "custom_domain": true }
   ],
+  "vars": {
+    // MCP のトークンをどの資源に結びつけるか（docs/007-mcp.md 4 章）。
+    // 仕様が audience の検証を MUST と言っているので、決め打ちにはできても
+    // 省略はしたくない。開発時は .dev.vars で上書きする。
+    "PUBLIC_ORIGIN": "https://nenpyo.net"
+  },
   "kv_namespaces": [
     {
+      // MCP の OAuth が使う保管庫（docs/007-mcp.md）。クライアントの登録、
+      // 認可コード、トークンがここに入る。年表のデータは D1 のまま。
+      //
+      // TODO: マージ前に本物の id を入れる。作り方は docs/007-mcp.md 10 章。
+      //   npx wrangler kv namespace create OAUTH_KV
       "binding": "OAUTH_KV",
-      "id": "0000000000000000000000000000spike"
+      "id": "PLACEHOLDER_CREATE_ME"
     }
   ],
   "d1_databases": [

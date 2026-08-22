@@ -9,6 +9,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "pnpm build && wrangler dev",
+    "preview:mcp": "pnpm build && wrangler dev --local-protocol https",
     "deploy": "pnpm build && wrangler deploy",
     "start": "vite dev",
     "prepare": "svelte-kit sync",

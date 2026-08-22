@@ -918,6 +918,60 @@ export async function mergeEntries(
   await touchTimeline(db, timelineId);
 }
 
+/* ── 検索 ─────────────────────────────────────────────────────────────── */
+
+/** 検索の 1 件。どの年表のどの行にあるかまで返す。 */
+export type EventHit = {
+  event_id: number;
+  entry_id: number;
+  year: number;
+  title: string;
+  category: string | null;
+  owner_username: string;
+  timeline_slug: string;
+  timeline_title: string;
+  tagline: string | null;
+};
+
+/**
+ * タイトルで出来事を探す。
+ *
+ * 年表は全部公開で読めるので、誰の年表も横断して返す。同じ event が複数の
+ * 年表に載っていれば、その数だけ行が出る。**どの年表の行なのかが分からないと
+ * 「載せる」に繋げない**ので、潰さずに返す（docs/003 5 章）。
+ *
+ * LIKE の前後にワイルドカードを付けるので索引は効かない。720 件のうちは
+ * これで足りる。
+ */
+export async function searchEvents(
+  db: D1Database,
+  query: string,
+  limit = 20,
+): Promise<EventHit[]> {
+  const { results } = await db
+    .prepare(
+      `SELECT ev.id       AS event_id,
+              te.id       AS entry_id,
+              ev.year, ev.title, ev.category,
+              u.username  AS owner_username,
+              t.slug      AS timeline_slug,
+              t.title     AS timeline_title,
+              n.tagline
+         FROM events ev
+         JOIN timeline_entry_events tee ON tee.event_id = ev.id
+         JOIN timeline_entries te       ON te.id = tee.entry_id
+         JOIN timelines t               ON t.id = te.timeline_id
+         JOIN users u                   ON u.id = t.owner_id
+    LEFT JOIN notes n                   ON n.id = te.note_id
+        WHERE ev.title LIKE ?
+     ORDER BY ev.year ASC, ev.month ASC, ev.day ASC, ev.hour ASC, ev.minute ASC, ev.id ASC
+        LIMIT ?`,
+    )
+    .bind(`%${query}%`, limit)
+    .all<EventHit>();
+  return results;
+}
+
 /** そのタイムラインで実際に使われているカテゴリと、その件数。 */
 export type CategoryUsage = { category: string | null; subcategory: string | null; count: number };
 

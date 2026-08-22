@@ -14,7 +14,7 @@ import {
   type EntryRef,
   type TimelineRef,
 } from "../context";
-import { parseEntryInput, type RawInput } from "../input";
+import { parseEntryInput, parseNoteInput, type RawInput } from "../input";
 import * as sql from "../db";
 
 const INTO_NOT_FOUND = "足す先の行が見つかりません";
@@ -69,6 +69,45 @@ export async function updateEntry(
   const input = parseEntryInput(raw);
 
   await sql.updateEntry(ctx.db, timeline.id, entry, input, user.id);
+
+  return { username: owner.username, slug: timeline.slug };
+}
+
+/**
+ * ノートだけを書き換える。事実には触らない。
+ *
+ * MCP から AI が使う口（#34）。**見方には正誤が無いので、ここには捏造の
+ * 危険がない。** 事実のほうは `addEntry` が持っていて、そちらは別の話。
+ *
+ * 中では `updateEntry` と同じ道を通る。事実の欄は今の値をそのまま渡すので、
+ * 凍結されたノートの複製（docs/003 5 章）もそのまま効く。**書き込みの道を
+ * 2 本にしない**ためで、片方だけ CoW を忘れる事故を防ぐ。
+ */
+export async function writeNote(
+  ctx: AppContext,
+  ref: EntryRef,
+  raw: RawInput,
+): Promise<TimelineRef> {
+  const { user, owner, timeline, entry } = await requireOwnEntry(ctx, ref);
+
+  const head = entry.events[0];
+  if (!head) throw new Error(`entry ${entry.id} has no event`);
+
+  await sql.updateEntry(
+    ctx.db,
+    timeline.id,
+    entry,
+    {
+      // 事実は今のまま。ここで動かすのはノートだけ。
+      year: head.year,
+      title: head.title,
+      category: head.category,
+      subcategory: head.subcategory,
+      links: head.links,
+      ...parseNoteInput(raw),
+    },
+    user.id,
+  );
 
   return { username: owner.username, slug: timeline.slug };
 }
