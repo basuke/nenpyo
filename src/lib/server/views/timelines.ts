@@ -88,7 +88,7 @@ export type EntryView = {
   note: { id: number; tagline: string | null; body: string | null } | null;
   /** ノートの持ち主。本文を開いたときだけ出す（#25） */
   author: PersonView | null;
-  /** 先祖のノートを書いた人。新しい順、重複を除いて最大 3 人 */
+  /** 先祖のノートの持ち主。新しい順、重複を除いて最大 3 人 */
   ancestors: PersonView[];
   events: EventView[];
   links: EntryLinks;

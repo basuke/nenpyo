@@ -51,7 +51,7 @@
   <input id="tagline" name="tagline" type="text" maxlength="100" value={values?.tagline ?? ""} />
   <p class="field__hint">
     その出来事をどう読むか、ひとことで。例：<code>勝利条件のない箱庭</code><br />
-    事実ではなく書いた人の見方なので、タイトルとは分けて持ちます。
+    事実ではなく載せた人の見方なので、タイトルとは分けて持ちます。
   </p>
 </div>
 

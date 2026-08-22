@@ -174,7 +174,7 @@ function noteChoice(entry: TimelineEntry): MergeCandidate {
   };
 }
 
-/** 載せる元の行。誰が書いたノートなのかまで見せる。 */
+/** 載せる元の行。誰の持ち物のノートなのかまで見せる。 */
 export type PlaceSource = BundleSummary & {
   tagline: string | null;
   body: string | null;
