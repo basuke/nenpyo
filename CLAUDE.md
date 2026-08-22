@@ -23,6 +23,7 @@
 - `docs/002-github-oauth.md` — GitHub OAuth の実装
 - `docs/003-events-and-notes.md` — イベントとノートの分離、entry、CoW
 - `docs/004-layers.md` — 層の分け方。ロジックは lib に、ルートは入り口だけ
+- `docs/005-testing.md` — テストの分け方。大枠は D1 を知らない、最低限だけが知っている
 
 ## 2. Issue の運用
 
@@ -168,17 +169,37 @@ routes  →  route.ts  →  actions / views  →  context / input  →  db
 - 読むだけのページは `export const csr = false;` を**理由のコメント付きで**置く
 - CSS クラスは BEM 風（`field__hint`）
 
-### テスト
+### テスト（`docs/005-testing.md`）
 
-- vitest。テストは対象と同じ場所に `*.test.ts` として置く
-- **純粋関数をテストする。** D1 を触るコードのテストは今のところ書いていない
+vitest。テストは対象と同じ場所に置く。**2 つに分かれている。**
+
+| | 大枠 | 最低限 |
+|---|---|---|
+| | `*.test.ts` | `*.d1.test.ts` |
+| 走る場所 | node（速い） | workerd + miniflare（遅い） |
+| 対象 | `actions/` `context.ts` `input.ts` と純粋関数 | `db.ts` |
+| 何を見るか | 誰が通れるか・何を弾くか・どのエラーになるか | SQL と制約の噛み合わせ |
+
+- **大枠は `vi.mock("../db")` で `db.ts` を丸ごと差し替える。** SQL は見ない。
+  認可も検証も「操作の中」で済んでいることを見る。
+  「書き込みが呼ばれていないこと」を必ず添える（`expect(sql.x).not.toHaveBeenCalled()`）
+- **`code` で照合し、`message` では照合しない。** 文言を直した瞬間に壊れる
+- **D1 を触るのは `db.ts` を試すときだけ。** 対象は
+  `timeline_entry_events` を組み替える 4 つと、ノートを複製する `updateEntry`。
+  ここが #29 の壊れ方をしうる場所で、大枠側では原理的に捕まらない
+- D1 側は `migrations/` をそのまま流す。テスト用のスキーマを別に持つと、
+  マイグレーションが既存コードの前提を壊す事故が素通りする
+- **回帰テストは、落ちることを確認してから入れる。** 直す前の状態に戻して
+  実際に落ちなければ、それは回帰テストではない
 - 検証しているのが「何であって、なぜか」が読み取れる `it` の名前を書く
 
 ## 5. コマンド
 
 ```
 pnpm dev                  開発サーバ
-pnpm test                 vitest（一回実行）
+pnpm test                 vitest（両方）
+pnpm test:unit            大枠だけ（D1 に繋がない・速い）
+pnpm test:d1              D1 に繋ぐものだけ
 pnpm typecheck            svelte-check
 pnpm build                本番ビルド
 pnpm preview              build して wrangler dev
