@@ -1,0 +1,18 @@
+// SvelteKit の adapter-cloudflare **だけ**が読む設定（#34 のスパイク）。
+//
+// アダプタは `main` の指す先に自分の生成物を書く。デプロイ用の wrangler.jsonc の
+// main は OAuthProvider の包み（src/worker.ts）を指しているので、そのままだと
+// アダプタに上書きされてしまう。書き出し先だけをここで分ける。
+//
+// バインディングはここに書かない。実際に効くのは wrangler.jsonc のほう。
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nenpyo-net",
+  "main": ".svelte-kit/cloudflare/_worker.js",
+  "compatibility_date": "2026-08-10",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".svelte-kit/cloudflare"
+  }
+}
