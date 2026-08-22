@@ -57,6 +57,10 @@ export type EventRow = {
 /**
  * 属人のノート。tagline がキャッチコピー、body がこれまでの description。
  * 同じ出来事に何本あってもよく、どれを採るかは年表側が決める。
+ *
+ * **`author_id` は「書いた人」ではなく「持ち主」。** 年表に載っている見方は
+ * その年表の持ち主のもので、その言葉を誰の指が打ったかは別の話
+ * （AI に下書きさせてもよい）。docs/003-events-and-notes.md 5 章。
  */
 export type NoteRow = {
   id: number;
@@ -214,7 +218,7 @@ export async function touchTimeline(db: D1Database, id: number) {
  * events が 1..N なのは束ね（compound）を同じ仕組みで表すため。単独の
  * イベントは要素数 1 の束ねとして扱うので、この型に分岐は要らない。
  */
-/** ノートの持ち主や、その先祖を書いた人。アイコンと名前を出すのに要る分だけ。 */
+/** ノートの持ち主や、その先祖を持っていた人。アイコンと名前を出すのに要る分だけ。 */
 export type Person = {
   id: number;
   username: string;
@@ -228,7 +232,7 @@ export type TimelineEntry = {
   note: NoteRow | null;
   /** ノートの持ち主。本文を開いたときだけ出す（#25）。 */
   author: Person | null;
-  /** 先祖のノートを書いた人。新しい順、重複を除いて最大 3 人。 */
+  /** 先祖のノートの持ち主。新しい順、重複を除いて最大 3 人。 */
   ancestors: Person[];
   events: EventRow[];
 };
@@ -322,7 +326,7 @@ function toPerson(head: EntryHeadRow): Person | null {
 }
 
 /**
- * その年表で使われているノートの、先祖を書いた人を集める。
+ * その年表で使われているノートの、先祖を持っていた人を集める。
  *
  * derivations を遡る。誰のノートから来たのかを、名前ではなくアイコンの並びで
  * 見せるため（#11）。同じ人が続くことはあるので重ねて数えず、近いほうから
@@ -474,10 +478,12 @@ async function noteIsFrozen(db: D1Database, noteId: number): Promise<boolean> {
 /**
  * 凍結されたノートを、この行のためのノートとして複製する。来歴を 1 行残す。
  *
- * **複製したものの持ち主は、書き換えた人になる。** 他人のノートを自分の年表に
- * 載せて、そこへ手を入れたなら、出来上がった文はその人のものである。元の人の
- * 名前が残り続けると、書いていないものを書いたことにしてしまう。
- * どこから来たかは derivations が語る（#11）。
+ * **複製したものの持ち主は、書き換えた人になる。** 年表に載っている見方は、
+ * その年表の持ち主のものである。他人のノートに手を入れたなら、出来上がった
+ * ものは手を入れた人の持ち物になる。元の人の名前が残り続けると、その人が
+ * **選んでいない見方をその人のものにして**しまう。
+ * どこから来たかは derivations が語るので、名前まで引き継ぐ必要はない
+ * （#11、docs/003-events-and-notes.md 5 章）。
  */
 async function forkNote(
   db: D1Database,
