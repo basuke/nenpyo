@@ -8,6 +8,11 @@
  * **adapter-cloudflare は `main` の指す先に自分の生成物を書く。** そのままだと
  * このファイルが上書きされるので、アダプタには wrangler.svelte.jsonc を
  * 読ませて書き出し先を分けてある。
+ *
+ * **`src/` の外に置いてある。** これは SvelteKit のコードではなく Worker の
+ * 入口で、しかも `.svelte-kit` のビルド成果物を import する。`src/` に置くと
+ * tsconfig の `checkJs` が生成物まで追いかけて、svelte-check が 1000 件の
+ * エラーを出す。
  */
 
 import { OAuthProvider } from "@cloudflare/workers-oauth-provider";
