@@ -66,8 +66,7 @@ export async function submit<T>(
   event: RequestEvent,
   fn: (ctx: AppContext, input: RawInput) => Promise<T>,
 ): Promise<T | ActionFailure<FormError>> {
-  const form = await event.request.formData();
-  const input = Object.fromEntries(form) as RawInput;
+  const input = toInput(await event.request.formData());
 
   try {
     return await fn(contextOf(event), input);
@@ -151,6 +150,23 @@ async function inputOf(event: RequestEvent): Promise<RawInput> {
     throw invalid("JSON のオブジェクトを送ってください", "not_an_object");
   }
   return parsed as RawInput;
+}
+
+/**
+ * `FormData` を plain object にする。
+ *
+ * **同じ名前が複数あるものは配列にする。** `Object.fromEntries()` は最後の 1 つ
+ * しか残さないので、チェックボックスの群れが黙って 1 つに減る。同意画面
+ * （docs/007-mcp.md）が実際にこれで壊れていて、**許したはずのスコープが
+ * 落ちていた**。落ちる方向なので危険ではないが、気づきにくい。
+ */
+function toInput(form: FormData): RawInput {
+  const input: RawInput = {};
+  for (const key of new Set(form.keys())) {
+    const values = form.getAll(key);
+    input[key] = values.length > 1 ? values.map(String) : values[0];
+  }
+  return input;
 }
 
 /**

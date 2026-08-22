@@ -9,6 +9,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "pnpm build && wrangler dev",
+    "preview:mcp": "pnpm build && wrangler dev --local-protocol https",
     "deploy": "pnpm build && wrangler deploy",
     "start": "vite dev",
     "prepare": "svelte-kit sync",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "@cloudflare/workers-oauth-provider": "^0.10.3",
     "@sveltejs/adapter-cloudflare": "^7.2.9",
     "@sveltejs/kit": "^2.70.3",
     "@sveltejs/vite-plugin-svelte": "^7.3.0",

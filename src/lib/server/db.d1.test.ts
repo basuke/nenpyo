@@ -243,6 +243,42 @@ describe("placeEntry", () => {
   });
 });
 
+describe("searchEvents", () => {
+  /**
+   * 同じ出来事が複数の年表に載っていれば、その数だけ返る。**どの年表の行かが
+   * 分からないと「載せる」に繋げない**ので、潰さずに返す（docs/003 5 章）。
+   */
+  it("returns one hit per timeline the event appears on", async () => {
+    const mine = await sql.createTimeline(db, {
+      ownerId: user.id,
+      slug: "mine",
+      title: "こっち",
+      description: null,
+    });
+    const sourceId = await addEntry(1970, "シムシティ発売");
+    await sql.placeEntry(db, mine!.id, await entryOf(sourceId), { kind: "none" }, user.id);
+
+    const hits = await sql.searchEvents(db, "シムシティ");
+
+    expect(hits).toHaveLength(2);
+    expect(hits.map((hit) => hit.timeline_slug).sort()).toEqual(["mine", "t"]);
+    // 同じ event を指している。複製はされない。
+    expect(new Set(hits.map((hit) => hit.event_id)).size).toBe(1);
+  });
+
+  it("matches on a fragment of the title, not just the whole thing", async () => {
+    await addEntry(1974, "日本沈没 映画公開", { tagline: "沈む国を先に見た" });
+
+    const [hit] = await sql.searchEvents(db, "沈没");
+    expect(hit).toMatchObject({ year: 1974, tagline: "沈む国を先に見た" });
+  });
+
+  it("finds nothing rather than everything when the query matches nothing", async () => {
+    await addEntry(1974, "日本沈没 映画公開");
+    expect(await sql.searchEvents(db, "そんな出来事はない")).toEqual([]);
+  });
+});
+
 describe("updateEntry", () => {
   /**
    * 参照が 2 本あるノートは凍結されていて、直すと複製される

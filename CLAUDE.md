@@ -25,6 +25,7 @@
 - `docs/004-layers.md` — 層の分け方。ロジックは lib に、ルートは入り口だけ
 - `docs/005-testing.md` — テストの分け方。大枠は D1 を知らない、最低限だけが知っている
 - `docs/006-api.md` — JSON API。読みは公開、書きは Cookie で同一オリジン専用
+- `docs/007-mcp.md` — MCP サーバー。OAuth 2.1、スコープ、tool
 
 ## 2. Issue の運用
 
@@ -156,7 +157,14 @@ routes  →  route.ts  →  actions / views  →  context / input  →  db
 - 検証は `src/lib/server/input.ts`。**`FormData` ではなく plain object を受ける。**
   検証は操作の中で走らせる。ルートで走らせると API から呼んだときに素通りする
 - `AppError` を HTTP に翻訳するのは `src/lib/server/route.ts` だけ。
-  画面は `page()` / `submit()`、API は `json()`。**同じ操作を呼ぶ**
+  画面は `page()` / `submit()`、API は `json()`、MCP は tool。**同じ操作を呼ぶ**
+- **`worker/` は SvelteKit ではない。** Worker の入口。ビルド成果物は直に
+  import せず、型は `worker/sveltekit.d.ts`・実体は wrangler の `alias` から
+  取る。直に import すると svelte-check が生成物まで型検査する
+  （`docs/007-mcp.md` 4 章）
+- **Worker の型を触ったら `npx wrangler types` を流してから typecheck する。**
+  `worker-configuration.d.ts` は gitignore されていて CI は作り直すので、
+  手元が古いと**ローカルで通って CI で落ちる**
 - API に **CORS を開けない。** Cookie 認証の前提が崩れる（`docs/006-api.md` 2 章）
 - **`views/` と `actions/` の戻り値には名前を付ける**（`Promise<TimelineView>`）。
   その形はページが受け取る `data` であり、API のレスポンスの契約でもある
@@ -207,6 +215,7 @@ pnpm test:d1              D1 に繋ぐものだけ
 pnpm typecheck            svelte-check
 pnpm build                本番ビルド
 pnpm preview              build して wrangler dev
+pnpm preview:mcp          同上。https で立てる（MCP を試すとき）
 
 pnpm db:migrate:local     マイグレーション適用（ローカル D1）
 pnpm db:migrate           同（本番 D1）

@@ -5,6 +5,7 @@ import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 export default {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter(),
+    // アダプタの書き出し先だけを別設定で指す（#34 のスパイク）。
+    adapter: adapter({ config: "wrangler.svelte.jsonc" }),
   },
 };

@@ -44,8 +44,11 @@ const throwing = (error: unknown) => async (_ctx: AppContext) => {
 };
 
 /** submit() は FormData を読むので、フォーム投稿の体裁にする。 */
-function formEvent(values: Record<string, string> = {}) {
-  const body = new URLSearchParams(values);
+function formEvent(values: Record<string, string | string[]> = {}) {
+  const body = new URLSearchParams();
+  for (const [key, value] of Object.entries(values)) {
+    for (const one of Array.isArray(value) ? value : [value]) body.append(key, one);
+  }
   const url = new URL(`${ORIGIN}/@basuke/t`);
   return {
     url,
@@ -116,6 +119,29 @@ describe("同じ AppError が入り口ごとに違う形で出る", () => {
     const refused = throwing(forbidden("だめ", "not_owner"));
     const thrown = await submit(formEvent(), refused).catch((e) => e);
     expect(thrown).toMatchObject({ status: 403 });
+  });
+});
+
+describe("submit() の入力", () => {
+  /**
+   * チェックボックスの群れのように、同じ名前が複数来ることがある。
+   * `Object.fromEntries()` は最後の 1 つしか残さないので、そのまま使うと
+   * **黙って減る。** 同意画面（docs/007-mcp.md）が実際にこれで壊れていて、
+   * 許したはずのスコープが落ちていた。
+   */
+  it("keeps every value when a field appears more than once", async () => {
+    const event = formEvent({ scope: ["timeline:read", "note:write"], title: "あ" });
+    const response = await submit(event, async (_ctx, input) => input);
+
+    expect(response).toEqual({ scope: ["timeline:read", "note:write"], title: "あ" });
+  });
+
+  it("leaves a single value as a plain string, not an array of one", async () => {
+    const response = await submit(
+      formEvent({ scope: "timeline:read" }),
+      async (_c, input) => input,
+    );
+    expect(response).toEqual({ scope: "timeline:read" });
   });
 });
 

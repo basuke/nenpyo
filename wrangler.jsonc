@@ -1,17 +1,40 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nenpyo-net",
-  "main": ".svelte-kit/cloudflare/_worker.js",
+  "main": "worker/index.ts",
   // SiestaWare account (owns the nenpyo.net zone).
   "account_id": "055b10d55440049a7e1b5964646f7d2c",
   "compatibility_date": "2026-08-10",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "binding": "ASSETS",
     "directory": ".svelte-kit/cloudflare"
   },
   "routes": [
     { "pattern": "nenpyo.net", "custom_domain": true }
+  ],
+  // 型は worker/sveltekit.d.ts が持ち、実体はここで差し替える。
+  // 生成された JavaScript を直に import すると、svelte-check が中身まで
+  // 追いかけて型検査してしまう（docs/007-mcp.md 4 章）。
+  "alias": {
+    "sveltekit-worker": "./.svelte-kit/cloudflare/_worker.js"
+  },
+  "vars": {
+    // MCP のトークンをどの資源に結びつけるか（docs/007-mcp.md 4 章）。
+    // 仕様が audience の検証を MUST と言っているので、決め打ちにはできても
+    // 省略はしたくない。開発時は .dev.vars で上書きする。
+    "PUBLIC_ORIGIN": "https://nenpyo.net"
+  },
+  "kv_namespaces": [
+    {
+      // MCP の OAuth が使う保管庫（docs/007-mcp.md）。クライアントの登録、
+      // 認可コード、トークンがここに入る。年表のデータは D1 のまま。
+      //
+      // TODO: マージ前に本物の id を入れる。作り方は docs/007-mcp.md 10 章。
+      //   npx wrangler kv namespace create OAUTH_KV
+      "binding": "OAUTH_KV",
+      "id": "PLACEHOLDER_CREATE_ME"
+    }
   ],
   "d1_databases": [
     {

@@ -88,6 +88,19 @@ export function parseEntryInput(raw: RawInput): EntryInput {
   };
 }
 
+/** ノートだけの入力。事実に触らずキャッチコピーと説明を書き換えるとき用。 */
+export type NoteInput = { tagline: string | null; body: string | null };
+
+export function parseNoteInput(raw: RawInput): NoteInput {
+  const tagline = optionalText(raw, "tagline");
+  if (tagline && tagline.length > 100) {
+    throw invalid("キャッチコピーは 100 文字までです", "tagline_too_long");
+  }
+  // 両方空でも通す。**ノートを空にするのは「消す」という意思表示**であって、
+  // 入力の誤りではない。束ねの統合で新しく書く場合とは事情が違う。
+  return { tagline, body: optionalText(raw, "body") };
+}
+
 /* ── ノートの選び方 ───────────────────────────────────────────────────── */
 
 /**
