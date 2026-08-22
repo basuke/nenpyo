@@ -158,9 +158,13 @@ routes  →  route.ts  →  actions / views  →  context / input  →  db
   検証は操作の中で走らせる。ルートで走らせると API から呼んだときに素通りする
 - `AppError` を HTTP に翻訳するのは `src/lib/server/route.ts` だけ。
   画面は `page()` / `submit()`、API は `json()`、MCP は tool。**同じ操作を呼ぶ**
-- **`worker/` は SvelteKit ではない。** Worker の入口で、ビルド成果物を
-  import する。`src/` に置くと svelte-check が生成物まで型検査する
+- **`worker/` は SvelteKit ではない。** Worker の入口。ビルド成果物は直に
+  import せず、型は `worker/sveltekit.d.ts`・実体は wrangler の `alias` から
+  取る。直に import すると svelte-check が生成物まで型検査する
   （`docs/007-mcp.md` 4 章）
+- **Worker の型を触ったら `npx wrangler types` を流してから typecheck する。**
+  `worker-configuration.d.ts` は gitignore されていて CI は作り直すので、
+  手元が古いと**ローカルで通って CI で落ちる**
 - API に **CORS を開けない。** Cookie 認証の前提が崩れる（`docs/006-api.md` 2 章）
 - **`views/` と `actions/` の戻り値には名前を付ける**（`Promise<TimelineView>`）。
   その形はページが受け取る `data` であり、API のレスポンスの契約でもある

@@ -7,9 +7,7 @@
  * 画面も既存の API も何も変わらない。
  *
  * **`src/` の外に置いてある。** これは SvelteKit のコードではなく Worker の
- * 入口で、`.svelte-kit` のビルド成果物を import する。`src/` に置くと
- * tsconfig の `checkJs` が生成物まで追いかけて、svelte-check が
- * 1000 件のエラーを出す。
+ * 入口だから。ビルド成果物との繋ぎ方は `worker/sveltekit.d.ts` を見よ。
  *
  * **adapter-cloudflare は `main` の指す先に自分の生成物を書く。** そのままだと
  * このファイルが上書きされるので、アダプタには `wrangler.svelte.jsonc` を
@@ -21,8 +19,9 @@ import { env } from "cloudflare:workers";
 import { handleMcpRequest } from "../src/lib/server/mcp/http";
 import { SCOPES } from "../src/lib/server/mcp/tools";
 import type { TokenProps } from "../src/lib/server/mcp/consent";
-// @ts-expect-error — SvelteKit のビルド成果物に型は無い。pnpm build が先に要る。
-import sveltekit from "../.svelte-kit/cloudflare/_worker.js";
+// 実体は wrangler.jsonc の alias が `.svelte-kit/cloudflare/_worker.js` に
+// 差し替える。型は worker/sveltekit.d.ts が持つ。`pnpm build` が先に要る。
+import sveltekit from "sveltekit-worker";
 
 type WorkerEnv = { DB: D1Database };
 
@@ -44,8 +43,8 @@ const RESOURCE = `${ORIGIN}/mcp`;
  * 焼き付けた値が入っている。**Cookie は見ない。** 別のオリジンから来るので
  * 効かないし、効かせるべきでもない（docs/006-api.md 2 章）。
  */
-const mcp: ExportedHandler<WorkerEnv> = {
-  async fetch(request, env, ctx) {
+const mcp = {
+  async fetch(request: Request, env: WorkerEnv, ctx: ExecutionContext) {
     const props = (ctx as unknown as { props?: TokenProps }).props;
 
     if (!props?.user) {
@@ -61,8 +60,8 @@ const mcp: ExportedHandler<WorkerEnv> = {
 
 export default new OAuthProvider({
   apiRoute: "/mcp",
-  apiHandler: mcp as ExportedHandler,
-  defaultHandler: sveltekit as ExportedHandler,
+  apiHandler: mcp,
+  defaultHandler: sveltekit,
 
   authorizeEndpoint: "/authorize",
   tokenEndpoint: "/oauth/token",
